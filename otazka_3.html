@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Státnicový test ČJ - Otázka 3: Didaktika a Exilová literatura</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .question-card {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-left: 5px solid #3498db;
+        }
+        .question-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+        .options label {
+            display: block;
+            background: #f9f9f9;
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid #e0e0e0;
+        }
+        .options label:hover {
+            background: #eef2f5;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 30px;
+            margin-bottom: 50px;
+        }
+        button:hover {
+            background-color: #219653;
+        }
+        .correct {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+            color: #155724;
+            font-weight: bold;
+        }
+        .incorrect {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+            color: #721c24;
+        }
+        .explanation {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            color: #856404;
+            border-radius: 4px;
+            font-size: 0.95em;
+            display: none;
+        }
+        #result {
+            font-size: 1.5em;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Státnicový test z ČJ (Otázka 3)</h1>
+    <p style="text-align:center;">Psychologie čtenářství pubescenta, Normalizace, Samizdat, Exil a Karel Kryl</p>
+    
+    <div id="quiz-container"></div>
+    
+    <button onclick="vyhodnotitTest()">Vyhodnotit test</button>
+    <div id="result"></div>
+
+    <script>
+        const otazky = [
+            // Psychologie čtenářství pubescenta
+            { q: "Jaké věkové období zahrnuje pubescence (druhý vzdor)?", options: ["6 - 10 let", "11 - 15 let", "15 - 18 let", "18 - 21 let"], a: 1, exp: "Pubescence pokrývá věk 11–15 let a je charakteristická tělesnými, psychickými změnami a vzdorem." },
+            { q: "Co hledá pubescent v literatuře nejčastěji, pokud touží 'někam patřit'?", options: ["Poezii z 19. století", "Skupinovou identitu", "Vědecké studie", "Rozvoj slovní zásoby"], a: 1, exp: "Pubescent touží po individualitě, vymezuje se vůči dospělým a hledá skupinovou identitu." },
+            { q: "Jakou hlavní funkci získává literatura v období pubescence?", options: ["Informativní", "Didaktickou", "Saturační", "Estetickou"], a: 2, exp: "Literatura získává saturační funkci, což znamená uspokojování psychických potřeb jedince (např. prožívání dobrodružství, únik od reality)." },
+            { q: "Jaký typ lyriky je pro pubescenta podle poznámek většinou pochopitelný (zhruba do 9 let věku)?", options: ["Neintencionální lyrika", "Reflexivní lyrika", "Intencionální lyrika", "Meditativní lyrika"], a: 2, exp: "Intencionální lyrika (často humorná, komická) je srozumitelná do 9 let. Později je pro žáky lyrika spíše 'rébusem'." },
+            { q: "Který žánr v literatuře pro pubescenty dominuje?", options: ["Lyrická poezie", "Epické žánry s napínavým dějem a šťastným koncem", "Odborná esej", "Absurdní drama"], a: 1, exp: "Pubescenti preferují epické žánry s napínavým dějem, lyrika je spíše na okraji." },
+            { q: "Jak nahlížejí učitelé na čtenářství pubescentů podle výzkumu (např. Homolová)?", options: ["Přeceňují ho", "Podceňují ho", "Považují ho za ideální", "Vůbec se jím nezabývají"], a: 1, exp: "Zatímco pubescenti řadí knihy na nižší místa zájmu, učitelé často čtenáře-pubescenty podceňují." },
+            { q: "Co přebralo iniciativu v motivaci ke čtení u dnešních pubescentů?", options: ["Rodiče", "Internet", "Škola", "Knihovny"], a: 1, exp: "Iniciativu přebírá internet; klasické apely na rozvoj slovní zásoby pubescenty již nemotivují." },
+
+            // Normalizace - Oficiální literatura
+            { q: "Kterou událostí začíná období normalizace v Československu?", options: ["Ukončení cenzury", "Podepsání tzv. moskevských protokolů", "Vydání Dva tisíce slov", "Založením Charty 77"], a: 1, exp: "Začíná podepsáním moskevských protokolů (1968/1969), což znamenalo konec uvolňování, obnovení cenzury a čistky." },
+            { q: "Na jaká témata se zaměřovali autoři oficiální literatury, aby se vyhnuli perzekuci?", options: ["Kritika režimu, politika", "Témata každodenního života, historie, venkov, sci-fi", "Náboženství, disent", "Život v emigraci"], a: 1, exp: "Autoři se vyhýbali politice a zaměřovali se na bezpečnější témata: každodenní život, historii, sci-fi." },
+            { q: "Do jakého žánru spadá dílo Ladislava Fukse 'Příběh kriminálního rady'?", options: ["Humoristická groteska", "Psychologická próza o traumatizujícím vztahu otce a syna", "Sci-fi román", "Historický epos"], a: 1, exp: "Jde o psychologickou prózu z počátku 70. let o traumatizujícím vztahu otce a syna." },
+            { q: "Kdo je autorem baladické novely 'Údolí včel' o fanatickém vyznavači křesťanství?", options: ["Ota Pavel", "Ladislav Fuks", "Vladimír Körner", "Bohumil Hrabal"], a: 2, exp: "Autorem baladických příběhů drásaného člověka (Údolí včel, Zánik samoty Berhof) je Vladimír Körner." },
+            { q: "Jaké poválečné téma řeší Körnerovo dílo 'Zánik samoty Berhof'?", options: ["Odsun židovského obyvatelstva", "Život sudetských Němců a Čechů, tlupy nacistických wehrwolfů odmítajících konec války", "Budování socialismu ve městě", "Život studentů v Praze"], a: 1, exp: "Zabývá se prvními poválečnými týdny v Sudetech, kde operují tlupy wehrwolfů." },
+            { q: "Který autor, původně sportovní reportér, psal autobiografické prózy jako 'Smrt krásných srnců' a 'Jak jsem potkal ryby'?", options: ["Radek John", "Ota Pavel", "Ladislav Fuks", "Vladimír Škutina"], a: 1, exp: "Ota Pavel psal citlivé, sportovní a přírodní autobiografické prózy." },
+            { q: "Jaké společenské problémy řeší Radek John v románech 'Džínový svět' a 'Memento'?", options: ["Problémy politických vězňů", "Problematické otázky mladých lidí (včetně drogové závislosti)", "Život na vesnici", "Kolektivizace zemědělství"], a: 1, exp: "Radek John, redaktor Mladého světa, se věnoval problémům mládeže, v Mementu pak konkrétně drogové závislosti." },
+
+            // Samizdatová literatura
+            { q: "Kdo byl vůdčí osobností českého undergroundu (samizdatu) a skupiny The Plastic People of the Universe?", options: ["Václav Havel", "Ivan Magor Jirous", "Pavel Kohout", "Ludvík Vaculík"], a: 1, exp: "Ivan 'Magor' Jirous byl uměleckým vedoucím a hybatelem undergroundu." },
+            { q: "Co požadoval politický text 'Charta 77'?", options: ["Svržení komunistické strany", "Aby stát dodržoval mezinárodní dohody o lidských právech, které sám podepsal", "Ekonomickou reformu", "Návrat k volnému trhu"], a: 1, exp: "Charta 77 (jejímiž prvními mluvčími byli Havel, Hájek, Patočka) vyzývala stát k dodržování lidských práv." },
+            { q: "Kdo založil samizdatovou edici 'Petlice' v roce 1972?", options: ["Ludvík Vaculík", "Václav Havel", "Eva Kantůrková", "Josef Škvorecký"], a: 0, exp: "Edici Petlice založil Ludvík Vaculík pro vydávání zakázaných autorů." },
+            { q: "Jaký román o kolektivizaci na vesnici v 60. letech napsala Eva Kantůrková?", options: ["Přítelkyně z domu smutku", "Smuteční slavnost", "Katyně", "Sekyra"], a: 1, exp: "Smuteční slavnost je její román, který mj. vypráví o pohřbu kulaka Jana Chladila a odporu vesnice." },
+            { q: "O čem pojednává próza Evy Kantůrkové 'Přítelkyně z domu smutku'?", options: ["O drogově závislé mládeži", "O jejím pobytu v ruzyňské věznici a snaze režimu zdeptat jedince", "O životě emigrantů ve Francii", "O sportovním prostředí"], a: 1, exp: "Dílo vzniklo po jejím ročním věznění a patří k vězeňské literatuře z Ruzyně počátku 80. let." },
+            { q: "Kdo je autorem manifestu 'Dva tisíce slov' a románu 'Sekyra'?", options: ["Pavel Kohout", "Ludvík Vaculík", "Milan Kundera", "Ivan Klíma"], a: 1, exp: "Autorem obou je Ludvík Vaculík, fejetonista a zakladatel edice Petlice." },
+            { q: "Jaký román Pavla Kohouta popisuje školu pro katy s popisy mučení jako satiru na mechanismy moci (např. StB)?", options: ["Z deníku kontrarevolucionáře", "Katyně", "Kde je zakopán pes", "Morčata"], a: 1, exp: "Román Katyně (1978) je satirou na mocenské praktiky, do níž se nedostane dívka na střední školu a učí se katovskému řemeslu." },
+            { q: "Který humorista a televizní publicista byl vězněn a napsal dílo 'Prezidentův vězeň na hradě plném bláznů'?", options: ["Vladimír Škutina", "Pavel Tigrid", "Josef Škvorecký", "Ivan Jirous"], a: 0, exp: "Vladimír Škutina, spoluautor televizních revue, prohlásil, že A. Novotný je vůl, za což byl mimo jiné vězněn." },
+
+            // Exilová literatura
+            { q: "Kde založili manželé Josef Škvorecký a Zdena Salivarová v roce 1971 nakladatelství 'Sixty Eight Publishers'?", options: ["V Paříži", "V Londýně", "V Torontu", "V Mnichově"], a: 2, exp: "Nakladatelství Sixty Eight Publishers bylo založeno v Torontu a vydávalo díla domácích zakázaných i exilových autorů." },
+            { q: "Který román Josefa Škvoreckého je satirou z vojenského prostředí 50. let?", options: ["Mirákl", "Prima sezona", "Tankový prapor", "Příběh inženýra lidských duší"], a: 2, exp: "Tankový prapor (podobně jako většina jeho děl se vyznačuje lehkostí, humorem a komikou)." },
+            { q: "Kdo napsal 'Kapesní průvodce inteligentní ženy po vlastním osudu', fiktivní vyprávění o dějinách s dívkou seznámenou na Jadranu?", options: ["Milan Kundera", "Pavel Tigrid", "Josef Škvorecký", "Ludvík Vaculík"], a: 1, exp: "Pavel Tigrid, vydavatel časopisu Svědectví, byl z politických důvodů nucen dvakrát emigrovat." },
+            { q: "Který autor byl zbaven státního občanství, žije v Paříži a napsal román 'Nesnesitelná lehkost bytí'?", options: ["Pavel Kohout", "Josef Škvorecký", "Milan Kundera", "Vladimír Škutina"], a: 2, exp: "Milan Kundera, řazený k postmoderně, zkoumá v tomto bestselleru osudy Tomáše a Terezy i zkreslení zážitku časem." },
+            { q: "Která autorka (manželka J. Škvoreckého) napsala román 'Honzlová' o osudu rodiny v 50. letech?", options: ["Eva Kantůrková", "Zdena Salivarová", "Eda Kriseová", "Tereza Boučková"], a: 1, exp: "Zdena Salivarová, spoluzakladatelka torontského nakladatelství, psala nepřikrášlenou realitu." },
+
+            // Písničkáři - Underground a Folk
+            { q: "Která pražská rocková kapela v čele s Milanem Hlavsou, používající i texty anglické nebo od E. Bondyho, je symbolem undergroundu?", options: ["Šafrán", "The Plastic People of the Universe", "DG 307", "Půlnoc"], a: 1, exp: "The Plastic People of the Universe byla klíčovou undergroundovou kapelou." },
+            { q: "Kdo byl vůdcem a uměleckým vedoucím The Plastic People, autorem sbírky 'Magorovy labutí písně' z věznice Valdice?", options: ["Vratislav Brabenec", "Pavel Zajíček", "Ivan Magor Jirous", "Milan Hlavsa"], a: 2, exp: "Ivan Magor Jirous byl vůdčí osobností, básníkem a politickým vězněm." },
+            { q: "Proč vznikla v roce 1973 kapela DG 307 (Pavel Zajíček, Milan Hlavsa)? Co tento název znamenal?", options: ["Adresa zkušebny", "Psychiatrická diagnóza umožňující získat modrou knížku (vyhnout se vojně)", "Kódové označení StB", "Datum založení pozpátku"], a: 1, exp: "Název DG 307 odkazoval na psychiatrickou diagnózu chránící před povinnou vojenskou službou." },
+            { q: "Jaký název mělo sdružení folkových písničkářů (vznik 1972), kde působili např. Hutka, Merta, Třešňák?", options: ["Šafrán", "Modrý efekt", "Petlice", "Svědectví"], a: 0, exp: "Sdružení se jmenovalo Šafrán s myšlenkou 'že šafránu je málo, svobodných umělců je málo'." },
+            { q: "Který popularizátor moravských lidových písniček a signatář Charty 77 složil píseň 'Krásný je vzduch'?", options: ["Vlastimil Třešňák", "Vladimír Merta", "Jaroslav Hutka", "Karel Kryl"], a: 2, exp: "Jaroslav Hutka, který byl později donucen k emigraci do Nizozemí." },
+            { q: "Která folková zpěvačka využívala hru na kytaru smyčcem a nehty?", options: ["Dáša Voňková", "Zdena Salivarová", "Eva Kantůrková", "Marta Kubišová"], a: 0, exp: "Dáša Andrtová-Voňková vynikala netradičním způsobem hry na kytaru." },
+
+            // Karel Kryl - Život a obecné informace
+            { q: "Z jaké rodiny pocházel Karel Kryl a jaký osud rodinný podnik potkal?", options: ["Z rodiny komunistických pohlavárů", "Z rodiny knihtiskařů; tiskárnu zabrali Němci a stroje rozbili komunisté", "Z rodiny důstojníků", "Z rodiny zemědělců"], a: 1, exp: "Kryl pocházel z rodiny knihtiskařů v Kroměříži. Rodinná tiskárna byla zničena v 50. letech komunisty." },
+            { q: "Kdy Karel Kryl emigroval do západního Německa?", options: ["1948", "1968", "1969", "1977"], a: 2, exp: "Kryl emigroval v roce 1969 a následně pracoval pro Rádio Svobodná Evropa v Mnichově." },
+            { q: "Co je hlavním znakem žánru 'protestsong', jehož je Kryl představitelem?", options: ["Písně pouze o přírodě", "Taneční rytmus", "Písně upozorňující na problémy v totalitní společnosti, snaha mobilizovat posluchače", "Humorné texty bez poselství"], a: 2, exp: "Protestsong protestuje proti bezpráví, má poučnou funkci a snaží se posluchače upozornit na společenské problémy." },
+            { q: "Které album vydal Kryl jako první a bylo reakcí na invazi vojsk v roce 1968?", options: ["Rakovina", "Bratříčku, zavírej vrátka", "Karavana mraků", "Maškary"], a: 1, exp: "Legendární album Bratříčku, zavírej vrátka vyšlo v roce 1969 (producent Jiří Černý)." },
+
+            // Karel Kryl - Rozbor alba Bratříčku, zavírej vrátka
+            { q: "Koho symbolizují 'vojáci přijeli v hranatých železných maringotkách' v titulní písni Bratříčku, zavírej vrátka?", options: ["Cirkus", "Sovětské tanky a invazní vojska", "Stavební dělníky", "Policii"], a: 1, exp: "Je to jasná metafora pro okupační vojska a jejich tanky v srpnu 1968." },
+            { q: "Kdo vystupuje v písni 'Král a klaun' a co tyto postavy symbolizují?", options: ["Král (dobyvatel/Rusové) vs. klaun (umění/humanita, který přežije králův pád)", "Král (Prezident) vs. klaun (občan)", "Král (kapitalismus) vs. klaun (socialismus)", "Postavy z pohádky bez skrytého významu"], a: 0, exp: "Dobyvačného krále (agresora) nakonec skolí šlak, zatímco umění a lidskost (klaun) přežijí a vysmívají se." },
+            { q: "Jaký biblický motiv využívá píseň 'Salome'?", options: ["Vzkříšení Lazara", "Zatčení Ježíše", "Tanec před Herodem a stětí Jana Křtitele", "Stavba Noemovy archy"], a: 2, exp: "Vychází z příběhu Salome, která tancem před Herodem získala hlavu Jana Křtitele. Kryl z ní dělá ambivalentní postavu." },
+            { q: "Koho obhajuje a koho kritizuje píseň 'Veličenstvo Kat'?", options: ["Oslavuje státníky", "Kritizuje utajené vraždění, zkázu morálky a nedemokratický režim (Kat = vládce)", "Popisuje středověké řemeslo", "Je to humorná píseň o soudech"], a: 1, exp: "Kat představuje despotického vládce státu 'páchne hnilobou a plný krkavců', kde kněz je ztotožněn s ďáblem." },
+            { q: "Co naznačuje 'Důchodce' z Krylovy písně?", options: ["Úctu ke stáří v socialismu", "Sarkastický a neúprosný pohled na realitu stáří a lhostejnosti", "Úspěšný život budovatele", "Radost ze života"], a: 1, exp: "Popisuje třesoucího se důchodce (žmoulá kůrku, sbírá nedopalky) jako obraz kruté reality stárnutí." },
+            { q: "Co symbolizuje 'rozmlácený kostel a rozlámaný anděl' v písni Anděl?", options: ["Opravu památek", "Území teroru, lhostejnost a rozpad civilizačních (kulturních/náboženských) hodnot", "Oslavu války", "Ateismus jako pokrok"], a: 1, exp: "Krytika rozpadu hodnot. Anděl nálezci nakonec uletí, protože ten mu ukul 'ulomená křídla z mosazný nábojnice' (symbol války)." },
+            { q: "Z jakého historického rčení vychází píseň 'Morituri te salutant'?", options: ["Z Bible", "Z pozdravu gladiátorů císaři: Jdoucí na smrt tě zdraví", "Z husitských chorálů", "Ze středověkých trubadúrů"], a: 1, exp: "Využívá starořímský pozdrav gladiátorů k navození kontrastu útrpné válečné cesty (smrti) a zamilovanosti (k Daniele)." },
+            { q: "Jakou situaci vykresluje píseň 'Pieta' na náměstí pod sochou Madony?", options: ["Slavnostní bohoslužbu", "Podnapilé vojáky (okupanty), kteří znesvěcují místo a pletou se s dívkami, zatímco 'nikdo se s nimi neloučil'", "Svatbu", "Vesnickou zábavu"], a: 1, exp: "Pieta ukazuje chování cizích vojáků, kteří rabují a znesvěcují, ale v konečném důsledku ukazuje fakt, že mnozí se domů nevrátí." },
+            { q: "O jaké události pravděpodobně pojednává 'Podivná ruleta' ('schůze v Černé nad Tisou')?", options: ["Sjezd spisovatelů", "Setkání představitelů SSSR a ČSSR před srpnovou invazí", "Volby 1946", "Mírová konference"], a: 1, exp: "Píseň reflektuje obavy z této historické schůzky ('výrobci hesel'), která předznamenala srpnovou okupaci (podivná ruleta, kde nikdo neví, co bude)." },
+            { q: "Co znamená 'Znamení doby' (mříž, obavy, zbabělost)?", options: ["Symbol nebezpečí, chaosu a apatie lidí k nastalé totalitní situaci", "Ekonomická krize", "Kritika církve", "Ekologický problém"], a: 0, exp: "Je to výzva k sebekritice; lidem zůstaly svobodné jen myšlenky a propadli apatii vůči utlačujícímu režimu." },
+            { q: "Proč voják v 'Píseň Neznámého vojína' nestojí o falešnou lítost delegací u jeho hrobu?", options: ["Protože je zraněný", "Protože by raději žil, než každoročně poslouchal naoko uspořádanou ceremonii od papalášů", "Protože byl pacifista", "Protože nemá rád hudbu"], a: 1, exp: "Má jasný mírový a protiválečný význam; mrtvý voják odmítá pokrytecké ceremonie a věnce." },
+            { q: "K čemu přirovnává Kryl Rusy a národ v písni 'Jeřabiny' (doba dozrávání srpen)?", options: ["Rusy k přátelům, národ k vítězům", "Rusy k vichřici a netopýrům, národ je němý a nečinný", "Rusy k letním bouřkám", "Rusy k andělům"], a: 1, exp: "Národ se v srpnu nebrání (je němý), 'motýl pod karabinami', a nakonec 'nezbývá nic jiného, než zpívat s Rusy'." },
+            { q: "Koho kritizuje 'Pasážová revolta'?", options: ["Jen komunisty", "Apatické mladé lidi, kteří žijí 've svých životech', nadávají, ale pro změnu nic nedělají (jsou pokrytci bez páteře)", "Důchodce", "Exilové autory"], a: 1, exp: "Kritizuje nejen komunistický režim, ale především lhostejnost a 'nicnedělání' tehdejší mládeže a zrady mezi kamarády." }
+        ];
+
+        const container = document.getElementById('quiz-container');
+
+        // Generování HTML
+        otazky.forEach((otazka, index) => {
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            
+            const title = document.createElement('div');
+            title.className = 'question-title';
+            title.textContent = `${index + 1}. ${otazka.q}`;
+            card.appendChild(title);
+
+            const optionsDiv = document.createElement('div');
+            optionsDiv.className = 'options';
+
+            otazka.options.forEach((opt, optIndex) => {
+                const label = document.createElement('label');
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = `q${index}`;
+                radio.value = optIndex;
+                
+                label.appendChild(radio);
+                label.appendChild(document.createTextNode(opt));
+                optionsDiv.appendChild(label);
+            });
+
+            card.appendChild(optionsDiv);
+
+            const explanationDiv = document.createElement('div');
+            explanationDiv.className = 'explanation';
+            explanationDiv.id = `exp${index}`;
+            card.appendChild(explanationDiv);
+
+            container.appendChild(card);
+        });
+
+        // Vyhodnocení
+        function vyhodnotitTest() {
+            let score = 0;
+            const cards = document.querySelectorAll('.question-card');
+
+            cards.forEach((card, index) => {
+                const selected = card.querySelector(`input[name="q${index}"]:checked`);
+                const labels = card.querySelectorAll('label');
+                const expDiv = document.getElementById(`exp${index}`);
+                
+                labels.forEach(l => {
+                    l.classList.remove('correct');
+                    l.classList.remove('incorrect');
+                });
+                expDiv.style.display = 'none';
+
+                if (selected) {
+                    const ans = parseInt(selected.value);
+                    if (ans === otazky[index].a) {
+                        score++;
+                        selected.parentElement.classList.add('correct');
+                    } else {
+                        selected.parentElement.classList.add('incorrect');
+                        labels[otazky[index].a].classList.add('correct');
+                        
+                        expDiv.style.display = 'block';
+                        expDiv.innerHTML = `<strong>Špatně.</strong><br>
+                                            <strong>Správná odpověď:</strong> <em>${otazky[index].options[otazky[index].a]}</em><br>
+                                            <strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
+                    }
+                } else {
+                    labels[otazky[index].a].classList.add('correct');
+                    expDiv.style.display = 'block';
+                    expDiv.innerHTML = `<strong>Neodpověděli jste.</strong><br>
+                                        <strong>Správná odpověď:</strong> <em>${otazky[index].options[otazky[index].a]}</em><br>
+                                        <strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
+                }
+            });
+
+            const resultDiv = document.getElementById('result');
+            const percent = Math.round((score / otazky.length) * 100);
+            resultDiv.innerHTML = `Váš výsledek: ${score} z ${otazky.length} bodů (${percent} %).`;
+            
+            if(percent >= 80) {
+                resultDiv.style.color = '#27ae60';
+                resultDiv.innerHTML += "<br>Famózní! Normalizaci, disent i Kryla máte v malíčku.";
+            } else if (percent >= 50) {
+                resultDiv.style.color = '#f39c12';
+                resultDiv.innerHTML += "<br>Velmi dobré, ale v některých metaforách u Kryla a samizdatu jsou rezervy. Zkontrolujte vysvětlení.";
+            } else {
+                resultDiv.style.color = '#c0392b';
+                resultDiv.innerHTML += "<br>Tato otázka je obsáhlá. Projděte si vysvětlivky u chyb, pomohou vám to lépe pochopit.";
+            }
+        }
+    </script>
+</body>
+</html>
