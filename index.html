@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Státnicový test: Literární historie a divadlo (60 otázek)</title>
+    <title>Státnicový test: Literární historie a divadlo s vysvětlením</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -77,6 +77,16 @@
             border-color: #f5c6cb !important;
             color: #721c24;
         }
+        .explanation {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            color: #856404;
+            border-radius: 4px;
+            font-size: 0.95em;
+            display: none; /* Skryto ve výchozím stavu */
+        }
         #result {
             font-size: 1.5em;
             text-align: center;
@@ -89,7 +99,7 @@
 <body>
 
     <h1>Státnicový test z ČJ: Historie, autoři a divadla</h1>
-    <p style="text-align:center;">Vyberte u každé otázky jednu správnou odpověď. Test vychází výhradně z vašich poznámek.</p>
+    <p style="text-align:center;">Vyberte u každé otázky jednu správnou odpověď. Test vás po odeslání sám opraví a vysvětlí chyby.</p>
     
     <div id="quiz-container"></div>
     
@@ -99,70 +109,236 @@
     <script>
         const otazky = [
             // Václav Havel
-            { q: "Z jaké rodiny pocházel Václav Havel?", options: ["Z dělnické rodiny z Kladna", "Z pražské podnikatelské rodiny", "Z učitelské rodiny z Brna", "Ze zemědělské rodiny z Moravy"], a: 1 },
-            { q: "Kterou čtvrť vybudoval Havlův dědeček a otec (spolu s palácem Lucerna)?", options: ["Vinohrady", "Žižkov", "Barrandov", "Dejvice"], a: 2 },
-            { q: "Z jakého důvodu byl V. Havel v roce 1950 vyloučen z poděbradského gymnázia?", options: ["Pro špatný prospěch", "Z politických důvodů", "Kvůli emigraci", "Z rodinných důvodů"], a: 1 },
-            { q: "Jakou profesi vykonával V. Havel po vyloučení ze školy?", options: ["Chemický laborant na VŠCHT", "Knihovník", "Kulisák v Národním divadle", "Učitel na základní škole"], a: 0 },
-            { q: "Jak se jmenovalo sdružení, které Havel založil a které vydávalo časopis Rozhovory 36?", options: ["Osmačtyřicátníci", "Šestatřicátníci", "Chartisté", "Kruh nezávislých spisovatelů"], a: 1 },
-            { q: "Kde pracoval Havel po vojenské službě jako jevištní technik?", options: ["V Národním divadle", "V Divadle na Vinohradech", "V Divadle ABC", "Ve Studiu Y"], a: 2 },
-            { q: "Kde působil V. Havel jako dramaturg po svém působení v Divadle ABC?", options: ["V Divadle Na zábradlí", "V Činoherním klubu", "V Redutě", "V Semaforu"], a: 0 },
-            { q: "Co V. Havel oficiálně vystudoval?", options: ["Práva na UK", "Filozofii na UK", "Dramaturgii na DAMU", "Režii na FAMU"], a: 2 },
-            { q: "V jakém roce založil V. Havel samizdatovou Edici Expedice?", options: ["1968", "1975", "1977", "1989"], a: 1 },
-            { q: "K jakému trestu byl Havel odsouzen za spoluzaložení Charty 77 (v roce 1977)?", options: ["K vyhoštění ze země", "K 14 měsícům vězení", "K 4,5 roku vězení", "K domácímu vězení"], a: 1 },
-            { q: "K jakému trestu byl odsouzen v roce 1978 za spoluzaložení VONS za podvracení republiky?", options: ["K 14 měsícům", "Ke 2 letům", "K 4,5 roku", "K 10 letům"], a: 2 },
-            { q: "Kterého dne byl Václav Havel zvolen prezidentem Československé federativní republiky?", options: ["17. 11. 1989", "25. 12. 1989", "1. 1. 1993", "21. 8. 1968"], a: 1 },
-            { q: "Které z následujících děl je dramatem Václava Havla?", options: ["Balada pro banditu", "Konec masopustu", "Zahradní slavnost", "Král Vávra"], a: 2 },
-            { q: "Které z následujících děl PATŘÍ mezi eseje Václava Havla?", options: ["Asanace", "Dopisy Olze", "Protest", "Vernisáž"], a: 1 },
+            { 
+                q: "Z jaké rodiny pocházel Václav Havel?", 
+                options: ["Z dělnické rodiny z Kladna", "Z pražské podnikatelské rodiny", "Z učitelské rodiny z Brna", "Ze zemědělské rodiny z Moravy"], 
+                a: 1,
+                exp: "Havel pocházel ze známé pražské podnikatelské rodiny, jeho dědeček a otec stáli za stavbou paláce Lucerna a čtvrti Barrandov."
+            },
+            { 
+                q: "Kterou čtvrť vybudoval Havlův dědeček a otec?", 
+                options: ["Vinohrady", "Žižkov", "Barrandov", "Dejvice"], 
+                a: 2,
+                exp: "Hovlova rodina vybudovala čtvrť Barrandov a jeho strýc následně i barrandovské ateliéry."
+            },
+            { 
+                q: "Z jakého důvodu byl V. Havel v roce 1950 vyloučen z poděbradského gymnázia?", 
+                options: ["Pro špatný prospěch", "Z politických důvodů", "Kvůli emigraci", "Z rodinných důvodů"], 
+                a: 1,
+                exp: "Byl vyloučen čistě z politických důvodů kvůli svému „buržoaznímu“ původu."
+            },
+            { 
+                q: "Jakou profesi vykonával V. Havel po vyloučení ze školy?", 
+                options: ["Chemický laborant na VŠCHT", "Knihovník", "Kulisák v Národním divadle", "Učitel na základní škole"], 
+                a: 0,
+                exp: "Po vyloučení pracoval jako chemický laborant na Vysoké škole chemicko-technologické (VŠCHT)."
+            },
+            { 
+                q: "Jak se jmenovalo sdružení, které Havel založil a které vydávalo časopis Rozhovory 36?", 
+                options: ["Osmačtyřicátníci", "Šestatřicátníci", "Chartisté", "Kruh nezávislých spisovatelů"], 
+                a: 1,
+                exp: "Založil sdružení s názvem Šestatřicátníci, které vydávalo zmíněný časopis."
+            },
+            { 
+                q: "Kde pracoval Havel po vojenské službě jako jevištní technik?", 
+                options: ["V Národním divadle", "V Divadle na Vinohradech", "V Divadle ABC", "Ve Studiu Y"], 
+                a: 2,
+                exp: "Po vojně se stal jevištním technikem v Divadle ABC, až později přešel do Divadla Na zábradlí jako dramaturg."
+            },
+            { 
+                q: "Kde působil V. Havel jako dramaturg po svém působení v Divadle ABC?", 
+                options: ["V Divadle Na zábradlí", "V Činoherním klubu", "V Redutě", "V Semaforu"], 
+                a: 0,
+                exp: "Z Divadla ABC vedly jeho kroky do Divadla Na zábradlí, kde se stal dramaturgem a později se zde uváděly jeho hry (Zahradní slavnost)."
+            },
+            { 
+                q: "Co V. Havel oficiálně vystudoval?", 
+                options: ["Práva na UK", "Filozofii na UK", "Dramaturgii na DAMU", "Režii na FAMU"], 
+                a: 2,
+                exp: "I přes politické překážky se mu podařilo vystudovat dramaturgii na DAMU."
+            },
+            { 
+                q: "V jakém roce založil V. Havel samizdatovou Edici Expedice?", 
+                options: ["1968", "1975", "1977", "1989"], 
+                a: 1,
+                exp: "Samizdatovou Edici Expedice založil v roce 1975."
+            },
+            { 
+                q: "K jakému trestu byl Havel odsouzen za spoluzaložení Charty 77 (v roce 1977)?", 
+                options: ["K vyhoštění ze země", "K 14 měsícům vězení", "K 4,5 roku vězení", "K domácímu vězení"], 
+                a: 1,
+                exp: "Za spoluzaložení Charty 77 a poškozování zájmů republiky byl odsouzen na 14 měsíců."
+            },
+            { 
+                q: "K jakému trestu byl odsouzen v roce 1978 za spoluzaložení VONS za podvracení republiky?", 
+                options: ["K 14 měsícům", "Ke 2 letům", "K 4,5 roku", "K 10 letům"], 
+                a: 2,
+                exp: "Za činnost ve VONS (Výbor na obranu nespravedlivě stíhaných) dostal mnohem přísnější trest – 4,5 roku vězení."
+            },
+            { 
+                q: "Kterého dne byl Václav Havel zvolen prezidentem Československé federativní republiky?", 
+                options: ["17. 11. 1989", "25. 12. 1989", "1. 1. 1993", "21. 8. 1968"], 
+                a: 1,
+                exp: "Prezidentem Československé federativní republiky byl zvolen přesně na 1. svátek vánoční, 25. prosince 1989."
+            },
+            { 
+                q: "Které z následujících děl je dramatem Václava Havla?", 
+                options: ["Balada pro banditu", "Konec masopustu", "Zahradní slavnost", "Král Vávra"], 
+                a: 2,
+                exp: "Zahradní slavnost je slavné Havlovo absurdní drama. Balada pro banditu je od M. Uhdeho, Konec masopustu od J. Topola a Král Vávra také od Uhdeho."
+            },
+            { 
+                q: "Které z následujících děl PATŘÍ mezi eseje Václava Havla?", 
+                options: ["Asanace", "Dopisy Olze", "Protest", "Vernisáž"], 
+                a: 1,
+                exp: "Dopisy Olze (stejně jako Moc bezmocných či Dopis Gustávu Husákovi) patří mezi jeho stěžejní eseje. Ostatní možnosti jsou jeho dramata."
+            },
             
             // Audience
-            { q: "Do jakého žánru spadá Havlova hra Audience?", options: ["Historické drama", "Absurdní drama", "Komedie dell'arte", "Tragédie"], a: 1 },
-            { q: "V jakém roce vznikla hra Audience?", options: ["1965", "1968", "1975", "1989"], a: 2 },
-            { q: "Komu je hra Audience věnována (památce koho)?", options: ["Janu Patočkovi", "Alfrédu Radokovi", "Jiřímu Šlitrovi", "Ladislavu Fialkovi"], a: 1 },
-            { q: "Jak je charakterizován Ferdinand Vaněk ve hře Audience?", options: ["Vulgární a výmluvný", "Tichý, pracovitý, vystudovaný ekonom", "Žoviální a pijící pivo", "Původně hrobař"], a: 1 },
-            { q: "Jaké povolání dříve vykonávala postava Bureše v Audienci?", options: ["Ekonom", "Spisovatel", "Skladník", "Hrobař"], a: 3 },
-            { q: "Kterou herečku navrhoval Sládek pozvat do pivovaru (byla by s ní „sranda“)?", options: ["Ivu Janžurovou", "Jiřinu Bohdalovou", "Ninu Divíškovou", "Jitku Molavcovou"], a: 1 },
-            { q: "Z jakého města byl Vaněk údajně přesunut do současného pivovaru?", options: ["Z Prahy", "Z Plzně", "Z Brna", "Z Pardubic"], a: 3 },
-            { q: "Před stýkáním se s kým Sládek Vaňka výslovně varuje?", options: ["S Pavlem Kohoutem", "S Karlem Gottem", "S Jiřím Suchým", "S Milanem Uhdem"], a: 0 },
-            { q: "Jak reaguje Vaněk v úplně závěrečné scéně na zdvořilou otázku Sládka?", options: ["Odmítne odpovědět", "Rozpláče se", "Odpovídá vulgárně („Na hovno“)", "Nabídne mu pivo"], a: 2 },
+            { 
+                q: "Do jakého žánru spadá Havlova hra Audience?", 
+                options: ["Historické drama", "Absurdní drama", "Komedie dell'arte", "Tragédie"], 
+                a: 1,
+                exp: "Hra Audience je typickým příkladem absurdního dramatu – vyobrazuje pocit bezmoci, ztrátu schopnosti se dorozumět a obsahuje plané tlachání."
+            },
+            { 
+                q: "Komu je hra Audience věnována (památce koho)?", 
+                options: ["Janu Patočkovi", "Alfrédu Radokovi", "Jiřímu Šlitrovi", "Ladislavu Fialkovi"], 
+                a: 1,
+                exp: "Podle poznámek je Audience věnována památce významného českého divadelního a filmového režiséra Alfréda Radoka."
+            },
+            { 
+                q: "Jak je charakterizován Ferdinand Vaněk ve hře Audience?", 
+                options: ["Vulgární a výmluvný", "Tichý, pracovitý, vystudovaný ekonom", "Žoviální a pijící pivo", "Původně hrobař"], 
+                a: 1,
+                exp: "Vaněk je Havlovým alter egem. Je to nesmělý, tichý, spořádaný a strohý intelektuál, který má vystudovanou ekonomii."
+            },
+            { 
+                q: "Z jakého města byl Vaněk údajně přesunut do současného pivovaru?", 
+                options: ["Z Prahy", "Z Plzně", "Z Brna", "Z Pardubic"], 
+                a: 3,
+                exp: "V ději se Vaněk od Sládka dozvídá, že měl být původně v pivovaru v Pardubicích, ale byl zásahem shora přesunut sem."
+            },
+            { 
+                q: "Před stýkáním se s kým Sládek Vaňka výslovně varuje?", 
+                options: ["S Pavlem Kohoutem", "S Karlem Gottem", "S Jiřím Suchým", "S Milanem Uhdem"], 
+                a: 0,
+                exp: "Sládek Vaňka důrazně varuje před stýkáním se se spisovatelem Pavlem Kohoutem (jakožto dalším disidentem)."
+            },
+            { 
+                q: "Jak reaguje Vaněk v úplně závěrečné scéně na zdvořilou otázku Sládka?", 
+                options: ["Odmítne odpovědět", "Rozpláče se", "Odpovídá vulgárně („Na hovno“)", "Nabídne mu pivo"], 
+                a: 2,
+                exp: "V závěru dochází k absurdnímu obratu rolí. Dříve vulgární Sládek mluví slušně, zatímco slušný intelektuál Vaněk na otázku „Jak se daří?“ odpoví vulgárně."
+            },
 
             // Divadlo 70. - 80. let (Autoři)
-            { q: "Jaké obory vystudoval Ivan Vyskočil?", options: ["Práva a ekonomii", "DAMU a pedagogiku-psychologii na UK", "Chemii na VŠCHT", "Filozofii a historii"], a: 1 },
-            { q: "Která divadla zakládal Ivan Vyskočil?", options: ["Semafor a Studio Y", "Redutu a Na zábradlí", "Činoherní klub a Divadlo za branou", "Husu na provázku a Divadlo na Vinohradech"], a: 1 },
-            { q: "Kterou z těchto her napsal Ivan Vyskočil?", options: ["Kdyby tisíc klarinetů", "Kočka na kolejích", "Král Vávra", "Piknik"], a: 0 },
-            { q: "Kde působil Josef Topol před studiem DAMU?", options: ["V Národním divadle", "V Divadle E. F. Buriana", "V Divadle ABC", "Ve Studiu Y"], a: 1 },
-            { q: "Které drama Josefa Topola bylo inspirováno Kosmovou kronikou a luckou válkou?", options: ["Konec masopustu", "Půlnoční vítr", "Kočka na kolejích", "Dávno, dávno již tomu"], a: 1 },
-            { q: "Z jakého původu pocházel dramatik Milan Uhde?", options: ["Ze šlechtického", "Z židovského po matce", "Z dělnického z Ostravy", "Z německého"], a: 1 },
-            { q: "Do jakého časopisu přispíval Milan Uhde?", options: ["Rozhovory 36", "Host do domu", "Respekt", "Květy"], a: 1 },
-            { q: "Které z těchto děl je od Milana Uhdeho?", options: ["Král Vávra", "Piknik", "Marast", "Jiné komedie"], a: 0 },
-            { q: "Čí knižní předlohu (Nikola Šuhaj loupežník) adaptoval Uhde v Baladě pro banditu?", options: ["Bohumila Hrabala", "Ivana Olbrachta", "Vladislava Vančury", "Karla Čapka"], a: 1 },
-            { q: "Kdo je autorem her Marast a Ecce Constantia?", options: ["Pavel Kohout", "Pavel Landovský", "Jiří Dienstbier", "František Pavlíček"], a: 0 },
-            { q: "Kdo je autorem her Jiné komedie a Sanitární noc?", options: ["Josef Topol", "Pavel Landovský", "Ivan Vyskočil", "Jiří Dienstbier"], a: 1 },
-            { q: "Kdo je autorem hry Příjem?", options: ["Pavel Kohout", "Pavel Landovský", "Jiří Dienstbier", "Václav Havel"], a: 2 },
-            { q: "Kdo je autorem díla Dávno, dávno již tomu?", options: ["František Pavlíček", "Milan Uhde", "Josef Topol", "Jan Schmid"], a: 0 },
+            { 
+                q: "Jaké obory vystudoval Ivan Vyskočil?", 
+                options: ["Práva a ekonomii", "DAMU a pedagogiku-psychologii na UK", "Chemii na VŠCHT", "Filozofii a historii"], 
+                a: 1,
+                exp: "Ivan Vyskočil (jeden ze zakladatelů malých forem) vystudoval herectví na DAMU a k tomu pedagogiku a psychologii na Univerzitě Karlově."
+            },
+            { 
+                q: "Která divadla zakládal Ivan Vyskočil?", 
+                options: ["Semafor a Studio Y", "Redutu a Na zábradlí", "Činoherní klub a Divadlo za branou", "Husu na provázku a Divadlo na Vinohradech"], 
+                a: 1,
+                exp: "Vyskočil stál u zrodu legendárních pražských malých scén – Reduty (kde dělal text-appealy) a Divadla Na zábradlí."
+            },
+            { 
+                q: "Kde působil Josef Topol před studiem DAMU?", 
+                options: ["V Národním divadle", "V Divadle E. F. Buriana", "V Divadle ABC", "Ve Studiu Y"], 
+                a: 1,
+                exp: "Josef Topol působil nejdříve v Divadle E. F. Buriana a až poté vystudoval DAMU."
+            },
+            { 
+                q: "Které drama Josefa Topola bylo inspirováno Kosmovou kronikou a luckou válkou?", 
+                options: ["Konec masopustu", "Půlnoční vítr", "Kočka na kolejích", "Dávno, dávno již tomu"], 
+                a: 1,
+                exp: "Drama Půlnoční vítr čerpá právě z Kosmovy kroniky a motivů lucké války."
+            },
+            { 
+                q: "Čí knižní předlohu adaptoval Milan Uhde v Baladě pro banditu?", 
+                options: ["Bohumila Hrabala", "Ivana Olbrachta", "Vladislava Vančury", "Karla Čapka"], 
+                a: 1,
+                exp: "Balada pro banditu je slavná divadelní (a později i filmová) adaptace knihy Nikola Šuhaj loupežník od Ivana Olbrachta."
+            },
+            { 
+                q: "Kdo je autorem her Jiné komedie a Sanitární noc?", 
+                options: ["Josef Topol", "Pavel Landovský", "Ivan Vyskočil", "Jiří Dienstbier"], 
+                a: 1,
+                exp: "Tyto hry napsal herec a disident Pavel Landovský."
+            },
 
             // Divadla
-            { q: "Co tvořil Ladislav Fialka v Divadle Na zábradlí?", options: ["Absurdní dramata", "Pantomimické scénky", "Text-appealy", "Muzikály"], a: 1 },
-            { q: "V kterém městě a roce bylo původně založeno Studio Y?", options: ["V Brně 1968", "V Liberci 1963", "V Praze 1978", "V Ostravě 1965"], a: 1 },
-            { q: "Kdo byl zakladatelem a ředitelem Studia Y?", options: ["Jan Schmid", "Otomar Krejča", "Jaroslav Vostrý", "Ladislav Smoček"], a: 0 },
-            { q: "Jaký dramatický formát byl typický pro Studio Y (kolektivní improvizace)?", options: ["Text-appealy", "Takzvaný večer na přidanou", "Vědecké přednášky", "Absurdní tlachání"], a: 1 },
-            { q: "Kdo založil Divadlo za branou (existující 1965-1972)?", options: ["Ivan Vyskočil", "Otomar Krejča", "Jan Schmid", "Jiří Suchý"], a: 1 },
-            { q: "Které divadlo zakládali v roce 1965 Jaroslav Vostrý a Ladislav Smoček?", options: ["Divadlo za branou", "Činoherní klub", "Husa na provázku", "Studio Y"], a: 1 },
-            { q: "Jak se jmenovala první hra L. Smočka v Činoherním klubu?", options: ["Kočka na kolejích", "Kdyby tisíc klarinetů", "Piknik", "Král Vávra"], a: 2 },
-            { q: "Které divadlo vedl ředitel Pistorius a působily v něm herečky Janžurová a Bohdalová?", options: ["Divadlo Na zábradlí", "Divadlo na Vinohradech", "Semafor", "Reduta"], a: 1 },
-            { q: "Pro které divadlo jsou typické vědecké přednášky a parodování českých vlastností?", options: ["Divadlo Járy Cimrmana", "Činoherní klub", "Husa na provázku", "Divadlo na okraji"], a: 0 },
-            { q: "Podle čeho získalo název divadlo Husa na provázku?", options: ["Podle básně J. Suchého", "Podle Mahenovy knížky filmových libret", "Byl to akronym", "Podle rekvizity v Baladě pro banditu"], a: 1 },
+            { 
+                q: "Co tvořil Ladislav Fialka v Divadle Na zábradlí?", 
+                options: ["Absurdní dramata", "Pantomimické scénky", "Text-appealy", "Muzikály"], 
+                a: 1,
+                exp: "Ladislav Fialka byl mim a v Divadle Na zábradlí vedl pantomimickou skupinu, jejíž scénky se začleňovaly do představení."
+            },
+            { 
+                q: "V kterém městě a roce bylo původně založeno Studio Y?", 
+                options: ["V Brně 1968", "V Liberci 1963", "V Praze 1978", "V Ostravě 1965"], 
+                a: 1,
+                exp: "Studio Y založil Jan Schmid původně v Liberci v roce 1963 jako sdružení loutkářů, do Prahy se přestěhovalo až v roce 1978."
+            },
+            { 
+                q: "Kdo založil Divadlo za branou (existující 1965-1972)?", 
+                options: ["Ivan Vyskočil", "Otomar Krejča", "Jan Schmid", "Jiří Suchý"], 
+                a: 1,
+                exp: "Divadlo za branou založil významný režisér Otomar Krejča po svém odchodu z Národního divadla."
+            },
+            { 
+                q: "Které divadlo zakládali v roce 1965 Jaroslav Vostrý a Ladislav Smoček?", 
+                options: ["Divadlo za branou", "Činoherní klub", "Husa na provázku", "Studio Y"], 
+                a: 1,
+                exp: "Tato dvojice založila legendární Činoherní klub, kde působil např. Josef Abrhám."
+            },
+            { 
+                q: "Pro které divadlo jsou typické vědecké přednášky a parodování českých vlastností?", 
+                options: ["Divadlo Járy Cimrmana", "Činoherní klub", "Husa na provázku", "Divadlo na okraji"], 
+                a: 0,
+                exp: "Spojení pseudovědeckých přednášek s parodií a toporným herectvím je základním znakem Divadla Járy Cimrmana (Smoljak, Svěrák)."
+            },
+            { 
+                q: "Podle čeho získalo název divadlo Husa na provázku?", 
+                options: ["Podle básně J. Suchého", "Podle Mahenovy knížky filmových libret", "Byl to akronym", "Podle rekvizity v Baladě pro banditu"], 
+                a: 1,
+                exp: "Divadlo bylo pojmenováno podle stejnojmenné knížky filmových libret brněnského autora Jiřího Mahena."
+            },
 
             // Divadla malých forem (60. léta)
-            { q: "Kde vznikla první malá jeviště a jaký byl jejich cíl?", options: ["Jako státní divadla na podporu režimu", "Z iniciativy skupinek nadšenců po kritice kultu osobnosti na 20. sjezdu KSSS", "Jako výhradně loutková divadla pro děti", "Jako součást Národního divadla"], a: 1 },
-            { q: "V jakém roce byla otevřena Reduta?", options: ["1950", "1957", "1965", "1968"], a: 1 },
-            { q: "Co byly tzv. text-appealy využívané v Redutě?", options: ["Němé pantomimické výstupy", "Snaha zapůsobit textem hraným, vypravovaným a zpívaným", "Manifesty proti cenzuře", "Akronymy hudebních žánrů"], a: 1 },
-            { q: "Kdo založil divadlo Semafor v roce 1959?", options: ["Vyskočil a Vodička", "Suchý a Šlitr", "Vostrý a Smoček", "Smoljak a Svěrák"], a: 1 },
-            { q: "Co znamená název akronymu SEMAFOR?", options: ["Sedm malých forem", "Sdružení emancipačních forem", "Sekce mladých formátů", "Sdružení malířů a fotografů"], a: 0 },
-            { q: "Jak se jmenovala první hra divadla Semafor?", options: ["Zuzana je sama doma", "Člověk z půdy", "Jonáš a tingltangl", "Kytice"], a: 1 },
-            { q: "Jaké proslavené kabaretní pásmo z roku 1962 účinkovali Šlitr a Suchý?", options: ["Zuzana není pro nikoho doma", "Kdyby tisíc klarinetů", "Jonáš a tingltangl", "Tak co, pane barone"], a: 2 },
-            { q: "Kdo tvořil autorskou dvojici Grossmann a... (konec 60. let)?", options: ["Svěrák", "Šlitr", "Šimek", "Dvořák"], a: 2 },
-            { q: "Kdo byli zakladatelé Divadla Na zábradlí (1958)?", options: ["Suchý, Šlitr", "Vyskočil, Suchý, Vodička", "Krejča, Topol", "Vostrý, Smoček"], a: 1 },
-            { q: "Která hra s písničkami byla prvním představením Divadla Na zábradlí?", options: ["Člověk z půdy", "Kdyby tisíc klarinetů", "Piknik", "Zahradní slavnost"], a: 1 }
+            { 
+                q: "Kde vznikla první malá jeviště a jaký byl jejich cíl?", 
+                options: ["Jako státní divadla na podporu režimu", "Z iniciativy nadšenců po kritice kultu osobnosti na 20. sjezdu KSSS", "Jako loutková divadla pro děti", "Jako součást Národního divadla"], 
+                a: 1,
+                exp: "Malé scény vznikaly z iniciativy nadšenců jako reakce na uvolnění po kritice kultu Stalinovy osobnosti."
+            },
+            { 
+                q: "Co byly tzv. text-appealy využívané v Redutě?", 
+                options: ["Němé pantomimické výstupy", "Snaha zapůsobit textem hraným, vypravovaným a zpívaným", "Manifesty proti cenzuře", "Akronymy hudebních žánrů"], 
+                a: 1,
+                exp: "Text-appeal (termín I. Vyskočila) byl žánr, který cílil na diváka apelativním slovem – kombinoval povídky, písně a kabaret."
+            },
+            { 
+                q: "Co znamená název akronymu SEMAFOR?", 
+                options: ["Sedm malých forem", "Sdružení emancipačních forem", "Sekce mladých formátů", "Sdružení malířů a fotografů"], 
+                a: 0,
+                exp: "Název SEMAFOR vymyslel Jiří Suchý jako zkratku pro „Sedm malých forem“ (film, poezie, jazz, loutky, tanec, výtvarné umění, komedie)."
+            },
+            { 
+                q: "Jak se jmenovala první hra divadla Semafor (1959)?", 
+                options: ["Zuzana je sama doma", "Člověk z půdy", "Jonáš a tingltangl", "Kytice"], 
+                a: 1,
+                exp: "Úplně prvním představením Semaforu byla komedie Člověk z půdy, ve které exceloval M. Horníček či M. Kopecký."
+            },
+            { 
+                q: "Kdo tvořil autorskou dvojici Grossmann a... (konec 60. let)?", 
+                options: ["Svěrák", "Šlitr", "Šimek", "Dvořák"], 
+                a: 2,
+                exp: "Legendární komickou dvojici v Semaforu (Návštěvní dny) tvořili Jiří Grossmann a Miloslav Šimek."
+            }
         ];
 
         const container = document.getElementById('quiz-container');
@@ -193,6 +369,13 @@
             });
 
             card.appendChild(optionsDiv);
+
+            // Skrytý div pro vysvětlení špatné odpovědi
+            const explanationDiv = document.createElement('div');
+            explanationDiv.className = 'explanation';
+            explanationDiv.id = `exp${index}`;
+            card.appendChild(explanationDiv);
+
             container.appendChild(card);
         });
 
@@ -204,25 +387,38 @@
             cards.forEach((card, index) => {
                 const selected = card.querySelector(`input[name="q${index}"]:checked`);
                 const labels = card.querySelectorAll('label');
+                const expDiv = document.getElementById(`exp${index}`);
                 
-                // Reset stylů
+                // Reset stylů z předchozího hodnocení
                 labels.forEach(l => {
                     l.classList.remove('correct');
                     l.classList.remove('incorrect');
                 });
+                expDiv.style.display = 'none';
 
                 if (selected) {
                     const ans = parseInt(selected.value);
                     if (ans === otazky[index].a) {
+                        // Správná odpověď
                         score++;
                         selected.parentElement.classList.add('correct');
                     } else {
+                        // Špatná odpověď -> ukaž správnou a vysvětlení
                         selected.parentElement.classList.add('incorrect');
                         labels[otazky[index].a].classList.add('correct');
+                        
+                        expDiv.style.display = 'block';
+                        expDiv.innerHTML = `<strong>Vaše odpověď je špatně.</strong><br>
+                                            <strong>Správná odpověď:</strong> <em>${otazky[index].options[otazky[index].a]}</em><br>
+                                            <strong>Zdůvodnění z poznámek:</strong> ${otazky[index].exp}`;
                     }
                 } else {
-                    // Pokud nic nevybral, jen ukaž správnou
+                    // Nevybral nic -> ukázat jen správnou a vysvětlení
                     labels[otazky[index].a].classList.add('correct');
+                    expDiv.style.display = 'block';
+                    expDiv.innerHTML = `<strong>Neodpověděli jste.</strong><br>
+                                        <strong>Správná odpověď:</strong> <em>${otazky[index].options[otazky[index].a]}</em><br>
+                                        <strong>Zdůvodnění z poznámek:</strong> ${otazky[index].exp}`;
                 }
             });
 
@@ -235,10 +431,10 @@
                 resultDiv.innerHTML += "<br>Skvělá práce, státnice máte v kapse!";
             } else if (percent >= 50) {
                 resultDiv.style.color = '#f39c12';
-                resultDiv.innerHTML += "<br>Dobrý základ, ale historii je třeba ještě trochu procvičit.";
+                resultDiv.innerHTML += "<br>Dobrý základ, ale historii je třeba ještě trochu procvičit. Podívejte se na zdůvodnění u chyb.";
             } else {
                 resultDiv.style.color = '#c0392b';
-                resultDiv.innerHTML += "<br>Tohle bude chtít ještě projít poznámky. Nevzdávejte to!";
+                resultDiv.innerHTML += "<br>Tohle bude chtít ještě projít poznámky. Nevzdávejte to a pročtěte si vysvětlení pod otázkami!";
             }
         }
     </script>
