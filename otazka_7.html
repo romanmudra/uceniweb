@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Státnicový test ČJ - Otázka 7: Didaktika a Próza po roce 1989</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .question-card {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-left: 5px solid #3498db;
+        }
+        .question-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+        .options label {
+            display: block;
+            background: #f9f9f9;
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid #e0e0e0;
+        }
+        .options label:hover {
+            background: #eef2f5;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 30px;
+            margin-bottom: 50px;
+        }
+        button:hover {
+            background-color: #219653;
+        }
+        .correct {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+            color: #155724;
+            font-weight: bold;
+        }
+        .incorrect {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+            color: #721c24;
+        }
+        .explanation {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            color: #856404;
+            border-radius: 4px;
+            font-size: 0.95em;
+            display: none;
+        }
+        #result {
+            font-size: 1.5em;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Státnicový test z ČJ (Otázka 7)</h1>
+    <p style="text-align:center;">Mezipředmětové vztahy, Projektové vyučování, Česká próza po roce 1989 a Vieweghova Báječná léta pod psa</p>
+    
+    <div id="quiz-container"></div>
+    
+    <button onclick="vyhodnotitTest()">Vyhodnotit test</button>
+    <div id="result"></div>
+
+    <script>
+        const otazky = [
+            // Didaktika - Učivo v RVP a mezipředmětové vztahy
+            { q: "Co podle RVP patří mezi 'tvořivé činnosti s literárním textem'?", options: ["Učení se životopisů zpaměti", "Přednes vhodných textů, volná reprodukce, dramatizace a vytváření vlastních textů", "Přepisování knihy do sešitu", "Tiché čtení bez interpretace"], a: 1, exp: "Do tvořivých činností patří přednes, reprodukce myšlenek, interpretace, dramatizace a tvorba vlastních textů či výtvarného doprovodu." },
+            { q: "Co tvoří základ literární teorie podle vymezení učiva v RVP?", options: ["Struktura literárního díla (námět, téma, hrdina, kompozice) a jazyk literárního díla", "Životopisy všech nositelů Nobelovy ceny", "Dějiny divadla", "Seznam povinné četby"], a: 0, exp: "Základ literární teorie tvoří struktura literárního díla (námět, téma, hrdina, kompozice) a jazyk díla." },
+            { q: "Na jaké dvě hlavní složky můžeme literaturu dělit, aby bylo snazší propojování předmětů?", options: ["Na poezii a drama", "Na literaturu uměleckou a věcnou", "Na českou a světovou", "Na starou a moderní"], a: 1, exp: "Literaturu dělíme na uměleckou (funkce estetická) a věcnou (funkce poznávací, což usnadňuje mezipředmětové propojování)." },
+            { q: "Jaké mezipředmětové propojení ilustruje román Josefa Škvoreckého Zbabělci?", options: ["Jazyk a cizí jazyky", "Český jazyk a literatura (propojování složek jazykové, slohové a literární)", "Literatura a zeměpis", "Literatura a fyzika"], a: 1, exp: "Zbabělci ilustrují propojení českého jazyka a literatury – uplatňují jazykové prostředky adolescentů a různé slohové postupy (vyprávěcí, popisný)." },
+            { q: "Které literární dílo z vašich poznámek ilustruje propojení oblasti Matematika a její aplikace?", options: ["Povídky malostranské", "Klapzubova jedenáctka", "Zbabělci", "Báječná léta pod psa"], a: 1, exp: "Klapzubova jedenáctka (E. Bass) ilustruje využití číselného výrazu označujícího fotbalové mužstvo, což propojuje literaturu s matematikou." },
+            { q: "Jak se v literatuře projevuje propojení s oblastí 'Informatika a komunikační technologie'?", options: ["Knihy se čtou jen na tabletu", "Využívána skrytě – např. nakopírované materiály, vyhledávání etymologie na mobilních telefonech", "V každé knize musí být zmínka o počítači", "Psaním referátů ve Wordu"], a: 1, exp: "Informatika se využívá skrytě (nakopírované materiály, využitelnost při vyhledávání na internetu/mobilu)." },
+            { q: "S jakými dvěma hlavními předměty je literatura propojena v oblasti 'Člověk a společnost'?", options: ["Dějepis, občanská výchova", "Fyzika, chemie", "Hudební a výtvarná výchova", "Pracovní činnosti"], a: 0, exp: "Oblast Člověk a společnost zahrnuje dějepis (v díle nalézáme kus historie) a občanskou výchovu (v díle nacházíme hodnoty a postoje)." },
+            { q: "Který autor z vašich poznámek ilustruje propojení literatury s přírodními vědami (Chemie, přírodopis)?", options: ["Vladimír Páral", "Karel Čapek", "Jan Neruda", "Ota Pavel"], a: 0, exp: "Specifickým autorem pro přírodní vědy je Vladimír Páral (původně chemik)." },
+            
+            // Didaktika - Projektové vyučování
+            { q: "Co je to projektové vyučování (projekt)?", options: ["Test na konci školního roku", "Komplexní úkol spjatý se životní realitou, s nímž se žák identifikuje a přebírá za něj odpovědnost", "Pouhé přečtení knihy", "Skupinový referát zkopírovaný z internetu"], a: 1, exp: "Projekt je komplexní úkol spjatý s realitou. Žák se s ním identifikuje, přebírá odpovědnost a na konci obhajuje výsledky argumenty." },
+            { q: "Které z následujících kritérií NEPATŘÍ k typickému dělení projektů?", options: ["Podle délky (krátkodobý, střednědobý)", "Podle místa a prostředí (školní, domácí)", "Podle účastníků (individuální, společné)", "Podle ročního období (jarní, letní)"], a: 3, exp: "Projekty se dělí podle délky, místa, účastníků, organizace (jednopředmětové/vícepředmětové) a podle informačního zdroje, nikoli podle ročních období." },
+            { q: "Jaké jsou 4 fáze řešení projektu?", options: ["1. Čtení, 2. Psaní, 3. Zkoušení, 4. Oprava", "1. Plánování, 2. Realizace, 3. Prezentace výstupů, 4. Hodnocení", "1. Úvod, 2. Zápletka, 3. Vyvrcholení, 4. Katastrofa", "1. Motivace, 2. Expozice, 3. Analýza, 4. Závěr"], a: 1, exp: "Čtyři fáze jsou: 1. Plánování, 2. Realizace, 3. Prezentace výstupů, 4. Hodnocení." },
+            { q: "V jaké roli vystupuje učitel během 2. fáze (Realizace projektu)?", options: ["Jako absolutní diktátor", "Jako role poradce", "Jako nečinný divák", "Jako jediný řešitel problému"], a: 1, exp: "Během realizace učitel působí v roli poradce, podporuje motivaci a zodpovědnost žáků." },
+            { q: "Co všechno by se mělo v rámci 4. fáze (Hodnocení projektu) hodnotit?", options: ["Pouze výsledný produkt", "Celý proces (plán, průběh i prezentaci výstupů)", "Pouze ústní projev žáka", "Pouze práce učitele"], a: 1, exp: "Hodnotit by se měl celý proces (plán, průběh i prezentace), přičemž hodnotí učitel i žáci." },
+
+            // Próza po roce 1989 - Charakteristika doby a linie
+            { q: "Která událost znamenala v listopadu 1989 pád komunistického režimu a následnou proměnu literárního systému?", options: ["Palachův týden", "Sametová revoluce (17. 11. 1989)", "Pražské jaro", "Konec 2. světové války"], a: 1, exp: "Dne 17. 11. 1989 padl komunistický režim, což vedlo k otevření světa a vydávání mnoha dosud zakázaných děl." },
+            { q: "O čem pojednává kniha 'Kouzelná flétna' od Bohumila Hrabala (vydaná po roce 1989)?", options: ["O hudbě a skladatelích", "Reakce na Palachův týden zaznamenaná deníkovými zápisy", "O životě v emigraci v Paříži", "O stavbě Národního divadla"], a: 1, exp: "Kouzelná flétna od B. Hrabala jsou deníkové zápisy reflektující dění kolem Palachova týdne." },
+            { q: "Do jaké linie české prózy po roce 1989 spadá snaha 'vyjádřit své pocity, názory a osobní zážitky' (např. Vlastimil Třešňák nebo Ivan Landsmann)?", options: ["Linie fantaskní", "Linie feministická", "Linie autentizační", "Linie historická"], a: 2, exp: "Snaha o vyjádření osobních pocitů a zážitků tvoří linii autentizační." },
+            { q: "Který disident, folkový písničkář a emigrant je autorem díla 'Klíč je pod rohožkou' (cesty po Německu, vzpomínky na domovinu)?", options: ["Ivan Landsmann", "Bohumil Hrabal", "Vlastimil Třešňák", "Michal Viewegh"], a: 2, exp: "Klíč je pod rohožkou napsal Vlastimil Třešňák (vydal i sbírku To nejdůležitější o panu Moritzovi)." },
+            { q: "Kdo je autorem díla 'Pestré vrstvy', které autenticky zachycuje život havíře, cestu do Kanady a emigraci v Holandsku?", options: ["Ivan Landsmann", "Jáchym Topol", "Roman Ludva", "Petr Šabach"], a: 0, exp: "Ivan Landsmann, který sám pracoval v dole a emigroval do Holandska, napsal Pestré vrstvy." },
+
+            // Próza po roce 1989 - Fantaskní linie a Humoristé
+            { q: "O co se snaží linie fantaskní (často označovaná za postmoderní)?", options: ["Přesně zdokumentovat historii 2. SV", "Rozbít příběh, prolnout fantaskní vize se zachycením skutečnosti a upozornit na nedokonalost poznání", "Prosazovat práva žen", "Zrušit vydávání knih a nahradit je filmy"], a: 1, exp: "Fantaskní linie se snaží rozbít klasický příběh a prolnout ho s fantaskními vizemi." },
+            { q: "Který autor psal čtivá, humorná a autobiografická díla, jejichž části byly využity pro filmy Pelíšky či Pupendo?", options: ["Michal Ajvaz", "Petr Šabach", "Roman Ludva", "Jaroslav Rudiš"], a: 1, exp: "Petr Šabach psal humorná a autobiografická díla, ze sbírky 'Hovno hoří' (novela Voda se šťávou) vycházely např. Pelíšky." },
+            { q: "Co zachycuje Šabachovo dílo 'Jak potopit Austrálii' (část Šakalí léta)?", options: ["Vzpomínky z autorových let (mají spád)", "Život klokanů", "Střípky ze života bez zápletky", "Emigraci do Austrálie"], a: 0, exp: "Šakalí léta (součást knihy Jak potopit Austrálii) jsou vzpomínky na mládí a mají spád, na rozdíl od 'Infarktových etud'." },
+            { q: "Který autor, původem z Olomouce (pracoval mj. jako dramaturg), napsal román o lidských osudech nazvaný 'Smrt a křeslo'?", options: ["Jáchym Topol", "Michal Ajvaz", "Roman Ludva", "Jan Balabán"], a: 2, exp: "Roman Ludva napsal román Smrt a křeslo, ve kterém se knihovník dopátrává historie křesla s vraždou." },
+
+            // Próza po roce 1989 - Feministická a další literatura
+            { q: "Jaká socioložka má podle poznámek zásluhu na vzniku nadace pro genderová studia a feministické literatury u nás?", options: ["Jiřina Šiklová", "Daniela Hodrová", "Tereza Boučková", "Irena Dousková"], a: 0, exp: "Zásluhu na rozvoji genderových studií má socioložka Jiřina Šiklová." },
+            { q: "Která autorka (znalkyně jazyků a redaktorka) napsala temnou prózu 'Trýznivé město' (putování Prahou minulou i současnou)?", options: ["Irena Dousková", "Tereza Boučková", "Daniela Hodrová", "Halina Pawlowská"], a: 2, exp: "Daniela Hodrová napsala Trýznivé město. Její tvorba je ovlivněna fuksovskou tajemnou atmosférou." },
+            { q: "Kdo je dcerou Pavla Kohouta (disidenta) a napsala útržky vzpomínek s názvem 'Indiánský běh'?", options: ["Daniela Hodrová", "Irena Dousková", "Tereza Boučková", "Jiřina Šiklová"], a: 2, exp: "Tereza Boučková, signatářka Charty 77 a dcera P. Kohouta, je autorkou Indiánského běhu a Roku kohouta (o adopci)." },
+            { q: "V kterém oblíbeném díle Ireny Douskové vypráví děvče o tom, jak se její rodině nedaří v době komunistického útlaku?", options: ["Goldstein píše dceři", "Hrdý Budžes", "Díky za každé nové ráno", "Pravidla směšného chování"], a: 1, exp: "Irena Dousková je autorkou známého vyprávění Hrdý Budžes." },
+            { q: "Který autor (vl. jménem Jan Beneš), zakladatel sdružení Moderní analfabet, píše lehce plynoucím stylem syceným městskou mluvou (román O rodičích a dětech)?", options: ["Jáchym Topol", "Michal Ajvaz", "Emil Hakl", "Jan Balabán"], a: 2, exp: "Emil Hakl (Jan Beneš) napsal román O rodičích a dětech (o rozmluvě otce a syna na procházce)." },
+            { q: "Který autor, dřívější textař skupiny Psí vojáci a syn Josefa Topola, napsal obsáhlý román ze 80. let 'Sestra' (o narkomanii a rasismu)?", options: ["Jáchym Topol", "Jan Balabán", "Michal Ajvaz", "Jaroslav Rudiš"], a: 0, exp: "Jáchym Topol je autorem románu Sestra a také prózy Kloktat dehet." },
+            { q: "Z jaké knihy pochází příběh o dospívající dívce, která se potýká s milostnými zklamáními a překážkami normalizace (autorkou je Halina Pawlowská)?", options: ["Sestra", "Díky za každé nové ráno", "Středověk", "Pravidla směšného chování"], a: 1, exp: "Halina Pawlowská je autorkou autobiograficky laděné prózy Díky za každé nové ráno." },
+            { q: "Který ostravský autor psal povídky plné mezních situací a ponuré atmosféry (Středověk, Možná že odcházíme)?", options: ["Michal Ajvaz", "Jan Balabán", "Jaroslav Rudiš", "Roman Ludva"], a: 1, exp: "Jan Balabán pocházel z Ostravy a jeho díla (Středověk, Kudy šel anděl) jsou velmi ponurá." },
+            { q: "Kdo je představitelem magického realismu (role sémiotiky jazyka a symbolů) a napsal knihu 'Vražda v hotelu Intercontinental'?", options: ["Michal Ajvaz", "Jan Balabán", "Jáchym Topol", "Emil Hakl"], a: 0, exp: "Michal Ajvaz je představitelem magického realismu; ve svých knihách propojuje pražské prostředí s fantaskními bytostmi." },
+            { q: "Který autor, známý také jako tvůrce komiksů (Alois Nebel), tematizuje soužití Čechů a Němců v Sudetech a neukotvené třicátníky (Nebe pod Berlínem)?", options: ["Roman Ludva", "Petr Šabach", "Jaroslav Rudiš", "Michal Viewegh"], a: 2, exp: "Jaroslav Rudiš je autorem komiksu i knihy Alois Nebel, a románů Nebe pod Berlínem či Grandhotel." },
+
+            // Michal Viewegh a Báječná léta pod psa
+            { q: "Kdo je autorem autobiografického románu 'Báječná léta pod psa' (vydaného v nakl. Československý spisovatel v r. 1995)?", options: ["Petr Šabach", "Michal Viewegh", "Jáchym Topol", "Radek John"], a: 1, exp: "Michal Viewegh napsal tento melancholický, satirický, ironický a humorný román zachycující 60. léta a normalizaci." },
+            { q: "Který román M. Viewegha pojednává o výchově dcery zbohatlíka pedagogem, jenž se do ní zamiluje (Beáta) a ona se nakonec zabije v autě?", options: ["Účastníci zájezdu", "Názory na vraždu", "Výchova dívek v Čechách", "Případ nevěrné Kláry"], a: 2, exp: "Jde o Výchovu dívek v Čechách." },
+            { q: "O čem pojednává román Účastníci zájezdu (M. Viewegh)?", options: ["O vraždě učitelky", "Setkání rozdílných lidí při zájezdu do Itálie", "O nevěrné milence Kláře", "O redaktorce ženského magazínu"], a: 1, exp: "Účastníci zájezdu sledují osudy a setkání různých povah při dovolené v Itálii." },
+            { q: "Co je typickým znakem Vieweghova románu Báječná léta pod psa (kompozice, žánry)?", options: ["Je psán pouze ve verších", "Střídání prózy, deníkových záznamů a dramatu, kompozice je chronologická", "Kompozice je výhradně retrospektivní", "Kniha nemá žádný děj"], a: 1, exp: "Báječná léta pod psa chronologicky střídají prózu, Kvídův deník a dramatické dialogy." },
+            { q: "Co je hlavním tématem 'Báječných let pod psa'?", options: ["Zachycení doby od 60. let přes normalizaci a snaha rodiny čelit politickému diktátu režimu, který člověka vláčí od úspěchu k neúspěchu", "Život české šlechty v 19. století", "Cestování po exotických zemích", "Založení komunistické strany"], a: 0, exp: "Kniha ironicky a s humorem zachycuje obraz normální rodiny, která se snaží přežít normalizaci a absurditu doby." },
+            { q: "Kdo je hlavní postavou a vypravěčem (alter egem Viewegha) v Báječných letech?", options: ["Paco", "Josef", "Kvido", "Zvára"], a: 2, exp: "Hlavním hrdinou je inteligentní a výřečný Kvido (ročník 1962), který si píše deník." },
+            { q: "Jak je v poznámkách charakterizován Kvidův otec?", options: ["Agresivní a hloupý", "Inteligentní, politicky nestálý, starostlivý, manuálně nezručný a emočně labilní (výstavba vlastní rakve)", "Fanatický komunista", "Bohém, který rodinu opustil"], a: 1, exp: "Kvidův otec je vzdělaný a starostlivý, ale kvůli ústupkům režimu (a Šperkovi) trpí depresemi a staví si doma rakev." },
+            { q: "Jak se jmenuje Kvidův mladší bratr, který miluje přírodu a spí ve spacáku?", options: ["Zvára", "Paco", "Jirka", "Šperk"], a: 1, exp: "Je to Paco, mladší bratr Kvida." },
+            { q: "Kdo je inženýr Zvára?", options: ["Kvidův dědeček", "Komunistický funkcionář, který šikanuje otce", "Spolužák Kvidova otce, který mu za vzdělání vděčí, ale nakonec se stane jeho nadřízeným", "Miláček rodiny"], a: 2, exp: "Zvára je spolužák, kterému Kvidův otec pomáhal s učením, ale protože je ochoten kolaborovat, stane se nadřízeným otce." },
+            { q: "Co vyvolá prvotní konflikt v rodině na Vánoce 1967 (když Líbina babička tvoří s Věrou salát)?", options: ["Kvidův otec shodí stromeček", "Josef se hádá s Lábou, protože Líbina, jezdící do SSSR, hájí Sověty jako kulturní, zatímco Josef je přesvědčen o hrozící okupaci", "Ztratí se dárky pro Paca", "Kvido uteče z domova"], a: 1, exp: "Hádka propuká mezi dědečkem Josefem, který očekává okupaci, a komunisticky orientovanou babičkou Líbou." },
+            { q: "Proč se rodina přestěhuje do Sázavy a získá tam nejprve jen nevhodnou 'prosklenou terasu'?", options: ["Chtěli blíž k přírodě", "Otec se nechtěl přihlásit do komunistické strany, tudíž nedostali slíbený byt, ale jen terasu", "Vyhráli ji v loterii", "Otec tam získal práci ředitele"], a: 1, exp: "Protože se otec odmítl zpočátku angažovat a vstoupit do KSČ, dostali od Šperka k bydlení jen chladnou prosklenou terasu." },
+            { q: "Jaké ústupky musí Kvidův otec postupně udělat soudruhu Šperkovi, aby rodina získala dům a otec kariérní růst?", options: ["Musí se rozvést", "Koupí si vlčáka, začne hrát fotbal za podnik a nakonec se zapíše na VUML", "Odešle Kvida do Ruska", "Vstoupí do armády"], a: 1, exp: "Aby rodina mohla normálně žít, otec potlačí svou hrdost – pořídí vlčáka, hraje s Šperkem fotbal a zapíše se na Večerní univerzitu marxismu-leninismu (VUML)." },
+            { q: "Co způsobí, že Kvidův otec následně upadne do hlubokých depresí a ztratí životní elán?", options: ["Pád z lešení", "Šperkovo chování; otec si uvědomí bezvýchodnost situace a své ponížení", "Zklamání z Kvidových známek ve škole", "Rozvod s matkou"], a: 1, exp: "Otec neufinancuje psychický tlak z toho, že musel poníženě ustupovat Šperkovi, začne dělat podřadnou práci a stavět si rakev." },
+            { q: "Kdo se s Kvidovou rodinou setkává při opékání kuřat, což přinese velké problémy a sledování tajnou policií?", options: ["Václav Havel", "Pavel Kohout (disident a signatář Charty 77)", "Jaroslav Rudiš", "Michal Viewegh starší"], a: 1, exp: "Matka pozve na opékání kuřat disidenta Pavla Kohouta (v roce 1977 po podpisu Charty 77), což Kvidova rodina těžce nese kvůli riziku s StB." },
+            { q: "Jakou dívku Kvido po celou knihu tajně miluje, touží po ní, žárlí na ni a nakonec s ní má dítě?", options: ["Mirjanu", "Jarušku Mackovou", "Líbu", "Zitu"], a: 1, exp: "Jaruška Macková je Kvidova dětská a celoživotní láska, kterou si nakonec i vezme." },
+            { q: "Jaký incident si Šperk a učitelky ve škole nespravedlivě spojí s Kvidem v roce 1977 (jako předzvěst problémů)?", options: ["Rozbití oken", "Shazování vlajek SSSR", "Paco shodil obraz Gustava Husáka (Kvido předtím omylem shodil obraz Svobody)", "Krádež třídní knihy"], a: 2, exp: "Mladší Paco shodil Husákův obraz. Škola to kvůli předchozím Kvidovým přešlapům okamžitě dává do souvislosti s Kvidovou 'problémovou' rodinou." }
+        ];
+
+        const container = document.getElementById('quiz-container');
+
+        // Generování HTML pro otázky
+        otazky.forEach((otazka, index) => {
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            
+            const title = document.createElement('div');
+            title.className = 'question-title';
+            title.textContent = `${index + 1}. ${otazka.q}`;
+            card.appendChild(title);
+
+            const optionsDiv = document.createElement('div');
+            optionsDiv.className = 'options';
+
+            otazka.options.forEach((opt, optIndex) => {
+                const label = document.createElement('label');
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = `q${index}`;
+                radio.value = optIndex;
+                
+                label.appendChild(radio);
+                label.appendChild(document.createTextNode(opt));
+                optionsDiv.appendChild(label);
+            });
+
+            card.appendChild(optionsDiv);
+
+            // Skrytý div pro vysvětlení
+            const explanationDiv = document.createElement('div');
+            explanationDiv.className = 'explanation';
+            explanationDiv.id = `exp${index}`;
+            card.appendChild(explanationDiv);
+
+            container.appendChild(card);
+        });
+
+        // Vyhodnocovací logika
+        function vyhodnotitTest() {
+            let score = 0;
+            const cards = document.querySelectorAll('.question-card');
+
+            cards.forEach((card, index) => {
+                const selected = card.querySelector(`input[name="q${index}"]:checked`);
+                const labels = card.querySelectorAll('label');
+                const expDiv = document.getElementById(`exp${index}`);
+                
+                labels.forEach(l => {
+                    l.classList.remove('correct');
+                    l.classList.remove('incorrect');
+                });
+                expDiv.style.display = 'none';
+
+                if (selected) {
+                    const ans = parseInt(selected.value);
+                    if (ans === otazky[index].a) {
+                        score++;
+                        selected.parentElement.classList.add('correct');
+                    } else {
+                        selected.parentElement.classList.add('incorrect');
+                        labels[otazky[index].a].classList.add('correct');
+                        
+                        expDiv.style.display = 'block';
+                        expDiv.innerHTML = `<strong>Špatně.</strong><br>
+                                            <strong>Správná odpověď:</strong> <em>${otazky[index].options[otazky[index].a]}</em><br>
+                                            <strong>Zdůvodnění z poznámek:</strong> ${otazky[index].exp}`;
+                    }
+                } else {
+                    labels[otazky[index].a].classList.add('correct');
+                    expDiv.style.display = 'block';
+                    expDiv.innerHTML = `<strong>Neodpověděli jste.</strong><br>
+                                        <strong>Správná odpověď:</strong> <em>${otazky[index].options[otazky[index].a]}</em><br>
+                                        <strong>Zdůvodnění z poznámek:</strong> ${otazky[index].exp}`;
+                }
+            });
+
+            const resultDiv = document.getElementById('result');
+            const percent = Math.round((score / otazky.length) * 100);
+            resultDiv.innerHTML = `Váš výsledek: ${score} z ${otazky.length} bodů (${percent} %).`;
+            
+            if(percent >= 80) {
+                resultDiv.style.color = '#27ae60';
+                resultDiv.innerHTML += "<br>Skvělé! Literatura po roce 1989 i didaktika projektů vám nedělá žádný problém.";
+            } else if (percent >= 50) {
+                resultDiv.style.color = '#f39c12';
+                resultDiv.innerHTML += "<br>Velmi dobrý základ. Pár chytáků se tam našlo, projděte si vysvětlivky (zejména autory linií).";
+            } else {
+                resultDiv.style.color = '#c0392b';
+                resultDiv.innerHTML += "<br>Bude to chtít ještě procvičit. Rámečky s vysvětlením vám pomůžou si jména lépe přiřadit k dílům.";
+            }
+        }
+    </script>
+</body>
+</html>
