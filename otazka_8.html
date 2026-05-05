@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Státnicový test ČJ - Otázka 8: Film, Válka a Ota Pavel</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .question-card {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-left: 5px solid #3498db;
+        }
+        .question-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+        .options label {
+            display: block;
+            background: #f9f9f9;
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid #e0e0e0;
+        }
+        .options label:hover {
+            background: #eef2f5;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 30px;
+            margin-bottom: 50px;
+        }
+        button:hover {
+            background-color: #219653;
+        }
+        .correct {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+            color: #155724;
+            font-weight: bold;
+        }
+        .incorrect {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+            color: #721c24;
+        }
+        .explanation {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            color: #856404;
+            border-radius: 4px;
+            font-size: 0.95em;
+            display: none;
+        }
+        #result {
+            font-size: 1.5em;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Státnicový test z ČJ (Otázka 8)</h1>
+    <p style="text-align:center;">Didaktické využití filmu, Obraz 1. a 2. světové války, Ota Pavel: Smrt krásných srnců</p>
+    
+    <div id="quiz-container"></div>
+    
+    <button onclick="vyhodnotitTest()">Vyhodnotit test</button>
+    <div id="result"></div>
+
+    <script>
+        const otazky = [
+            // Didaktika - Film a audionahrávky
+            { q: "Jaký je vztah mezi knihou a jejím filmovým zpracováním z hlediska didaktiky?", options: ["Film by měl knihu zcela nahradit", "Film by neměl nahrazovat literární dílo, ale spíše jej doplňovat (přínos spočívá v komparaci)", "Film by se měl pouštět jen za odměnu", "Kniha by se měla číst až po zhlédnutí celého filmu"], a: 1, exp: "Podle poznámek by film neměl literární dílo nahrazovat, ale doplňovat. Přínos tkví v jejich vzájemné komparaci." },
+            { q: "Jak by měla být volena stopáž filmové ukázky v hodině literatury?", options: ["Minimálně 45 minut", "Měla by dějově odpovídat čtené literární ukázce (vybíráme vhodnou stopáž)", "Celovečerní film na dvě hodiny", "Pouze 10 sekund"], a: 1, exp: "Stopáž by měla být vybrána tak, aby dějově odpovídala čtené literární ukázce." },
+            { q: "Která z výhod zapojení filmu do výuky umožňuje sledování neverbálního vyjadřování, zvuku a melodie?", options: ["Zprostředkování velkého množství témat", "Flexibilita a manipulační možnosti", "Zprostředkování komunikační situace autentické a stylizované", "Zvýšení motivace žáků"], a: 2, exp: "Autentické zprostředkování komunikační situace umožňuje žákům sledovat i neverbální vyjadřování, zvuk a melodii." },
+            { q: "Co umožňuje 'flexibilita a manipulační možnosti' filmu?", options: ["Změnit konec filmu", "Zastavit přehrávání v libovolný okamžik, přehrávat dozadu či přehrávat obraz bez zvuku (a naopak)", "Změnit herce v hlavní roli", "Přidat české titulky k českému filmu"], a: 1, exp: "Tato flexibilita umožňuje učiteli zastavit obraz, přehrávat jej pozpátku nebo pustit obraz bez zvuku pro různé didaktické aktivity." },
+            { q: "Před filmovou projekcí (např. u Bílé nemoci) se můžeme žáků ptát: 'Jak si postavu maršála představujete?'. O jakou metodu se může jednat?", options: ["Metoda tvůrčího psaní", "Metoda živých soch nebo výrazové četby v roli (tvořivá dramatika)", "Metoda reprodukce děje", "Diktát"], a: 1, exp: "Otázky na představu postavy a její následné ztvárnění spadají pod metodu tvořivé dramatiky (živé sochy, výrazová četba v roli)." },
+            { q: "Jaký je hlavní cíl komparace s filmovou sekvencí po jejím zhlédnutí?", options: ["Zjistit, jestli žáci dávali pozor", "Zhodnotit práci kameramana a střihače", "Porovnat vlastní představy a verbalizované výrazy s tím, jak to ztvárnili herci a režisér, a diskutovat o případných odlišnostech", "Zkritizovat film jako horší než knihu"], a: 2, exp: "Cílem komparace je porovnat vlastní představy a interpretace (např. postoje, výrazy) s konkrétním filmovým zpracováním a diskutovat o tom." },
+
+            // Obraz 1. světové války
+            { q: "Který autor poezie odmítal Rakousko-Uhersko, vyjadřoval odpor k válce (sbírka Života bído, přec tě mám rád) a byl ovlivněn impresionismem?", options: ["Rudolf Medek", "Jaroslav Hašek", "Fráňa Šrámek", "Jaromír John"], a: 2, exp: "Fráňa Šrámek psal antimilitaristickou poezii, odmítal Rakousko-Uhersko a ve sbírce Modrý a rudý symbolicky ztvárnil odpor k vojsku." },
+            { q: "O čem pojednávají povídky 'Žasnoucí voják' od F. Šrámka?", options: ["O vzpouře námořníků", "O zmatku v duši intelektuála, který věřil v mezinárodní solidaritu dělníků a nakonec vraždil na frontě", "O lásce na venkově", "O stavbě Národního divadla"], a: 1, exp: "Žasnoucí voják ukazuje zmatek intelektuála, jehož ideály o solidaritě ztroskotaly tváří v tvář vraždění na frontě." },
+            { q: "Který spisovatel byl členem Československé družiny v Rusku a psal legionářskou literaturu (např. Třetí rota, Hlídač č. 47)?", options: ["Jaromír John", "Jaroslav Hašek", "Josef Kopta", "František Langer"], a: 2, exp: "Josef Kopta napsal románový cyklus Třetí rota a psychologickou novelu Hlídač č. 47." },
+            { q: "Co je hlavním tématem románové pentalogie 'Anabáze' od Rudolfa Medka?", options: ["Cesta legií přes boje s německou a rakouskou armádou do Ruska", "Návrat legionářů přes Ameriku", "Život českých emigrantů ve Francii", "Válka na balkánské frontě"], a: 0, exp: "Medkova Anabáze sleduje strastiplnou cestu a boje československých legií v Rusku." },
+            { q: "Proč se zastřelí hlavní hrdina v Medkově dramatu 'Plukovník Švec'?", options: ["Z nešťastné lásky", "Aby zastavil rozklad morálky ve svém vojsku (protirevoluční stanovisko)", "Protože prohrál bitvu", "Protože byl obviněn ze zrady"], a: 1, exp: "Plukovník Švec se zastřelí jako oběť pro své vojsko, aby zastavil rozpadající se morálku vojáků." },
+            { q: "Jakou postavu představuje dobrý voják Švejk (od J. Haška) podle vašich poznámek?", options: ["Válečného hrdinu s mnoha medailemi", "Úředního prosťáčka, lidového hrdinu (bezmocného, vychytralého, nepoddajného), který se vyhýbá vojenským povinnostem a naivita je jeho maskou v zápase s mocí", "Důstojníka rakouské armády", "Zrádce národa"], a: 1, exp: "Švejk je lidový hrdina, který předstírá naivitu (idiotství je maskou), zdůrazňuje svou hloupost plněním nesmyslných rozkazů a tak bojuje s mocí." },
+            { q: "Který autor patří do nelegionářské literatury (bojoval na balkánské frontě, dostal úplavici a ochrnul) a napsal povídky 'Večery na slamníku'?", options: ["Richard Weiner", "Jaroslav Hašek", "Jaromír John", "Karel Matěj Čapek-Chod"], a: 2, exp: "Jaromír John bojoval na balkánské frontě a ve Večerech na slamníku zachytil osudy a morální hodnoty prostých lidí na frontě s ironií vůči nadutosti rakouských vojáků." },
+            { q: "Jaké motivy převládají v povídkách 'Lítice' od Richarda Weinera?", options: ["Oslava hrdinství", "Expresionistické motivy destrukce lidské psychiky pod tlakem válečných zážitků, odcizení jedince", "Humor a satira", "Dokumentární popis zbraní"], a: 1, exp: "Weinerovy Lítice jsou hluboce expresionistické, ukazují destrukci psychiky, depersonalizaci a odcizení." },
+
+            // Obraz 2. světové války
+            { q: "Jaký byl hlavní cíl pohádkové hry Jana Drdy 'Hrátky s čertem' napsané za války?", options: ["Vystrašit děti", "Odmítání okázalé zbožnosti a symbolika vítězství spojenců nad temnými silami Třetí říše (souboj princezny/vojáka s peklem)", "Kritika komunistického režimu", "Podpora fašismu"], a: 1, exp: "Hra pomocí alegorie a pohádkových motivů (boj s peklem) symbolizovala boj proti Třetí říši." },
+            { q: "O čem vypráví román 'Život s hvězdou' od Jiřího Weila?", options: ["O cestě do vesmíru", "O holocaustu a každodennosti bankovního úředníka Josefa Roubíčka, který musí nosit žlutou hvězdu a přežívá díky omylu", "O životě partyzánů v horách", "O pražském povstání"], a: 1, exp: "Weilův román líčí osud židovského úředníka Josefa Roubíčka čekajícího na transport." },
+            { q: "Jak byla po roce 1948 Weilova kniha 'Život s hvězdou' přijata dobovou kritikou?", options: ["Byla oceněna státní cenou", "Byla tvrdě odsouzena, kritici v ní viděli zbabělé poraženectví", "Stala se povinnou školní četbou", "Byla ignorována"], a: 1, exp: "Poúnorová marxistická kritika román tvrdě odsoudila jako zbabělé poraženectví (chyběl jim aktivní komunistický odboj)." },
+            { q: "Který komunistický novinář byl popraven v Berlíně a zanechal po sobě 'Reportáž psanou na oprátce'?", options: ["Julius Fučík", "Jan Drda", "Arnošt Lustig", "Norbert Frýd"], a: 0, exp: "Julius Fučík je autorem této reportáže propašované z vězení na motácích (stala se základním dílem pro komunistickou mládež)." },
+            { q: "O čem pojednává novela Arnošta Lustiga 'Modlitba pro Kateřinu Horovitzovou'?", options: ["O vzpouře v Osvětimi", "Inspiruje se skutečnou událostí z roku 1943 v Itálii (podvod na bohatých Židech) a zachycuje zoufalou snahu o zachování lidské důstojnosti", "O návratu dívky z koncentráku do Švýcarska", "O skrývání se v Praze"], a: 1, exp: "Novela je inspirována událostí z roku 1943 a ukazuje cynismus nacistů i snahu židovských zajatců uchovat si důstojnost." },
+            { q: "V jakém díle Arnošta Lustiga se nevracející dívka (z koncentračního tábora) nedokáže začlenit do normálního života a spáchá ve Švýcarsku sebevraždu?", options: ["Dita Saxová", "Démanty noci", "Modlitba pro Kateřinu Horovitzovou", "Noc a naděje"], a: 0, exp: "Dita Saxová je příběh dívky, která po přežití koncentračního tábora nedokáže najít smysl života a spáchá sebevraždu." },
+            { q: "Jaké téma zpracovává Jan Otčenášek v díle 'Romeo, Julie a tma'?", options: ["O divadelním kroužku v Terezíně", "O lásce studenta Pavla a židovské dívky Ester, kterou skrývá a která je nakonec zmařena v období heydrichiády", "O partyzánském odboji na Moravě", "O osvobození Prahy"], a: 1, exp: "Otčenáškův román je tragickým milostným příběhem z doby heydrichiády, kde Pavel ukrývá židovku Ester." },
+
+            // Ota Pavel - Život a Smrt krásných srnců (Obecně)
+            { q: "Jaké bylo vlastní jméno Oty Pavla?", options: ["Ota Popper", "Ota Lustig", "Kamil Zeman", "Ota Škvorecký"], a: 0, exp: "Narodil se jako Otto Popper (z židovské rodiny obchodníka)." },
+            { q: "Jaký sport a práce předcházely literární dráze Oty Pavla?", options: ["Byl učitelem a hrál fotbal", "Byl sportovním zpravodajem Československého rozhlasu a vášnivým rybářem", "Byl profesionálním cyklistou", "Pracoval jako lékař"], a: 1, exp: "Ota Pavel byl velkým sportovním fanouškem, rybářem a po válce pracoval jako sportovní zpravodaj." },
+            { q: "S jakou nemocí se Ota Pavel potýkal v pozdějším věku, což ho vedlo k pobytům v psychiatrických léčebnách?", options: ["S tuberkulózou", "S rakovinou plic", "S projevy duševní nemoci – schizofrenie", "S Parkinsonovou chorobou"], a: 2, exp: "Ota Pavel trpěl vážnou duševní nemocí (schizofrenií)." },
+            { q: "Jaký literární žánr představuje kniha 'Smrt krásných srnců'?", options: ["Román", "Divadelní hra", "Soubor povídek", "Epická báseň"], a: 2, exp: "Smrt krásných srnců je soubor autobiografických povídek." },
+            { q: "Komu je soubor 'Smrt krásných srnců' věnován?", options: ["Mamince, která měla za muže mého tatínka", "Karlu Proškovi", "Bratrům Hugovi a Jirkovi", "Sportovcům Dukly"], a: 0, exp: "Kniha je přímo věnována 'Mamince, která měla za muže mého tatínka'." },
+            { q: "Kdo vystupuje v knize jako vypravěč?", options: ["Tatínek Leo Popper", "Strýc Karel Prošek", "Nejmladší syn (Ota)", "Vševědoucí vypravěč"], a: 2, exp: "Vypravěčem je nejmladší syn Ota (v podobě malého chlapce)." },
+            { q: "Které jazykové rysy jsou pro knihu 'Smrt krásných srnců' typické?", options: ["Výhradně spisovná čeština bez emocí", "Složitá souvětí a filozofické úvahy", "Užívání zdrobnělin (maminka, Leoušek), přirovnání (kapři jako teleta) a prolínání jazykových vrstev", "Cizojazyčné texty bez překladu"], a: 2, exp: "Typické jsou zdrobněliny, vtipná přirovnání a prolínání různých vrstev jazyka (slang, obecná čeština)." },
+
+            // Rozbor povídek Oty Pavla
+            { q: "O čem vypráví povídka 'Nejdražší ve střední Evropě'?", options: ["O nákupu drahého auta", "Tatínek koupí rybník od dr. Václavíka, ale vyloví z něj jen jednoho kapra. Poté Václavíkovi prodá starou nalakovanou ledničku bez vnitřku jako pomstu.", "O cestě do Itálie", "O výhře v loterii"], a: 1, exp: "Tatínek je podveden při koupi rybníka (vyloví jediného kapra) a později se pomstí prodejem prázdné ledničky." },
+            { q: "V povídce 'Ve službách Švédska', pro jakou firmu tatínek pracoval jako úspěšný prodejce vysavačů a ledniček?", options: ["Baťa", "Elektrolux", "Škoda", "Siemens"], a: 1, exp: "Tatínek pracoval pro firmu Elektrolux jako špičkový (i když neodbytný a drzý) prodejce." },
+            { q: "Koho si ředitel firmy Elektrolux, pan Korálek, přeje nechat namalovat pro svou propagaci (Povídka Ve službách Švédska)?", options: ["Tatínka", "Sám sebe", "Svou ženu Irmu slavným malířem Nechlebou", "Svého psa"], a: 2, exp: "Korálek se chce pochlubit a přeje si, aby slavný a podivínský malíř Vratislav Nechleba namaloval jeho ženu Irmu." },
+            { q: "V titulní povídce 'Smrt krásných srnců' tatínek navzdory zákazům uloví s pomocí psa Holana srnce. Proč to udělá?", options: ["Pro zábavu", "Aby prodal maso na černém trhu", "Aby nasytil své dva starší syny (Huga a Jirku) masem před jejich transportem do koncentračního tábora", "Aby naštval lesníka Novotného"], a: 2, exp: "Tatínek riskuje život, sundá si židovskou hvězdu a s pomocí převozníka Proška uloví srnce, aby synové přežili útrapy koncentračního tábora." },
+            { q: "Kdo byl Karel Prošek?", options: ["Ředitel firmy Elektrolux", "Koumák a pytlák, převozník na Berounce, majitel psa Holana", "Důstojník wehrmachtu", "Zloděj ledniček"], a: 1, exp: "Karel Prošek byl převozník, pytlák a tatínkův dobrý přítel, který mu v nouzi půjčil psa Holana." },
+            { q: "V povídce 'Kapři pro wehrmacht', co musí tatínek udělat před odjezdem do koncentračního tábora na příkaz gestapačíků?", options: ["Uvařit jim večeři", "Zazpívat německou hymnu", "Rozbít sádrovou bustu T. G. Masaryka a drtit ji sekyrou", "Odvézt je do Prahy"], a: 2, exp: "Gestapo tatínka poníží tím, že ho donutí zničit bustu T. G. Masaryka." },
+            { q: "Jak tatínek s Ottou v povídce 'Kapři pro wehrmacht' přechytračí Němce těsně před odjezdem rodiny do transportu?", options: ["Vykradou jim auto", "V noci vysekají otvor do ledu vlastního zabaveného rybníka, vyloví všechny kapry a tajně je prodají. Němci tak při výlovu nenajdou nic.", "Podplatí stráže", "Podříznou jim sítě"], a: 1, exp: "V noci potají vyloví svůj zabavený rybník, takže Němcům při oficiálním výlovu zbudou jen prázdné sítě." },
+            { q: "V povídce 'Jak jsme se střetli s Vlky' rodina soutěží s jinou rodinou rybářů na Lužnici. Kdo na konci vyhraje?", options: ["Vlkovi uloví 10 štik", "Tatínek a jeho rodina ('ten den dali naší rodině na prdel' a ulovili 5 velkých štik)", "Soutěž skončí remízou", "Nikdo nic neuloví"], a: 1, exp: "Vlkovi sice tajně krmili ryby a schovávali si je, ale nakonec v rozhodující den naloví velké štiky a rodinu Popperů porazí." },
+            { q: "Jak se tatínek v povídce 'Otázka hmyzu vyřešena' pokusí po válce zbohatnout, když ho vyhodí z práce?", options: ["Prodejem aut", "Začne prodávat Mucholapky firmy DERSOL (které nátře na žluto), i když vůbec nelepí, a podvodem je vnutí panu Jedličkovi", "Prodává ryby", "Začne chovat prasata"], a: 1, exp: "Tatínek se snaží prodat nefunkční mucholapky. Podvodem (ukáže funkční švýcarský výrobek jako svůj) přiměje pana Jedličku k jejich nákupu." },
+            { q: "O čem pojednává povídka 'Prase nebude!'?", options: ["O nákupu auta", "Tatínek je zapálený do vykrmování prasete pro JZD, které má být odměnou; ale protože rodina nebyla v JZD, prase nakonec nedostanou, jen pár korun", "O zrušení Vánoc", "O lovecké výpravě na kance"], a: 1, exp: "Tatínek se s maminkou dře při krmení prasat pro JZD s vidinou vlastního prasete. Nakonec jim dají jen almužnu s tím, že 'žádné prase nebude'." },
+            { q: "Proč musí v povídce 'Běh Prahou' tatínek s Otylkem prchat před davem při oslavách vítězství KSČ?", options: ["Protože ukradli peníze", "Protože běželi s americkým vojákem Johny v džípu, který rozdával žvýkačky a cigarety, což rozlítilo komunisty", "Protože nesli americkou vlajku", "Protože fandili fotbalu"], a: 1, exp: "Běželi oslavovat s Američanem Johnym (symbolem kapitalismu a UNRRY), což vedlo k tomu, že je dav komunistů zbil." },
+            { q: "V povídce 'Králíci s moudrýma očima' tatínek začne chovat šampiony králíky. Jak reaguje, když mu je na výstavě zkritizují kvůli banalitám (neumyté genitálie)?", options: ["Přijme kritiku a králíky umyje", "Králíky prodá na maso", "Rozčílí se, vypustí šampiony zpět do přírody, odejde domů a po čase zkolabuje a zemře", "Vyhraje soudní spor"], a: 2, exp: "Tatínek neustojí nespravedlnost komise, vypustí králíky na svobodu, vrátí se zlomený domů a nakonec umírá." }
+        ];
+
+        const container = document.getElementById('quiz-container');
+
+        // Generování HTML
+        otazky.forEach((otazka, index) => {
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            
+            const title = document.createElement('div');
+            title.className = 'question-title';
+            title.textContent = `${index + 1}. ${otazka.q}`;
+            card.appendChild(title);
+
+            const optionsDiv = document.createElement('div');
+            optionsDiv.className = 'options';
+
+            otazka.options.forEach((opt, optIndex) => {
+                const label = document.createElement('label');
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = `q${index}`;
+                radio.value = optIndex;
+                
+                label.appendChild(radio);
+                label.appendChild(document.createTextNode(opt));
+                optionsDiv.appendChild(label);
+            });
+
+            card.appendChild(optionsDiv);
+
+            const explanationDiv = document.createElement('div');
+            explanationDiv.className = 'explanation';
+            explanationDiv.id = `exp${index}`;
+            card.appendChild(explanationDiv);
+
+            container.appendChild(card);
+        });
+
+        // Vyhodnocení
+        function vyhodnotitTest() {
+            let score = 0;
+            const cards = document.querySelectorAll('.question-card');
+
+            cards.forEach((card, index) => {
+                const selected = card.querySelector(`input[name="q${index}"]:checked`);
+                const labels = card.querySelectorAll('label');
+                const expDiv = document.getElementById(`exp${index}`);
+                
+                labels.forEach(l => {
+                    l.classList.remove('correct');
+                    l.classList.remove('incorrect');
+                });
+                expDiv.style.display = 'none';
+
+                if (selected) {
+                    const ans = parseInt(selected.value);
+                    if (ans === otazky[index].a) {
+                        score++;
+                        selected.parentElement.classList.add('correct');
+                    } else {
+                        selected.parentElement.classList.add('incorrect');
+                        labels[otazky[index].a].classList.add('correct');
+                        
+                        expDiv.style.display = 'block';
+                        expDiv.innerHTML = `<strong>Špatně.</strong><br>
+                                            <strong>Správná odpověď:</strong> <em>${otazky[index].options[otazky[index].a]}</em><br>
+                                            <strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
+                    }
+                } else {
+                    labels[otazky[index].a].classList.add('correct');
+                    expDiv.style.display = 'block';
+                    expDiv.innerHTML = `<strong>Neodpověděli jste.</strong><br>
+                                        <strong>Správná odpověď:</strong> <em>${otazky[index].options[otazky[index].a]}</em><br>
+                                        <strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
+                }
+            });
+
+            const resultDiv = document.getElementById('result');
+            const percent = Math.round((score / otazky.length) * 100);
+            resultDiv.innerHTML = `Váš výsledek: ${score} z ${otazky.length} bodů (${percent} %).`;
+            
+            if(percent >= 80) {
+                resultDiv.style.color = '#27ae60';
+                resultDiv.innerHTML += "<br>Vynikající! Skvěle se orientujete ve válečné literatuře i v nádherných povídkách Oty Pavla.";
+            } else if (percent >= 50) {
+                resultDiv.style.color = '#f39c12';
+                resultDiv.innerHTML += "<br>Slušný výkon. Ota Pavel má hodně detailních zápletek, určitě si u chyb pročtěte vysvětlení.";
+            } else {
+                resultDiv.style.color = '#c0392b';
+                resultDiv.innerHTML += "<br>Tohle bude chtít ještě zopakovat. Rámečky pod špatnými odpověďmi vám to krásně shrnou.";
+            }
+        }
+    </script>
+</body>
+</html>
