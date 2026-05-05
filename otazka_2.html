@@ -3,118 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Státnicový test ČJ - Otázka 2: Didaktika a 19. století</title>
+    <title>Státnicový test ČJ - Otázka 2</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
-            color: #333;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-            line-height: 1.6;
-        }
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
-        }
-        .question-card {
-            background: #fff;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            border-left: 5px solid #3498db;
-        }
-        .question-title {
-            font-weight: bold;
-            font-size: 1.1em;
-            margin-bottom: 15px;
-        }
-        .options label {
-            display: block;
-            background: #f9f9f9;
-            padding: 10px 15px;
-            margin-bottom: 8px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: 0.2s;
-            border: 1px solid #e0e0e0;
-        }
-        .options label:hover {
-            background: #eef2f5;
-        }
-        input[type="radio"] {
-            margin-right: 10px;
-        }
-        button {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            font-size: 1.2em;
-            background-color: #27ae60;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 30px;
-            margin-bottom: 50px;
-        }
-        button:hover {
-            background-color: #219653;
-        }
-        .correct {
-            background-color: #d4edda !important;
-            border-color: #c3e6cb !important;
-            color: #155724;
-            font-weight: bold;
-        }
-        .incorrect {
-            background-color: #f8d7da !important;
-            border-color: #f5c6cb !important;
-            color: #721c24;
-        }
-        .explanation {
-            margin-top: 15px;
-            padding: 15px;
-            background-color: #fff3cd;
-            border-left: 5px solid #ffc107;
-            color: #856404;
-            border-radius: 4px;
-            font-size: 0.95em;
-            display: none;
-        }
-        #result {
-            font-size: 1.5em;
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #2c3e50;
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; }
+        h1 { text-align: center; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        .question-card { background: #fff; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 5px solid #3498db; }
+        .question-title { font-weight: bold; font-size: 1.1em; margin-bottom: 15px; }
+        .options label { display: block; background: #f9f9f9; padding: 10px 15px; margin-bottom: 8px; border-radius: 5px; cursor: pointer; transition: 0.2s; border: 1px solid #e0e0e0; }
+        .options label:hover { background: #eef2f5; }
+        .locked label { cursor: not-allowed; pointer-events: none; }
+        input[type="radio"] { margin-right: 10px; }
+        button { display: block; width: 100%; padding: 15px; font-size: 1.2em; background-color: #2c3e50; color: white; border: none; border-radius: 8px; cursor: pointer; transition: 0.3s; margin-top: 30px; margin-bottom: 50px; }
+        button:hover { background-color: #1a252f; }
+        .correct { background-color: #d4edda !important; border-color: #c3e6cb !important; color: #155724; font-weight: bold; }
+        .incorrect { background-color: #f8d7da !important; border-color: #f5c6cb !important; color: #721c24; }
+        .explanation { margin-top: 15px; padding: 15px; border-radius: 4px; font-size: 0.95em; display: none; }
+        .explanation.success { background-color: #d4edda; border-left: 5px solid #28a745; color: #155724; }
+        .explanation.error { background-color: #fff3cd; border-left: 5px solid #dc3545; color: #856404; }
+        #result { font-size: 1.5em; text-align: center; font-weight: bold; margin-bottom: 20px; color: #2c3e50; }
     </style>
 </head>
 <body>
 
     <h1>Státnicový test z ČJ (Otázka 2)</h1>
-    <p style="text-align:center;">Didaktika (RVP, ŠVP, Kompetence, Bloom) a Literatura (Bachův absolutismus, Májovci, Ruchovci, Lumírovci)</p>
+    <p style="text-align:center;">Didaktika (RVP, ŠVP, Kompetence, Bloom) a Literatura 19. století</p>
     
     <div id="quiz-container"></div>
-    
-    <button onclick="vyhodnotitTest()">Vyhodnotit test</button>
+    <button onclick="zobrazitKonecneSkore()">Zobrazit celkové skóre</button>
     <div id="result"></div>
 
     <script>
         const otazky = [
-            // Didaktika: RVP a ŠVP
             { q: "Jak se nazývá program MŠMT schválený od roku 2004 (nejvyšší úroveň vzdělávání)?", options: ["Školní vzdělávací program", "Rámcový vzdělávací program (RVP)", "Bílá kniha", "Bloomova taxonomie"], a: 1, exp: "Rámcový vzdělávací program (RVP) je celostátní program MŠMT, který zahrnuje principy ZV (základního vzdělávání)." },
             { q: "Co obsahuje část C v dokumentu RVP?", options: ["Žáci se spec. potřebami", "Vymezení RVP v systému", "Pojetí, cíle, klíčové kompetence, průřezová témata a oblasti", "Hodnocení výsledků vzdělávání"], a: 2, exp: "Část C definuje mj. pojetí základního vzdělávání, 9 vzdělávacích oblastí a klíčové kompetence." },
             { q: "Který dokument si tvoří každá škola (MŠ, ZŠ, SŠ) sama, přičemž musí realizovat požadavky RVP?", options: ["Bílou knihu", "Školní vzdělávací program (ŠVP)", "Didaktickou osnovu", "Kurikulum ZV"], a: 1, exp: "Školní vzdělávací program (ŠVP) si tvoří každá škola sama, profiluje se jím a učí podle něj kreativně." },
             { q: "Do jaké vzdělávací oblasti spadá Literární výchova?", options: ["Umění a kultura", "Člověk a společnost", "Jazyk a jazyková komunikace", "Člověk a svět práce"], a: 2, exp: "Literární výchova tvoří (spolu s jazykovou a komunikační výchovou) oblast Jazyk a jazyková komunikace." },
-            
-            // Didaktika: Klíčové kompetence
             { q: "Kolik klíčových kompetencí definuje RVP pro základní vzdělávání?", options: ["4", "5", "6", "8"], a: 2, exp: "Klíčových kompetencí je 6: k učení, k řešení problému, komunikativní, sociální a personální, občanské, pracovní." },
             { q: "Do které kompetence patří výstup: „vyhledává a třídí informace, operuje s obecně užívanými termíny“?", options: ["K. k učení", "K. komunikativní", "K. pracovní", "K. k řešení problému"], a: 0, exp: "Vyhledávání informací a posouzení vlastního pokroku v učení patří do Kompetence k učení." },
             { q: "Která kompetence zahrnuje to, že žák „vnímá nejrůznější problémové situace a samostatně je řeší logickými postupy“?", options: ["K. sociální", "K. k řešení problému", "K. k učení", "K. pracovní"], a: 1, exp: "Patří do Kompetence k řešení problému." },
@@ -122,157 +45,92 @@
             { q: "Pokud žák „účinně spolupracuje ve skupině a podílí se na utváření příjemné atmosféry“, rozvíjí kompetenci:", options: ["Pracovní", "Komunikativní", "Sociální a personální", "Občanskou"], a: 2, exp: "Tyto dovednosti (kooperace, respektování hlediska druhých ve skupině) spadají pod sociální a personální kompetenci." },
             { q: "Která kompetence vede žáka k tomu, že „respektuje naše tradice, chápe ekologické souvislosti a odmítá hrubé zacházení“?", options: ["K. k řešení problému", "K. pracovní", "K. občanské", "K. sociální a personální"], a: 2, exp: "Toto jsou znaky občanských kompetencí (tradice, ekologie, odmítání útlaku)." },
             { q: "Do jaké kompetence řadíme bezpečné používání materiálů, nástrojů a dodržování vymezených pravidel?", options: ["Pracovní", "K učení", "Občanské", "Sociální"], a: 0, exp: "Kompetence pracovní zahrnuje bezpečné zacházení s vybavením a rozvoj podnikatelského myšlení." },
-            
-            // Bloomova taxonomie
             { q: "Do kolika kategorií je rozdělena Bloomova taxonomie cílů?", options: ["4", "5", "6", "8"], a: 2, exp: "Je rozdělena do 6 kategorií, které jsou uspořádány podle náročnosti." },
             { q: "Která úroveň Bloomovy taxonomie je nejnižší (1. stupeň) a zahrnuje např. pojmenování nebo vyjmenování faktů?", options: ["Pochopení", "Aplikace", "Zapamatování", "Analýza"], a: 2, exp: "První a nejnižší úroveň je Zapamatování (definovat, vyjmenovat, napsat)." },
             { q: "Slovesa jako „dokázat, formulovat, vlastními slovy vysvětlit, objasnit“ patří typicky do kategorie:", options: ["Zapamatování", "Pochopení/porozumění", "Aplikace", "Syntéza"], a: 1, exp: "Patří do 2. úrovně: Pochopení/porozumění (jednoduchá interpretace textu)." },
             { q: "Pokud žák musí „analyzovat, provést rozbor nebo rozčlenit“, jedná se o:", options: ["Pochopení", "Syntézu", "Analýzu", "Hodnotící posouzení"], a: 2, exp: "To je 4. úroveň: Analýza (rozbor komplexní informace na prvky)." },
             { q: "Nejvyšší, 6. úroveň Bloomovy taxonomie, kam patří „obhájit, argumentovat, posoudit, zhodnotit“, se nazývá:", options: ["Syntéza", "Aplikace", "Hodnotící posouzení", "Pochopení"], a: 2, exp: "Šestá úroveň se jmenuje Hodnotící posouzení." },
-
-            // Historie: Bachův absolutismus a Májovci
             { q: "V jakém období probíhal tzv. Bachův absolutismus?", options: ["1848-1868", "1849-1859", "1868-1888", "1830-1848"], a: 1, exp: "Bachův absolutismus probíhal v letech 1849-1859, kdy byly snahy Čechů zpomaleny." },
             { q: "Kdo se stal symbolem zatýkání nepohodlných lidí a útlaku v době Bachova absolutismu?", options: ["Jan Neruda", "Josef Kajetán Tyl", "Karel Havlíček Borovský", "Karel Hynek Mácha"], a: 2, exp: "Symbolem této doby byl Karel Havlíček Borovský, který byl perzekuován a deportován." },
             { q: "V jakém roce vydali Májovci svůj první almanach (Máj)?", options: ["1848", "1858", "1868", "1888"], a: 1, exp: "Májovci vydali almanach Máj na jaře roku 1858." },
             { q: "Na které tři starší autory Májovci primárně navazovali?", options: ["Tyl, Erben, Němcová", "Mácha, Borovský, Erben", "Vrchlický, Sládek, Zeyer", "Čelakovský, Kollár, Palacký"], a: 1, exp: "Navazovali na odkaz K. H. Máchy, K. H. Borovského a K. J. Erbena." },
             { q: "Jaký byl jeden ze základních znaků tvorby Májovců?", options: ["Únik do pohádek", "Zájem o lidovou tvorbu a současné sociální situace", "Psali pouze latinsky", "Vyloučení venkovské tematiky"], a: 1, exp: "Neobraceli se tolik do historie, ale kladli důraz na současnost, pokrok, svobodu a zobrazení reálného dění." },
-
-            // Vítězslav Hálek
             { q: "Kde se narodil Vítězslav Hálek (a odkazoval k tomuto místu ve svém díle)?", options: ["Na Malé Straně", "Na Mělnicku", "V Klatovech", "V Ostředku u Benešova"], a: 1, exp: "Hálek se narodil na Mělnicku, studoval v Praze a redigoval Národní listy a Lumír." },
             { q: "Která Hálkova sbírka je optimistická, plná lehkých zpěvných veršů a oslavuje lásku k Dorotce?", options: ["V přírodě", "Pohádka z naší vesnice", "Večerní písně", "Zpěvy páteční"], a: 2, exp: "Láska k Dorotce a přírodě, odmítání předsudků – to jsou Hálkovy Večerní písně." },
             { q: "Která Hálkova epická sbírka kritizuje sociální poměry na vesnici?", options: ["Pohádka z naší vesnice", "V přírodě", "Arabesky", "Lešetínský kovář"], a: 0, exp: "Je to Pohádka z naší vesnice." },
             { q: "Jak se jmenuje Hálkova povídka o dívce, kterou rodiče z donucení provdali za bohatého sedláka a ona se zbláznila?", options: ["Babička", "Muzikantská Liduška", "Na statku a v chaloupce", "Svéhlavička"], a: 1, exp: "Jde o slavnou povídku Muzikantská Liduška." },
-
-            // Jan Neruda
-            { q: "Kde prožil Jan Neruda dětství a většinu života (což reflektoval ve svém díle)?", options: ["Na Vinohradech", "Na Malé Straně v domě U Dvou slunců", "V Poděbradech", "Na Vyšehradě"], a: 1, exp: "Neruda se narodil a žil na Malé Straně, v domě U Dvou slunců." },
+            { q: "Kde prožil Jan Neruda dětství a většinu života?", options: ["Na Vinohradech", "Na Malé Straně v domě U Dvou slunců", "V Poděbradech", "Na Vyšehradě"], a: 1, exp: "Neruda se narodil a žil na Malé Straně, v domě U Dvou slunců." },
             { q: "Jakým grafickým symbolem podepisoval Neruda své fejetony v Národních listech?", options: ["Hvězdičkou", "Trojúhelníkem", "Otazníkem", "Křížkem"], a: 1, exp: "Jeho fejetony byly často označovány trojúhelníkem." },
             { q: "Která spisovatelka Nerudu finančně podporovala a on jí předal své dopisy?", options: ["Božena Němcová", "Eliška Krásnohorská", "Karolina Světlá", "Sofie Podlipská"], a: 2, exp: "Měl velmi blízký vztah s Karolinou Světlou, která mu pomáhala, na nátlak jejího manžela ale vztah skončil." },
             { q: "Jak se jmenuje první, hluboce pesimistická sbírka Jana Nerudy z roku 1858?", options: ["Písně kosmické", "Zpěvy páteční", "Hřbitovní kvítí", "Prosté motivy"], a: 2, exp: "Hřbitovní kvítí – plná skepse, motiv hřbitova jako obraz české společnosti." },
             { q: "Ve které sbírce vyjadřuje Neruda optimistický náhled na dobový technický pokrok a vtěluje do něj ideály svobody?", options: ["Písně kosmické", "Knihy veršů", "Balady a romance", "Hřbitovní kvítí"], a: 0, exp: "Písně kosmické vnímají technický pokrok optimisticky a reflektují vztah člověka ke kosmu." },
-            { q: "Jaký postup zvolil Neruda ve sbírce Balady a romance?", options: ["Zcela vynechal postavy svatých.", "Přetvořil balady na romance a romance na balady.", "Napsal je v próze.", "Přeložil je z francouzštiny."], a: 1, exp: "Balady záměrně měnil na romance a naopak, věnoval se lidským vztahům (např. Romance o Karlu IV.)." },
+            { q: "Jaký postup zvolil Neruda ve sbírce Balady a romance?", options: ["Zcela vynechal postavy svatých.", "Přetvořil balady na romance a romance na balady.", "Napsal je v próze.", "Přeložil je z francouzštiny."], a: 1, exp: "Balady záměrně měnil na romance a naopak, věnoval se lidským vztahům." },
             { q: "Která intimní a přírodní sbírka Nerudy obsahuje lásku k Anně Tiché a zachycuje přírodu v ročních obdobích?", options: ["Knihy veršů", "Prosté motivy", "Zpěvy páteční", "Písně kosmické"], a: 1, exp: "Jsou to Prosté motivy." },
             { q: "Které stěžejní prozaické dílo Nerudy sleduje vývoj ekonomických vztahů a postav na Praze 1?", options: ["Arabesky", "Muzikantská Liduška", "Povídky malostranské", "Různí lidé"], a: 2, exp: "Povídky malostranské detailně vykreslují život a figurky Malé Strany." },
-
-            // Ruchovci a Svatopluk Čech
             { q: "Kdy byl vydán almanach Ruch, který dal jméno Ruchovcům?", options: ["1858", "1868", "1881", "1894"], a: 1, exp: "Ruch vyšel roku 1868, na oslavu položení základního kamene Národního divadla." },
             { q: "Jakým jiným pojmem se Ruchovci označují?", options: ["Škola kosmopolitní", "Škola národní", "Prokletí básníci", "Škola romantická"], a: 1, exp: "Zatímco Lumírovci byli kosmopolitní, Ruchovci byli vlastenecká Škola národní." },
             { q: "Který historický epos Svatopluka Čecha se zabývá radikální husitskou sektou a jejím zničením?", options: ["Husita na Baltu", "Evropa", "Lešetínský kovář", "Adamité"], a: 3, exp: "Adamité je epos o stejnojmenné radikální sektě." },
-            { q: "V jakém satirickém eposu Svatopluka Čecha opičák vytváří vlastní stát (čímž se zesměšňuje Rakousko-Uhersko)?", options: ["Pravý výlet pana Broučka do Měsíce", "Slavie", "Hanuman", "Písně otroka"], a: 2, exp: "Hanuman je zvířecí epos (bajka), který tepal do tehdejší politické situace." },
-            { q: "Jak se jmenuje hlavní postava Čechových satirických povídek, v nichž tento měšťák cestuje na Měsíc nebo do husitské doby?", options: ["Antonín Sommer", "Pan Brouček", "Václav kovář", "Král Vukašín"], a: 1, exp: "Matěj Brouček je ztělesněním českého maloměšťáctví a zbabělosti." },
+            { q: "V jakém satirickém eposu Svatopluka Čecha opičák vytváří vlastní stát?", options: ["Pravý výlet pana Broučka do Měsíce", "Slavie", "Hanuman", "Písně otroka"], a: 2, exp: "Hanuman je zvířecí epos (bajka), který tepal do tehdejší politické situace." },
+            { q: "Jak se jmenuje hlavní postava Čechových satirických povídek, v nichž cestuje na Měsíc nebo do husitské doby?", options: ["Antonín Sommer", "Pan Brouček", "Václav kovář", "Král Vukašín"], a: 1, exp: "Matěj Brouček je ztělesněním českého maloměšťáctví a zbabělosti." },
             { q: "Která alegorická skladba S. Čecha přirovnává otroky k tehdejšímu dělnictvu?", options: ["Jitřní písně", "Evropa", "Písně otroka", "Adamité"], a: 2, exp: "Ve skladbě Písně otroka jsou otroci paralelou pro utlačované dělníky." },
-
-            // Eliška Krásnohorská
             { q: "Co založila Eliška Krásnohorská?", options: ["První veřejnou knihovnu", "Soukromé dívčí gymnázium Minerva", "Spolek Svatobor", "Časopis Lumír"], a: 1, exp: "Zasloužila se o emancipaci žen založením gymnázia Minerva." },
             { q: "Pro kterého českého skladatele napsala E. Krásnohorská libreta (např. Hubička, Čertova stěna)?", options: ["Antonín Dvořák", "Leoš Janáček", "Bedřich Smetana", "Zdeněk Fibich"], a: 2, exp: "Psala libreta právě pro Smetanovy opery Hubička a Čertova stěna." },
-
-            // Lumírovci a J. V. Sládek
             { q: "Jak se nazývali Lumírovci podle svého přesvědčení?", options: ["Škola národní", "Škola kosmopolitní", "Národní obrození", "Modernisté"], a: 1, exp: "Byli školou kosmopolitní – otevírali českou literaturu světu a překládali ze Západu." },
             { q: "Kam vycestoval Josef Václav Sládek a zkušenosti odtud přenesl i do své tvorby (např. báseň Na hrobech indiánských)?", options: ["Do Francie", "Do Itálie", "Do USA", "Do Ruska"], a: 2, exp: "Působil v USA jako vychovatel a učitel, zažil tam zacházení s indiány a černochy." },
             { q: "Jaká Sládkova sbírka je určena výhradně pro děti?", options: ["Starosvětské písničky", "Zvony a zvonky", "Jiskry na moři", "Selské písně"], a: 1, exp: "Zvony a zvonky (podobně jako Zlatý máj) patří mezi jeho stěžejní díla pro děti." },
-
-            // Jaroslav Vrchlický
             { q: "Jaké bylo vlastní (občanské) jméno Jaroslava Vrchlického?", options: ["Karel Havlíček", "Emil Frída", "Josef Vostrý", "Antonín Sova"], a: 1, exp: "Původem z Loun, narodil se jako Emil Frída." },
-            { q: "Který francouzský historik ovlivnil Vrchlického během studií?", options: ["Charles Baudelaire", "Ernest Denis", "Victor Hugo", "Guillaume Apollinaire"], a: 1, exp: "Byl to Ernest Denis. (Hugo a Baudelaire byli básníci, které Vrchlický překládal)." },
-            { q: "Jak se jmenovala žena J. Vrchlického, s níž měl manželskou krizi (měla děti s hercem Seifertem)?", options: ["Karolina Světlá", "Ludmila, dcera Sofie Podlipské", "Anna Tichá", "Eliška Krásnohorská"], a: 1, exp: "Oženil se s Ludmilou (dcerou Sofie Podlipské). Její nevěra hluboce poznamenala jeho tvorbu." },
+            { q: "Který francouzský historik ovlivnil Vrchlického během studií?", options: ["Charles Baudelaire", "Ernest Denis", "Victor Hugo", "Guillaume Apollinaire"], a: 1, exp: "Byl to Ernest Denis." },
             { q: "Ze které sbírky pochází slavná milostná báseň „Za trochu lásky šel bych světa kraj“?", options: ["Sny o štěstí", "Selské balady", "Okna v bouři", "Strom života"], a: 2, exp: "Sbírka Okna v bouři (1894), plná zklamání, ale i touhy po lásce." },
-            { q: "Komu byla sbírka Okna v bouři věnována?", options: ["Ludmile Podlipské", "Ernestu Denisovi", "Z. Przesmyskému", "J. V. Sládkovi"], a: 2, exp: "Byla věnována jeho příteli Zenonu Przesmyskému." },
-            { q: "Co představuje „odkrytá hlava a bosé nohy“ v básni Za trochu lásky...?", options: ["Chudobu autora", "Horké letní počasí", "Symbol sebeobětování a nutnost něco pro lásku vytrpět", "Nezdravý životní styl"], a: 2, exp: "Bosé nohy znamenají, že láska něco stojí a je třeba pro ni něco vytrpět, odkrytá hlava značí sebeobětování (smeknutí)." },
+            { q: "Co představuje „odkrytá hlava a bosé nohy“ v básni Za trochu lásky...?", options: ["Chudobu autora", "Horké letní počasí", "Symbol sebeobětování a nutnost něco pro lásku vytrpět", "Nezdravý životní styl"], a: 2, exp: "Bosé nohy znamenají, že láska něco stojí a je třeba pro ni něco vytrpět, odkrytá hlava značí sebeobětování." },
             { q: "Jak se jmenuje obří epický cyklus J. Vrchlického, který byl inspirován V. Hugem a zabýval se vývojem lidstva k humanitě?", options: ["Selské balady", "Zlomky epopeje", "Adamité", "Z hlubin"], a: 1, exp: "Zlomky epopeje jsou jeho nejambicióznějším cyklem (mapujícím historii lidstva)." },
             { q: "Které slavné drama J. Vrchlického zfilmoval v 70. letech 20. století Zdeněk Podskalský?", options: ["Král Vukašín", "Konec masopustu", "Noc na Karlštejně", "Půlnoční vítr"], a: 2, exp: "Noc na Karlštejně je ikonická divadelní hra, kterou proslavil muzikálový film." }
         ];
 
+        let score = 0; let answeredQuestions = 0;
         const container = document.getElementById('quiz-container');
 
-        // Generování HTML
         otazky.forEach((otazka, index) => {
-            const card = document.createElement('div');
-            card.className = 'question-card';
-            
-            const title = document.createElement('div');
-            title.className = 'question-title';
-            title.textContent = `${index + 1}. ${otazka.q}`;
-            card.appendChild(title);
-
-            const optionsDiv = document.createElement('div');
-            optionsDiv.className = 'options';
+            const card = document.createElement('div'); card.className = 'question-card'; card.id = `q-card-${index}`;
+            const title = document.createElement('div'); title.className = 'question-title'; title.textContent = `${index + 1}. ${otazka.q}`; card.appendChild(title);
+            const optionsDiv = document.createElement('div'); optionsDiv.className = 'options';
 
             otazka.options.forEach((opt, optIndex) => {
-                const label = document.createElement('label');
-                const radio = document.createElement('input');
-                radio.type = 'radio';
-                radio.name = `q${index}`;
-                radio.value = optIndex;
+                const label = document.createElement('label'); const radio = document.createElement('input');
+                radio.type = 'radio'; radio.name = `q${index}`; radio.value = optIndex;
                 
-                label.appendChild(radio);
-                label.appendChild(document.createTextNode(opt));
-                optionsDiv.appendChild(label);
+                radio.addEventListener('change', function() {
+                    const currentCard = document.getElementById(`q-card-${index}`);
+                    const allRadios = currentCard.querySelectorAll('input[type="radio"]');
+                    const labels = currentCard.querySelectorAll('label');
+                    const expDiv = document.getElementById(`exp${index}`);
+                    
+                    allRadios.forEach(r => r.disabled = true); currentCard.classList.add('locked');
+                    const selectedVal = parseInt(this.value); const correctVal = otazky[index].a;
+                    labels[correctVal].classList.add('correct');
+
+                    if (selectedVal === correctVal) {
+                        score++; expDiv.className = 'explanation success';
+                        expDiv.innerHTML = `<strong>Správně!</strong><br><strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
+                    } else {
+                        labels[selectedVal].classList.add('incorrect'); expDiv.className = 'explanation error';
+                        expDiv.innerHTML = `<strong>Špatně.</strong><br><strong>Správná odpověď:</strong> <em>${otazky[index].options[correctVal]}</em><br><strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
+                    }
+                    expDiv.style.display = 'block'; answeredQuestions++;
+                });
+
+                label.appendChild(radio); label.appendChild(document.createTextNode(opt)); optionsDiv.appendChild(label);
             });
-
             card.appendChild(optionsDiv);
-
-            // Skrytý div pro vysvětlení odpovědi
-            const explanationDiv = document.createElement('div');
-            explanationDiv.className = 'explanation';
-            explanationDiv.id = `exp${index}`;
-            card.appendChild(explanationDiv);
-
-            container.appendChild(card);
+            const explanationDiv = document.createElement('div'); explanationDiv.className = 'explanation'; explanationDiv.id = `exp${index}`;
+            card.appendChild(explanationDiv); container.appendChild(card);
         });
 
-        // Vyhodnocení
-        function vyhodnotitTest() {
-            let score = 0;
-            const cards = document.querySelectorAll('.question-card');
-
-            cards.forEach((card, index) => {
-                const selected = card.querySelector(`input[name="q${index}"]:checked`);
-                const labels = card.querySelectorAll('label');
-                const expDiv = document.getElementById(`exp${index}`);
-                
-                // Reset stylů
-                labels.forEach(l => {
-                    l.classList.remove('correct');
-                    l.classList.remove('incorrect');
-                });
-                expDiv.style.display = 'none';
-
-                if (selected) {
-                    const ans = parseInt(selected.value);
-                    if (ans === otazky[index].a) {
-                        score++;
-                        selected.parentElement.classList.add('correct');
-                    } else {
-                        selected.parentElement.classList.add('incorrect');
-                        labels[otazky[index].a].classList.add('correct');
-                        
-                        expDiv.style.display = 'block';
-                        expDiv.innerHTML = `<strong>Vaše odpověď je špatná.</strong><br>
-                                            <strong>Správná odpověď:</strong> <em>${otazky[index].options[otazky[index].a]}</em><br>
-                                            <strong>Proč?</strong> ${otazky[index].exp}`;
-                    }
-                } else {
-                    labels[otazky[index].a].classList.add('correct');
-                    expDiv.style.display = 'block';
-                    expDiv.innerHTML = `<strong>Neodpověděli jste.</strong><br>
-                                        <strong>Správná odpověď:</strong> <em>${otazky[index].options[otazky[index].a]}</em><br>
-                                        <strong>Proč?</strong> ${otazky[index].exp}`;
-                }
-            });
-
+        function zobrazitKonecneSkore() {
             const resultDiv = document.getElementById('result');
-            const percent = Math.round((score / otazky.length) * 100);
-            resultDiv.innerHTML = `Váš výsledek: ${score} z ${otazky.length} bodů (${percent} %).`;
-            
-            if(percent >= 80) {
-                resultDiv.style.color = '#27ae60';
-                resultDiv.innerHTML += "<br>Vynikající! Didaktika i 19. století vám jdou naprosto skvěle.";
-            } else if (percent >= 50) {
-                resultDiv.style.color = '#f39c12';
-                resultDiv.innerHTML += "<br>Slušný výkon, ale najdou se tu mezery. Určitě si pročtěte vysvětlení u chybných odpovědí.";
-            } else {
-                resultDiv.style.color = '#c0392b';
-                resultDiv.innerHTML += "<br>Tohle bude chtít ještě čas. Projděte si vysvětlivky, ať si učivo lépe zafixujete.";
+            if (answeredQuestions < otazky.length) {
+                resultDiv.style.color = '#e67e22'; resultDiv.innerHTML = `Zatím jste odpověděl/a na ${answeredQuestions} z ${otazky.length} otázek. <br> Průběžné skóre: ${score} správně.`; return;
             }
+            const percent = Math.round((score / otazky.length) * 100); resultDiv.innerHTML = `Váš konečný výsledek: ${score} z ${otazky.length} bodů (${percent} %).`;
         }
     </script>
 </body>
