@@ -1,854 +1,246 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Státnice ČJ — Studijní kartičky</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #0e0e0f;
-    --bg2: #161618;
-    --bg3: #1e1e21;
-    --bg4: #27272b;
-    --border: rgba(255,255,255,0.07);
-    --border2: rgba(255,255,255,0.14);
-    --text: #f0ede8;
-    --text2: #9b9792;
-    --text3: #5a5754;
-    --accent: #e8c547;
-    --accent2: #c9a82e;
-    --accent-bg: rgba(232,197,71,0.08);
-    --accent-bg2: rgba(232,197,71,0.15);
-    --kdo: #7eb8f7;
-    --kdy: #f7a07e;
-    --kde: #7ef7b8;
-    --co: #d07ef7;
-    --kdo-bg: rgba(126,184,247,0.1);
-    --kdy-bg: rgba(247,160,126,0.1);
-    --kde-bg: rgba(126,247,184,0.1);
-    --co-bg: rgba(208,126,247,0.1);
-    --correct: #5af5a0;
-    --correct-bg: rgba(90,245,160,0.08);
-    --wrong: #f55a5a;
-    --wrong-bg: rgba(245,90,90,0.08);
-    --radius: 12px;
-    --radius-lg: 18px;
-    --font-display: 'DM Serif Display', serif;
-    --font-body: 'Instrument Sans', sans-serif;
-    --font-mono: 'DM Mono', monospace;
-  }
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--font-body);
-    font-size: 16px;
-    line-height: 1.6;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* GRID DECORATION */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
-    background-size: 48px 48px;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .container {
-    position: relative;
-    z-index: 1;
-    max-width: 820px;
-    margin: 0 auto;
-    padding: 0 2rem;
-  }
-
-  /* HEADER */
-  header {
-    padding: 3.5rem 0 2.5rem;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 2.5rem;
-  }
-
-  .header-inner {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 2rem;
-    flex-wrap: wrap;
-  }
-
-  .header-left { flex: 1; min-width: 260px; }
-
-  .eyebrow {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: .14em;
-    color: var(--accent);
-    text-transform: uppercase;
-    margin-bottom: .6rem;
-  }
-
-  h1 {
-    font-family: var(--font-display);
-    font-size: clamp(2rem, 5vw, 3rem);
-    font-weight: 400;
-    line-height: 1.1;
-    color: var(--text);
-    margin-bottom: .5rem;
-  }
-
-  h1 em {
-    font-style: italic;
-    color: var(--accent);
-  }
-
-  .header-desc {
-    font-size: 13px;
-    color: var(--text2);
-    margin-top: .5rem;
-  }
-
-  .header-stats {
-    display: flex;
-    gap: 1.5rem;
-    flex-shrink: 0;
-  }
-
-  .hstat {
-    text-align: right;
-  }
-
-  .hstat-num {
-    font-family: var(--font-mono);
-    font-size: 2rem;
-    font-weight: 500;
-    color: var(--text);
-    line-height: 1;
-  }
-
-  .hstat-lbl {
-    font-size: 11px;
-    color: var(--text3);
-    letter-spacing: .06em;
-    text-transform: uppercase;
-    margin-top: 2px;
-  }
-
-  /* TABS */
-  .tab-nav {
-    display: flex;
-    gap: 4px;
-    margin-bottom: 2rem;
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 4px;
-    width: fit-content;
-  }
-
-  .tab-btn {
-    font-family: var(--font-body);
-    font-size: 13px;
-    font-weight: 500;
-    padding: 8px 22px;
-    border: none;
-    border-radius: 8px;
-    background: transparent;
-    color: var(--text2);
-    cursor: pointer;
-    transition: all .2s;
-    letter-spacing: .02em;
-  }
-
-  .tab-btn.active {
-    background: var(--bg4);
-    color: var(--text);
-  }
-
-  .tab-btn:hover:not(.active) { color: var(--text); }
-
-  /* SECTION */
-  .section { display: none; }
-  .section.active { display: block; }
-
-  /* FILTER ROW */
-  .filter-row {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 1.5rem;
-  }
-
-  .filter-pill {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: .08em;
-    padding: 5px 14px;
-    border-radius: 100px;
-    border: 1px solid var(--border2);
-    background: transparent;
-    color: var(--text2);
-    cursor: pointer;
-    transition: all .18s;
-  }
-
-  .filter-pill:hover { color: var(--text); border-color: rgba(255,255,255,.25); }
-  .filter-pill.active.f-vse { background: var(--accent-bg2); border-color: var(--accent); color: var(--accent); }
-  .filter-pill.active.f-kdo { background: var(--kdo-bg); border-color: var(--kdo); color: var(--kdo); }
-  .filter-pill.active.f-kdy { background: var(--kdy-bg); border-color: var(--kdy); color: var(--kdy); }
-  .filter-pill.active.f-kde { background: var(--kde-bg); border-color: var(--kde); color: var(--kde); }
-  .filter-pill.active.f-co  { background: var(--co-bg);  border-color: var(--co);  color: var(--co); }
-
-  /* CARD META */
-  .card-meta {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-  }
-
-  .card-counter {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--text3);
-  }
-
-  .cat-badge {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: .1em;
-    padding: 4px 10px;
-    border-radius: 4px;
-    border: 1px solid;
-  }
-
-  .cat-badge.KDO { color: var(--kdo); border-color: rgba(126,184,247,.25); background: var(--kdo-bg); }
-  .cat-badge.KDY { color: var(--kdy); border-color: rgba(247,160,126,.25); background: var(--kdy-bg); }
-  .cat-badge.KDE { color: var(--kde); border-color: rgba(126,247,184,.25); background: var(--kde-bg); }
-  .cat-badge.CO  { color: var(--co);  border-color: rgba(208,126,247,.25); background: var(--co-bg); }
-
-  /* PROGRESS */
-  .progress-wrap { margin-bottom: 1.25rem; }
-
-  .progress-bar {
-    height: 2px;
-    background: var(--bg4);
-    border-radius: 1px;
-    overflow: hidden;
-  }
-
-  .progress-fill {
-    height: 100%;
-    background: var(--accent);
-    border-radius: 1px;
-    transition: width .4s cubic-bezier(.4,0,.2,1);
-  }
-
-  /* FLASHCARD */
-  .flashcard {
-    perspective: 1400px;
-    cursor: pointer;
-    margin-bottom: 1.25rem;
-    min-height: 220px;
-  }
-
-  .fc-inner {
-    position: relative;
-    min-height: 220px;
-    transform-style: preserve-3d;
-    transition: transform .55s cubic-bezier(.4,0,.2,1);
-  }
-
-  .flashcard.flipped .fc-inner { transform: rotateY(180deg); }
-
-  .fc-face {
-    position: absolute;
-    width: 100%;
-    min-height: 220px;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--border);
-    padding: 2.5rem 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  }
-
-  .fc-front {
-    background: var(--bg2);
-  }
-
-  .fc-front:hover {
-    border-color: var(--border2);
-  }
-
-  .fc-back {
-    transform: rotateY(180deg);
-    background: var(--bg3);
-    border-color: var(--accent-bg2);
-  }
-
-  .fc-hint-label {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-    color: var(--text3);
-    margin-bottom: 1rem;
-  }
-
-  .fc-back .fc-hint-label {
-    color: var(--accent);
-    opacity: .7;
-  }
-
-  .fc-question {
-    font-family: var(--font-display);
-    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
-    font-weight: 400;
-    color: var(--text);
-    line-height: 1.45;
-    max-width: 580px;
-  }
-
-  .fc-answer {
-    font-size: 15px;
-    color: var(--text);
-    line-height: 1.65;
-    max-width: 560px;
-  }
-
-  /* NAV BUTTONS */
-  .nav-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 2rem;
-  }
-
-  .nav-btn {
-    font-family: var(--font-body);
-    font-size: 13px;
-    font-weight: 500;
-    padding: 9px 20px;
-    border-radius: var(--radius);
-    border: 1px solid var(--border2);
-    background: var(--bg2);
-    color: var(--text2);
-    cursor: pointer;
-    transition: all .18s;
-    letter-spacing: .02em;
-  }
-
-  .nav-btn:hover { background: var(--bg3); color: var(--text); border-color: rgba(255,255,255,.2); }
-
-  .nav-btn.primary {
-    background: var(--accent);
-    color: #0e0e0f;
-    border-color: var(--accent);
-    font-weight: 600;
-  }
-
-  .nav-btn.primary:hover { background: #f0d05a; border-color: #f0d05a; }
-
-  /* ────── QUIZ ────── */
-  .quiz-topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1.25rem;
-  }
-
-  .quiz-score-label {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--text3);
-  }
-
-  .q-block { margin-bottom: .5rem; }
-
-  .q-text {
-    font-family: var(--font-display);
-    font-size: clamp(1.05rem, 2.5vw, 1.3rem);
-    font-weight: 400;
-    color: var(--text);
-    line-height: 1.45;
-    margin-bottom: 1.25rem;
-  }
-
-  .options {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 1rem;
-  }
-
-  .opt {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    background: var(--bg2);
-    color: var(--text);
-    cursor: pointer;
-    font-family: var(--font-body);
-    font-size: 14px;
-    text-align: left;
-    transition: all .15s;
-    line-height: 1.45;
-  }
-
-  .opt:hover:not(:disabled) { border-color: var(--border2); background: var(--bg3); }
-  .opt:disabled { cursor: default; }
-
-  .opt-letter {
-    width: 26px;
-    height: 26px;
-    border-radius: 6px;
-    border: 1px solid var(--border2);
-    background: var(--bg3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--text2);
-    flex-shrink: 0;
-    transition: all .15s;
-  }
-
-  .opt.correct { border-color: rgba(90,245,160,.3); background: var(--correct-bg); }
-  .opt.correct .opt-letter { background: var(--correct); color: #0e0e0f; border-color: var(--correct); }
-
-  .opt.wrong { border-color: rgba(245,90,90,.3); background: var(--wrong-bg); }
-  .opt.wrong .opt-letter { background: var(--wrong); color: #0e0e0f; border-color: var(--wrong); }
-
-  .feedback {
-    font-size: 13px;
-    line-height: 1.55;
-    padding: 12px 16px;
-    border-radius: var(--radius);
-    border: 1px solid;
-    margin-bottom: 1rem;
-  }
-
-  .feedback.ok { background: var(--correct-bg); border-color: rgba(90,245,160,.25); color: var(--correct); }
-  .feedback.nope { background: var(--wrong-bg); border-color: rgba(245,90,90,.25); color: var(--wrong); }
-
-  .next-q-btn {
-    font-family: var(--font-body);
-    font-size: 13px;
-    font-weight: 500;
-    padding: 9px 22px;
-    border-radius: var(--radius);
-    border: 1px solid var(--border2);
-    background: var(--bg2);
-    color: var(--text);
-    cursor: pointer;
-    transition: all .15s;
-  }
-
-  .next-q-btn:hover { background: var(--bg3); }
-
-  /* RESULTS */
-  .results {
-    text-align: center;
-    padding: 3rem 1rem;
-  }
-
-  .results-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 2.5rem;
-  }
-
-  .res-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 1.25rem 1rem;
-  }
-
-  .res-val {
-    font-family: var(--font-display);
-    font-size: 2.5rem;
-    font-weight: 400;
-    color: var(--text);
-    line-height: 1;
-    margin-bottom: .25rem;
-  }
-
-  .res-val.accent { color: var(--accent); }
-
-  .res-lbl {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: .1em;
-    color: var(--text3);
-    text-transform: uppercase;
-  }
-
-  .results-msg {
-    font-family: var(--font-display);
-    font-size: 1.3rem;
-    font-style: italic;
-    color: var(--text2);
-    margin-bottom: 1.5rem;
-  }
-
-  .res-progress {
-    height: 4px;
-    background: var(--bg4);
-    border-radius: 2px;
-    max-width: 300px;
-    margin: 0 auto 2rem;
-    overflow: hidden;
-  }
-
-  .res-fill {
-    height: 4px;
-    background: var(--accent);
-    border-radius: 2px;
-    width: 0%;
-    transition: width 1s cubic-bezier(.4,0,.2,1);
-  }
-
-  /* FOOTER */
-  footer {
-    margin-top: 4rem;
-    padding: 2rem 0;
-    border-top: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-
-  .footer-brand {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--text3);
-    letter-spacing: .08em;
-  }
-
-  .footer-brand span { color: var(--accent); }
-
-  /* ANIMATIONS */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .section.active { animation: fadeUp .35s ease both; }
-
-  /* SCROLLBAR */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 3px; }
-
-  @media (max-width: 600px) {
-    .header-inner { flex-direction: column; align-items: flex-start; }
-    .header-stats { flex-direction: row; gap: 2rem; }
-    .hstat { text-align: left; }
-    .results-grid { grid-template-columns: repeat(3,1fr); }
-    h1 { font-size: 2rem; }
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Státnicový test: Literární historie a divadlo (60 otázek)</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .question-card {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-left: 5px solid #3498db;
+        }
+        .question-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+        .options label {
+            display: block;
+            background: #f9f9f9;
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid #e0e0e0;
+        }
+        .options label:hover {
+            background: #eef2f5;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 30px;
+            margin-bottom: 50px;
+        }
+        button:hover {
+            background-color: #219653;
+        }
+        .correct {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+            color: #155724;
+            font-weight: bold;
+        }
+        .incorrect {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+            color: #721c24;
+        }
+        #result {
+            font-size: 1.5em;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+    </style>
 </head>
 <body>
 
-<div class="container">
+    <h1>Státnicový test z ČJ: Historie, autoři a divadla</h1>
+    <p style="text-align:center;">Vyberte u každé otázky jednu správnou odpověď. Test vychází výhradně z vašich poznámek.</p>
+    
+    <div id="quiz-container"></div>
+    
+    <button onclick="vyhodnotitTest()">Vyhodnotit test</button>
+    <div id="result"></div>
 
-  <header>
-    <div class="header-inner">
-      <div class="header-left">
-        <div class="eyebrow">Státnice · Český jazyk &amp; literatura · 2025</div>
-        <h1>Literární výchova<br>&amp; <em>dramatická tvorba</em></h1>
-        <p class="header-desc">Kartičky + kvíz zaměřený na KDO, KDY, KDE a CO</p>
-      </div>
-      <div class="header-stats">
-        <div class="hstat">
-          <div class="hstat-num">40</div>
-          <div class="hstat-lbl">kartiček</div>
-        </div>
-        <div class="hstat">
-          <div class="hstat-num">20</div>
-          <div class="hstat-lbl">otázek</div>
-        </div>
-      </div>
-    </div>
-  </header>
+    <script>
+        const otazky = [
+            // Václav Havel
+            { q: "Z jaké rodiny pocházel Václav Havel?", options: ["Z dělnické rodiny z Kladna", "Z pražské podnikatelské rodiny", "Z učitelské rodiny z Brna", "Ze zemědělské rodiny z Moravy"], a: 1 },
+            { q: "Kterou čtvrť vybudoval Havlův dědeček a otec (spolu s palácem Lucerna)?", options: ["Vinohrady", "Žižkov", "Barrandov", "Dejvice"], a: 2 },
+            { q: "Z jakého důvodu byl V. Havel v roce 1950 vyloučen z poděbradského gymnázia?", options: ["Pro špatný prospěch", "Z politických důvodů", "Kvůli emigraci", "Z rodinných důvodů"], a: 1 },
+            { q: "Jakou profesi vykonával V. Havel po vyloučení ze školy?", options: ["Chemický laborant na VŠCHT", "Knihovník", "Kulisák v Národním divadle", "Učitel na základní škole"], a: 0 },
+            { q: "Jak se jmenovalo sdružení, které Havel založil a které vydávalo časopis Rozhovory 36?", options: ["Osmačtyřicátníci", "Šestatřicátníci", "Chartisté", "Kruh nezávislých spisovatelů"], a: 1 },
+            { q: "Kde pracoval Havel po vojenské službě jako jevištní technik?", options: ["V Národním divadle", "V Divadle na Vinohradech", "V Divadle ABC", "Ve Studiu Y"], a: 2 },
+            { q: "Kde působil V. Havel jako dramaturg po svém působení v Divadle ABC?", options: ["V Divadle Na zábradlí", "V Činoherním klubu", "V Redutě", "V Semaforu"], a: 0 },
+            { q: "Co V. Havel oficiálně vystudoval?", options: ["Práva na UK", "Filozofii na UK", "Dramaturgii na DAMU", "Režii na FAMU"], a: 2 },
+            { q: "V jakém roce založil V. Havel samizdatovou Edici Expedice?", options: ["1968", "1975", "1977", "1989"], a: 1 },
+            { q: "K jakému trestu byl Havel odsouzen za spoluzaložení Charty 77 (v roce 1977)?", options: ["K vyhoštění ze země", "K 14 měsícům vězení", "K 4,5 roku vězení", "K domácímu vězení"], a: 1 },
+            { q: "K jakému trestu byl odsouzen v roce 1978 za spoluzaložení VONS za podvracení republiky?", options: ["K 14 měsícům", "Ke 2 letům", "K 4,5 roku", "K 10 letům"], a: 2 },
+            { q: "Kterého dne byl Václav Havel zvolen prezidentem Československé federativní republiky?", options: ["17. 11. 1989", "25. 12. 1989", "1. 1. 1993", "21. 8. 1968"], a: 1 },
+            { q: "Které z následujících děl je dramatem Václava Havla?", options: ["Balada pro banditu", "Konec masopustu", "Zahradní slavnost", "Král Vávra"], a: 2 },
+            { q: "Které z následujících děl PATŘÍ mezi eseje Václava Havla?", options: ["Asanace", "Dopisy Olze", "Protest", "Vernisáž"], a: 1 },
+            
+            // Audience
+            { q: "Do jakého žánru spadá Havlova hra Audience?", options: ["Historické drama", "Absurdní drama", "Komedie dell'arte", "Tragédie"], a: 1 },
+            { q: "V jakém roce vznikla hra Audience?", options: ["1965", "1968", "1975", "1989"], a: 2 },
+            { q: "Komu je hra Audience věnována (památce koho)?", options: ["Janu Patočkovi", "Alfrédu Radokovi", "Jiřímu Šlitrovi", "Ladislavu Fialkovi"], a: 1 },
+            { q: "Jak je charakterizován Ferdinand Vaněk ve hře Audience?", options: ["Vulgární a výmluvný", "Tichý, pracovitý, vystudovaný ekonom", "Žoviální a pijící pivo", "Původně hrobař"], a: 1 },
+            { q: "Jaké povolání dříve vykonávala postava Bureše v Audienci?", options: ["Ekonom", "Spisovatel", "Skladník", "Hrobař"], a: 3 },
+            { q: "Kterou herečku navrhoval Sládek pozvat do pivovaru (byla by s ní „sranda“)?", options: ["Ivu Janžurovou", "Jiřinu Bohdalovou", "Ninu Divíškovou", "Jitku Molavcovou"], a: 1 },
+            { q: "Z jakého města byl Vaněk údajně přesunut do současného pivovaru?", options: ["Z Prahy", "Z Plzně", "Z Brna", "Z Pardubic"], a: 3 },
+            { q: "Před stýkáním se s kým Sládek Vaňka výslovně varuje?", options: ["S Pavlem Kohoutem", "S Karlem Gottem", "S Jiřím Suchým", "S Milanem Uhdem"], a: 0 },
+            { q: "Jak reaguje Vaněk v úplně závěrečné scéně na zdvořilou otázku Sládka?", options: ["Odmítne odpovědět", "Rozpláče se", "Odpovídá vulgárně („Na hovno“)", "Nabídne mu pivo"], a: 2 },
 
-  <nav class="tab-nav">
-    <button class="tab-btn active" onclick="showTab('cards',this)">Kartičky</button>
-    <button class="tab-btn" onclick="showTab('quiz',this)">Kvíz</button>
-  </nav>
+            // Divadlo 70. - 80. let (Autoři)
+            { q: "Jaké obory vystudoval Ivan Vyskočil?", options: ["Práva a ekonomii", "DAMU a pedagogiku-psychologii na UK", "Chemii na VŠCHT", "Filozofii a historii"], a: 1 },
+            { q: "Která divadla zakládal Ivan Vyskočil?", options: ["Semafor a Studio Y", "Redutu a Na zábradlí", "Činoherní klub a Divadlo za branou", "Husu na provázku a Divadlo na Vinohradech"], a: 1 },
+            { q: "Kterou z těchto her napsal Ivan Vyskočil?", options: ["Kdyby tisíc klarinetů", "Kočka na kolejích", "Král Vávra", "Piknik"], a: 0 },
+            { q: "Kde působil Josef Topol před studiem DAMU?", options: ["V Národním divadle", "V Divadle E. F. Buriana", "V Divadle ABC", "Ve Studiu Y"], a: 1 },
+            { q: "Které drama Josefa Topola bylo inspirováno Kosmovou kronikou a luckou válkou?", options: ["Konec masopustu", "Půlnoční vítr", "Kočka na kolejích", "Dávno, dávno již tomu"], a: 1 },
+            { q: "Z jakého původu pocházel dramatik Milan Uhde?", options: ["Ze šlechtického", "Z židovského po matce", "Z dělnického z Ostravy", "Z německého"], a: 1 },
+            { q: "Do jakého časopisu přispíval Milan Uhde?", options: ["Rozhovory 36", "Host do domu", "Respekt", "Květy"], a: 1 },
+            { q: "Které z těchto děl je od Milana Uhdeho?", options: ["Král Vávra", "Piknik", "Marast", "Jiné komedie"], a: 0 },
+            { q: "Čí knižní předlohu (Nikola Šuhaj loupežník) adaptoval Uhde v Baladě pro banditu?", options: ["Bohumila Hrabala", "Ivana Olbrachta", "Vladislava Vančury", "Karla Čapka"], a: 1 },
+            { q: "Kdo je autorem her Marast a Ecce Constantia?", options: ["Pavel Kohout", "Pavel Landovský", "Jiří Dienstbier", "František Pavlíček"], a: 0 },
+            { q: "Kdo je autorem her Jiné komedie a Sanitární noc?", options: ["Josef Topol", "Pavel Landovský", "Ivan Vyskočil", "Jiří Dienstbier"], a: 1 },
+            { q: "Kdo je autorem hry Příjem?", options: ["Pavel Kohout", "Pavel Landovský", "Jiří Dienstbier", "Václav Havel"], a: 2 },
+            { q: "Kdo je autorem díla Dávno, dávno již tomu?", options: ["František Pavlíček", "Milan Uhde", "Josef Topol", "Jan Schmid"], a: 0 },
 
-  <!-- ═══════════ KARTIČKY ═══════════ -->
-  <section id="cards" class="section active">
-    <div class="filter-row" id="filters"></div>
+            // Divadla
+            { q: "Co tvořil Ladislav Fialka v Divadle Na zábradlí?", options: ["Absurdní dramata", "Pantomimické scénky", "Text-appealy", "Muzikály"], a: 1 },
+            { q: "V kterém městě a roce bylo původně založeno Studio Y?", options: ["V Brně 1968", "V Liberci 1963", "V Praze 1978", "V Ostravě 1965"], a: 1 },
+            { q: "Kdo byl zakladatelem a ředitelem Studia Y?", options: ["Jan Schmid", "Otomar Krejča", "Jaroslav Vostrý", "Ladislav Smoček"], a: 0 },
+            { q: "Jaký dramatický formát byl typický pro Studio Y (kolektivní improvizace)?", options: ["Text-appealy", "Takzvaný večer na přidanou", "Vědecké přednášky", "Absurdní tlachání"], a: 1 },
+            { q: "Kdo založil Divadlo za branou (existující 1965-1972)?", options: ["Ivan Vyskočil", "Otomar Krejča", "Jan Schmid", "Jiří Suchý"], a: 1 },
+            { q: "Které divadlo zakládali v roce 1965 Jaroslav Vostrý a Ladislav Smoček?", options: ["Divadlo za branou", "Činoherní klub", "Husa na provázku", "Studio Y"], a: 1 },
+            { q: "Jak se jmenovala první hra L. Smočka v Činoherním klubu?", options: ["Kočka na kolejích", "Kdyby tisíc klarinetů", "Piknik", "Král Vávra"], a: 2 },
+            { q: "Které divadlo vedl ředitel Pistorius a působily v něm herečky Janžurová a Bohdalová?", options: ["Divadlo Na zábradlí", "Divadlo na Vinohradech", "Semafor", "Reduta"], a: 1 },
+            { q: "Pro které divadlo jsou typické vědecké přednášky a parodování českých vlastností?", options: ["Divadlo Járy Cimrmana", "Činoherní klub", "Husa na provázku", "Divadlo na okraji"], a: 0 },
+            { q: "Podle čeho získalo název divadlo Husa na provázku?", options: ["Podle básně J. Suchého", "Podle Mahenovy knížky filmových libret", "Byl to akronym", "Podle rekvizity v Baladě pro banditu"], a: 1 },
 
-    <div class="progress-wrap">
-      <div class="progress-bar"><div class="progress-fill" id="prog"></div></div>
-    </div>
+            // Divadla malých forem (60. léta)
+            { q: "Kde vznikla první malá jeviště a jaký byl jejich cíl?", options: ["Jako státní divadla na podporu režimu", "Z iniciativy skupinek nadšenců po kritice kultu osobnosti na 20. sjezdu KSSS", "Jako výhradně loutková divadla pro děti", "Jako součást Národního divadla"], a: 1 },
+            { q: "V jakém roce byla otevřena Reduta?", options: ["1950", "1957", "1965", "1968"], a: 1 },
+            { q: "Co byly tzv. text-appealy využívané v Redutě?", options: ["Němé pantomimické výstupy", "Snaha zapůsobit textem hraným, vypravovaným a zpívaným", "Manifesty proti cenzuře", "Akronymy hudebních žánrů"], a: 1 },
+            { q: "Kdo založil divadlo Semafor v roce 1959?", options: ["Vyskočil a Vodička", "Suchý a Šlitr", "Vostrý a Smoček", "Smoljak a Svěrák"], a: 1 },
+            { q: "Co znamená název akronymu SEMAFOR?", options: ["Sedm malých forem", "Sdružení emancipačních forem", "Sekce mladých formátů", "Sdružení malířů a fotografů"], a: 0 },
+            { q: "Jak se jmenovala první hra divadla Semafor?", options: ["Zuzana je sama doma", "Člověk z půdy", "Jonáš a tingltangl", "Kytice"], a: 1 },
+            { q: "Jaké proslavené kabaretní pásmo z roku 1962 účinkovali Šlitr a Suchý?", options: ["Zuzana není pro nikoho doma", "Kdyby tisíc klarinetů", "Jonáš a tingltangl", "Tak co, pane barone"], a: 2 },
+            { q: "Kdo tvořil autorskou dvojici Grossmann a... (konec 60. let)?", options: ["Svěrák", "Šlitr", "Šimek", "Dvořák"], a: 2 },
+            { q: "Kdo byli zakladatelé Divadla Na zábradlí (1958)?", options: ["Suchý, Šlitr", "Vyskočil, Suchý, Vodička", "Krejča, Topol", "Vostrý, Smoček"], a: 1 },
+            { q: "Která hra s písničkami byla prvním představením Divadla Na zábradlí?", options: ["Člověk z půdy", "Kdyby tisíc klarinetů", "Piknik", "Zahradní slavnost"], a: 1 }
+        ];
 
-    <div class="card-meta">
-      <span class="card-counter" id="counter">1 / 40</span>
-      <span class="cat-badge" id="cat-badge">KDO</span>
-    </div>
+        const container = document.getElementById('quiz-container');
 
-    <div class="flashcard" id="fc" onclick="flipCard()">
-      <div class="fc-inner">
-        <div class="fc-face fc-front">
-          <div class="fc-hint-label">otázka — klikni pro odpověď</div>
-          <div class="fc-question" id="fq"></div>
-        </div>
-        <div class="fc-face fc-back">
-          <div class="fc-hint-label">odpověď</div>
-          <div class="fc-answer" id="fa"></div>
-        </div>
-      </div>
-    </div>
+        // Generování HTML pro otázky
+        otazky.forEach((otazka, index) => {
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            
+            const title = document.createElement('div');
+            title.className = 'question-title';
+            title.textContent = `${index + 1}. ${otazka.q}`;
+            card.appendChild(title);
 
-    <div class="nav-row">
-      <button class="nav-btn" onclick="prevCard()">← Předchozí</button>
-      <button class="nav-btn primary" onclick="shuffleCards()">Zamíchat</button>
-      <button class="nav-btn" onclick="nextCard()">Další →</button>
-    </div>
-  </section>
+            const optionsDiv = document.createElement('div');
+            optionsDiv.className = 'options';
 
-  <!-- ═══════════ KVÍZ ═══════════ -->
-  <section id="quiz" class="section">
-    <div id="quiz-body"></div>
-  </section>
+            otazka.options.forEach((opt, optIndex) => {
+                const label = document.createElement('label');
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = `q${index}`;
+                radio.value = optIndex;
+                
+                label.appendChild(radio);
+                label.appendChild(document.createTextNode(opt));
+                optionsDiv.appendChild(label);
+            });
 
-  <footer>
-    <div class="footer-brand">Státnice <span>·</span> ČJ 2025 <span>·</span> vygenerováno Claude AI</div>
-    <div class="footer-brand" style="color:var(--text3)">KDO · KDY · KDE · CO</div>
-  </footer>
+            card.appendChild(optionsDiv);
+            container.appendChild(card);
+        });
 
-</div>
+        // Vyhodnocovací logika
+        function vyhodnotitTest() {
+            let score = 0;
+            const cards = document.querySelectorAll('.question-card');
 
-<script>
-const allCards = [
-  {cat:"KDO", q:"Kdo je Václav Havel?", a:"Dramatik, dramaturg, disident a první prezident České republiky (1993–2003). Syn pražského podnikatele, dětství na Barrandově."},
-  {cat:"KDY", q:"Kdy byl Havel vyloučen z gymnázia a proč?", a:"V roce 1950 — z politických důvodů. Poté pracoval jako laboratorní chemik a studoval při zaměstnání."},
-  {cat:"KDE", q:"Kde Havel studoval dramaturgii?", a:"Na DAMU (Divadelní akademii múzických umění) v Praze — po základní vojenské službě."},
-  {cat:"KDE", q:"Kde Havel pracoval jako dramaturg na začátku kariéry?", a:"Nejdříve v Divadle ABC, poté v Divadle Na zábradlí — kde vznikla jeho nejvýznamnější díla."},
-  {cat:"KDY", q:"Kdy byl Havel poprvé odsouzen a na jak dlouho?", a:"V roce 1977 — podmíněně na 14 měsíců za podkopávání zájmů republiky."},
-  {cat:"KDY", q:"Kdy byl Havel odsouzen jako člen VONS a na jak dlouho?", a:"V roce 1978 — odsouzen na 4,5 roku; ve věznicích Heřmanice, Plzeň-Bory a Valdice."},
-  {cat:"KDY", q:"Kdy byl Havel zvolen prezidentem ČSSR?", a:"29. prosince 1989 — po Sametové revoluci."},
-  {cat:"KDY", q:"V jakém období byl Havel prezidentem České republiky?", a:"1993–2003."},
-  {cat:"CO", q:"Co je Charta 77?", a:"Petice a občanské hnutí (1977) požadující dodržování lidských práv. Havel byl jedním z mluvčích — vystavil se tak přímému pronásledování."},
-  {cat:"CO", q:"Jaká dramata napsal Václav Havel?", a:"Autostop, Zahradní slavnost (1963), Vyrozumění, Audience (1975), Vernisáž, Protest, Pokušení, Asanace."},
-  {cat:"KDY", q:"Kdy vznikla Zahradní slavnost a kde byla premiéra?", a:"V roce 1963 — premiéra v Divadle Na zábradlí. Havlova dramatická prvotina."},
-  {cat:"CO", q:"Co satirizuje Zahradní slavnost?", a:"Byrokratický jazyk a kariérismus v komunistickém systému. Hugo Pludek se adaptuje na prázdný newspeak."},
-  {cat:"KDY", q:"Kdy vznikla hra Audience a jak se šířila?", a:"V roce 1975, za normalizace — šířena samizdatem, oficiálně nepublikována."},
-  {cat:"CO", q:"O čem je drama Audience?", a:"Vaněk (pivovarský dělník-intelektuál) odmítá spolupracovat s StB. Sládek mu nabízí výhody výměnou za informace o sobě."},
-  {cat:"KDO", q:"Kdo jsou postavy v dramatu Audience?", a:"Sládek (vedoucí pivovaru) a Ferdinand Vaněk (intelektuál-disident, alter ego Havla)."},
-  {cat:"KDE", q:"Kde se odehrává drama Audience?", a:"V kanceláři sládka v pivovaru — jediné místo, statické prostředí umocňuje absurditu situace."},
-  {cat:"KDO", q:"Kdo je Ferdinand Vaněk?", a:"Havlova dramatická postava — intelektuál a disident pracující v pivovaru. Vystupuje v Audience, Vernisáži a Protestu."},
-  {cat:"KDY", q:"Kdy bylo Divadlo Na zábradlí založeno?", a:"V roce 1958."},
-  {cat:"KDO", q:"Kdo stál u zrodu Divadla Na zábradlí?", a:"Ivan Vyskočil, Jiří Suchý a Vladimír Vlašínová."},
-  {cat:"CO", q:"Čím bylo Divadlo Na zábradlí výjimečné?", a:"Hrálo mimo konvenci — fringe styl, zahraniční hosté (Dürrenmatt, Miller). Protestovalo proti zavedené divadelní tradici."},
-  {cat:"KDO", q:"Kdo je Josef Topol?", a:"Dramatik, studoval DAMU, pracoval v Divadle Na zábradlí. Bratr básníka Filipa Topola."},
-  {cat:"CO", q:"Jaká dramata napsal Josef Topol?", a:"Půlnoční vítr (Kosmova kronika), Jejich den, Sbohem Sokrate, Konec masopustu, Hlasová pole na kolejích."},
-  {cat:"KDO", q:"Kdo je Milan Uhde?", a:"Dramatik, Žid z Brna. Gymnázium v Králově Poli. Přispíval do Pulsu a Hosta. Podepsal Chartu 77."},
-  {cat:"KDE", q:"Kde studoval Milan Uhde gymnázium?", a:"Na Gymnáziu v Králově Poli v Brně."},
-  {cat:"CO", q:"Co napsal Milan Uhde?", a:"Balada pro banditu (o Jánošíkovi) a Král Vávra (satira na komunistický režim)."},
-  {cat:"KDO", q:"Kdo jsou Ladislav Smoljak a Zdeněk Svěrák?", a:"Autoři, herci a zakladatelé Divadla Járy Cimrmana. Svěrák je také scenárista filmů (Kolja)."},
-  {cat:"CO", q:"Co je Divadlo Járy Cimrmana?", a:"Divadlo s fiktivním géniem Járou Cimrmanem — satirizuje a glorifikuje české vlastnosti. Smoljak a Svěrák."},
-  {cat:"KDO", q:"Kdo jsou představitelé Kostnické školy (recepční estetika)?", a:"Wolfgang Iser a Hans Robert Jauss — němečtí literární vědci, 60.–70. léta 20. stol."},
-  {cat:"CO", q:"Co je recepční estetika?", a:"Literárněvědná teorie — čtenář je spolutvůrcem smyslu textu. Iser a Jauss ukázali roli čtenáře při interpretaci."},
-  {cat:"CO", q:"Co je komunikativní pojetí literární výchovy (KLV)?", a:"Přístup, kde žák je aktivní čtenář. Cílem je rozvoj čtenářských kompetencí, nikoliv memorování faktů."},
-  {cat:"CO", q:"Čím se liší tradiční a komunikativní pojetí LV?", a:"Tradiční: centrum = text, žák pasivní, důraz na fakta. KLV: centrum = čtenář, žák aktivní tvůrce smyslu."},
-  {cat:"CO", q:"Co jsou metody KLV?", a:"Metoda čtení a přiřazování, práce s fotografií, interpretační dialog, tvořivé psaní, metody kritického myšlení."},
-  {cat:"CO", q:"Co je imaginační a dynamický proces čtení?", a:"Čtenář si tvoří vlastní film — zapojuje zkušenosti, vyplňuje mezery textu. Základ recepční estetiky (Iser, Jauss)."},
-  {cat:"KDE", q:"Kde byl Havel vězněn v letech 1979–1983?", a:"Věznice Heřmanice, Plzeň-Bory a Valdice — celkem 4,5 roku."},
-  {cat:"CO", q:"Co jsou Havlovy klíčové eseje?", a:"O smyslu Charty 77, Politika a svědomí, Dopis Gustávu Husákovi, Dopisy Olze."},
-  {cat:"CO", q:"Co je drama Pokušení (Havel)?", a:"Drama inspirované Faustem — vědec Foustka uzavře pakt s mocí. Napsáno v 80. letech, satira na kolaboraci s režimem."},
-  {cat:"KDY", q:"Kdy byl Havel zvolen prezidentem ČSFR?", a:"25. 12. 1989 — zvolen prezidentem Česko-Slovenské Federativní Republiky."},
-  {cat:"KDE", q:"Kde Havel vyrůstal v dětství?", a:"Na Barrandově v Praze — jeho otec a strýc tam vybudovali filmová studia a podnikatelský komplex."},
-  {cat:"CO", q:"Co je Husa na provázku?", a:"Brněnské divadlo — uvádělo Mahagonky a filmové sborníky. Bolek Polívka byl jedním z herců."},
-  {cat:"KDY", q:"Kdy vydal Havel svou prvotinu Zahradní slavnost?", a:"Premiéra v roce 1963 v Divadle Na zábradlí — Havel měl tehdy 27 let."},
-];
+            cards.forEach((card, index) => {
+                const selected = card.querySelector(`input[name="q${index}"]:checked`);
+                const labels = card.querySelectorAll('label');
+                
+                // Reset stylů
+                labels.forEach(l => {
+                    l.classList.remove('correct');
+                    l.classList.remove('incorrect');
+                });
 
-const quizQ = [
-  {cat:"KDY", q:"Ve kterém roce byl Václav Havel zvolen prezidentem ČSSR?", opts:["1987","1989","1990","1993"], ans:1, exp:"29. 12. 1989 — Havel byl zvolen prezidentem ČSSR po Sametové revoluci."},
-  {cat:"KDY", q:"V jakém období byl Havel prezidentem České republiky?", opts:["1990–1992","1989–1992","1993–2003","1990–2003"], ans:2, exp:"Prezidentem ČR byl Havel v letech 1993–2003."},
-  {cat:"KDE", q:"Kde Havel pracoval jako dramaturg?", opts:["Národní divadlo","Divadlo Na zábradlí","Divadlo Járy Cimrmana","Stavovské divadlo"], ans:1, exp:"Havel působil jako dramaturg v Divadle Na zábradlí."},
-  {cat:"CO", q:"Co je Charta 77?", opts:["Divadelní hra","Petice za lidská práva","Román o normalizaci","Filmový scénář"], ans:1, exp:"Charta 77 je petice a občanské hnutí za lidská práva (1977)."},
-  {cat:"KDY", q:"Za co byl Havel v roce 1977 odsouzen?", opts:["Emigraci","Vloupání","Podkopávání zájmů republiky","Výtržnictví"], ans:2, exp:"V r. 1977 odsouzen podmíněně na 14 měsíců za podkopávání zájmů republiky."},
-  {cat:"KDY", q:"Kdy bylo Divadlo Na zábradlí založeno?", opts:["1945","1958","1968","1978"], ans:1, exp:"Divadlo Na zábradlí bylo založeno v roce 1958."},
-  {cat:"KDO", q:"Kdo stál u zrodu Divadla Na zábradlí?", opts:["Havel a Topol","Smoljak a Svěrák","Vyskočil, Suchý, Vlašínová","Uhde a Topol"], ans:2, exp:"Zakladatelé: Ivan Vyskočil, Jiří Suchý a Vladimír Vlašínová."},
-  {cat:"CO", q:"Které drama je Havlovou prvotinou z roku 1963?", opts:["Audience","Vernisáž","Zahradní slavnost","Asanace"], ans:2, exp:"Zahradní slavnost (1963) — Havlova prvotina, satirizuje byrokratický jazyk."},
-  {cat:"KDE", q:"Kde se odehrává drama Audience?", opts:["V továrně","V kanceláři sládka v pivovaru","V divadle","Ve věznici"], ans:1, exp:"Audience se odehrává v kanceláři sládka v pivovaru."},
-  {cat:"KDO", q:"Kdo je Ferdinand Vaněk?", opts:["Historická osoba","Alter ego Havla — intelektuál-disident","Reálný politik","Postava z Topola"], ans:1, exp:"Vaněk = Havlova dramatická postava, intelektuál a disident pracující v pivovaru."},
-  {cat:"KDY", q:"Kdy vznikla hra Audience?", opts:["1963","1968","1975","1989"], ans:2, exp:"Audience vznikla v roce 1975 za normalizace, šířena samizdatem."},
-  {cat:"CO", q:"Co je cílem komunikativního pojetí LV?", opts:["Memorování faktů","Chronologie","Rozvoj čtenářských kompetencí","Znalost autorů"], ans:2, exp:"KLV klade důraz na rozvoj čtenářských kompetencí, nikoliv memorování."},
-  {cat:"KDO", q:"Kdo jsou představitelé Kostnické školy?", opts:["Havel a Topol","Iser a Jauss","Smoljak a Svěrák","Marx a Freud"], ans:1, exp:"Wolfgang Iser a Hans Robert Jauss — zakladatelé recepční estetiky, 60.–70. léta."},
-  {cat:"CO", q:"Co napsal Milan Uhde?", opts:["Audience a Vernisáž","Zahradní slavnost","Balada pro banditu a Král Vávra","Půlnoční vítr"], ans:2, exp:"Uhde: Balada pro banditu (Jánošík) a Král Vávra (satira na komunismus)."},
-  {cat:"KDE", q:"Kde studoval Milan Uhde gymnázium?", opts:["Praha","Gymnázium v Králově Poli, Brno","Plzeň","Olomouc"], ans:1, exp:"Uhde studoval na Gymnáziu v Králově Poli v Brně."},
-  {cat:"CO", q:"Co je Divadlo Járy Cimrmana?", opts:["Historické divadlo","Divadlo s fiktivním géniem — Smoljak a Svěrák","Divadlo absurdního dramatu","První česká scéna"], ans:1, exp:"DJC — Smoljak a Svěrák uvádí hry fiktivního génia Járy Cimrmana."},
-  {cat:"CO", q:"Co napsal Josef Topol?", opts:["Balada pro banditu","Audience","Půlnoční vítr a Konec masopustu","Zahradní slavnost"], ans:2, exp:"Topol: Půlnoční vítr (Kosmova kronika), Konec masopustu, Jejich den."},
-  {cat:"KDY", q:"Kdy byl Havel vyloučen z gymnázia?", opts:["1945","1950","1955","1960"], ans:1, exp:"Havel byl vyloučen z gymnázia z politických důvodů v roce 1950."},
-  {cat:"KDE", q:"Kde Havel studoval dramaturgii?", opts:["UK Praha","DAMU","AVU","FAMU"], ans:1, exp:"Havel studoval dramaturgii na DAMU v Praze."},
-  {cat:"CO", q:"Co odlišuje tradiční a komunikativní pojetí LV?", opts:["Délka hodin","Centrum=text vs centrum=čtenář","Počet knih","Jazyk výuky"], ans:1, exp:"Tradiční: centrum = text, žák pasivní. KLV: centrum = čtenář, žák aktivní tvůrce smyslu."},
-];
+                if (selected) {
+                    const ans = parseInt(selected.value);
+                    if (ans === otazky[index].a) {
+                        score++;
+                        selected.parentElement.classList.add('correct');
+                    } else {
+                        selected.parentElement.classList.add('incorrect');
+                        labels[otazky[index].a].classList.add('correct');
+                    }
+                } else {
+                    // Pokud nic nevybral, jen ukaž správnou
+                    labels[otazky[index].a].classList.add('correct');
+                }
+            });
 
-/* ── State ── */
-let cur = [...allCards], idx = 0, flipped = false, activeF = 'VŠE';
-let qIdx = 0, score = 0, answered = false, shuffledQ = [];
-
-const cats = ['VŠE','KDO','KDY','KDE','CO'];
-const fClass = {'VŠE':'f-vse','KDO':'f-kdo','KDY':'f-kdy','KDE':'f-kde','CO':'f-co'};
-
-/* ── Filters ── */
-function buildFilters() {
-  document.getElementById('filters').innerHTML = cats.map(c =>
-    `<button class="filter-pill ${fClass[c]} ${c==='VŠE'?'active':''}" onclick="setF('${c}')">${c}</button>`
-  ).join('');
-}
-
-function setF(f) {
-  activeF = f;
-  cur = f === 'VŠE' ? [...allCards] : allCards.filter(c => c.cat === f);
-  idx = 0; flipped = false;
-  document.querySelectorAll('.filter-pill').forEach(b => {
-    b.classList.toggle('active', b.textContent === f);
-  });
-  renderCard();
-}
-
-/* ── Cards ── */
-function renderCard() {
-  const c = cur[idx];
-  document.getElementById('fq').textContent = c.q;
-  document.getElementById('fa').textContent = c.a;
-  document.getElementById('counter').textContent = `${idx+1} / ${cur.length}`;
-  const badge = document.getElementById('cat-badge');
-  badge.textContent = c.cat;
-  badge.className = 'cat-badge ' + c.cat;
-  document.getElementById('prog').style.width = ((idx+1)/cur.length*100) + '%';
-  const fc = document.getElementById('fc');
-  fc.classList.remove('flipped');
-  flipped = false;
-}
-
-function flipCard() {
-  flipped = !flipped;
-  document.getElementById('fc').classList.toggle('flipped', flipped);
-}
-
-function nextCard() { idx = (idx+1) % cur.length; renderCard(); }
-function prevCard() { idx = (idx - 1 + cur.length) % cur.length; renderCard(); }
-function shuffleCards() { cur = cur.sort(() => Math.random() - .5); idx = 0; renderCard(); }
-
-/* ── Quiz ── */
-function startQuiz() {
-  shuffledQ = [...quizQ].sort(() => Math.random() - .5);
-  qIdx = 0; score = 0; answered = false;
-  renderQ();
-}
-
-function renderQ() {
-  const el = document.getElementById('quiz-body');
-  if (qIdx >= shuffledQ.length) {
-    const pct = Math.round(score / shuffledQ.length * 100);
-    const msg = pct >= 80 ? 'Výborně, jsi připraven/a na státnice.' : pct >= 55 ? 'Dobrý základ, ještě trošku opakuj.' : 'Nevadí — kartičky ti pomůžou!';
-    el.innerHTML = `
-      <div class="results-grid">
-        <div class="res-card"><div class="res-val accent">${score}</div><div class="res-lbl">správně</div></div>
-        <div class="res-card"><div class="res-val">${pct}%</div><div class="res-lbl">úspěšnost</div></div>
-        <div class="res-card"><div class="res-val">${shuffledQ.length - score}</div><div class="res-lbl">chyb</div></div>
-      </div>
-      <div class="results">
-        <div class="res-progress"><div class="res-fill" id="rfill"></div></div>
-        <div class="results-msg">${msg}</div>
-        <button class="nav-btn primary" onclick="startQuiz()">Zkusit znovu</button>
-      </div>`;
-    setTimeout(() => { const f = document.getElementById('rfill'); if(f) f.style.width = pct + '%'; }, 80);
-    return;
-  }
-
-  const q = shuffledQ[qIdx];
-  const letters = ['A','B','C','D'];
-  const shuffled = q.opts.map((o,i) => ({o,i})).sort(() => Math.random() - .5);
-
-  el.innerHTML = `
-    <div class="quiz-topbar">
-      <span class="cat-badge ${q.cat}">${q.cat}</span>
-      <span class="quiz-score-label">${qIdx+1} / ${shuffledQ.length} · skóre ${score}</span>
-    </div>
-    <div class="progress-wrap"><div class="progress-bar"><div class="progress-fill" style="width:${Math.round(qIdx/shuffledQ.length*100)}%"></div></div></div>
-    <div class="q-block">
-      <div class="q-text">${q.q}</div>
-      <div class="options" id="opts">
-        ${shuffled.map(({o,i}, li) => `<button class="opt" onclick="checkA(${i})" id="opt-${i}"><span class="opt-letter">${letters[li]}</span>${o}</button>`).join('')}
-      </div>
-      <div id="fb"></div>
-      <button class="next-q-btn" id="nb" style="display:none" onclick="nextQ()">Další otázka →</button>
-    </div>`;
-}
-
-function checkA(chosen) {
-  if (answered) return;
-  answered = true;
-  const q = shuffledQ[qIdx];
-  document.querySelectorAll('.opt').forEach(o => o.disabled = true);
-  const fb = document.getElementById('fb');
-  if (chosen === q.ans) {
-    score++;
-    document.getElementById('opt-'+chosen).classList.add('correct');
-    fb.className = 'feedback ok';
-    fb.textContent = '✓ Správně. ' + q.exp;
-  } else {
-    document.getElementById('opt-'+chosen).classList.add('wrong');
-    document.getElementById('opt-'+q.ans).classList.add('correct');
-    fb.className = 'feedback nope';
-    fb.textContent = '✗ Špatně. ' + q.exp;
-  }
-  document.getElementById('nb').style.display = 'inline-block';
-}
-
-function nextQ() { qIdx++; answered = false; renderQ(); }
-
-function showTab(s, btn) {
-  document.querySelectorAll('.section').forEach(e => e.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(e => e.classList.remove('active'));
-  document.getElementById(s).classList.add('active');
-  btn.classList.add('active');
-  if (s === 'quiz') startQuiz();
-}
-
-/* ── Init ── */
-buildFilters();
-renderCard();
-</script>
+            const resultDiv = document.getElementById('result');
+            const percent = Math.round((score / otazky.length) * 100);
+            resultDiv.innerHTML = `Váš výsledek: ${score} z ${otazky.length} bodů (${percent} %).`;
+            
+            if(percent >= 80) {
+                resultDiv.style.color = '#27ae60';
+                resultDiv.innerHTML += "<br>Skvělá práce, státnice máte v kapse!";
+            } else if (percent >= 50) {
+                resultDiv.style.color = '#f39c12';
+                resultDiv.innerHTML += "<br>Dobrý základ, ale historii je třeba ještě trochu procvičit.";
+            } else {
+                resultDiv.style.color = '#c0392b';
+                resultDiv.innerHTML += "<br>Tohle bude chtít ještě projít poznámky. Nevzdávejte to!";
+            }
+        }
+    </script>
 </body>
 </html>
