@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Státnicový test ČJ - Otázka 8: Film, Válka a Ota Pavel</title>
+    <title>Státnicový test ČJ - Otázka 8 (Okamžité vyhodnocení)</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -46,6 +46,11 @@
         .options label:hover {
             background: #eef2f5;
         }
+        /* Třídy pro uzamčené otázky */
+        .locked label {
+            cursor: not-allowed;
+            pointer-events: none;
+        }
         input[type="radio"] {
             margin-right: 10px;
         }
@@ -54,7 +59,7 @@
             width: 100%;
             padding: 15px;
             font-size: 1.2em;
-            background-color: #27ae60;
+            background-color: #2c3e50;
             color: white;
             border: none;
             border-radius: 8px;
@@ -64,7 +69,7 @@
             margin-bottom: 50px;
         }
         button:hover {
-            background-color: #219653;
+            background-color: #1a252f;
         }
         .correct {
             background-color: #d4edda !important;
@@ -80,12 +85,20 @@
         .explanation {
             margin-top: 15px;
             padding: 15px;
-            background-color: #fff3cd;
-            border-left: 5px solid #ffc107;
-            color: #856404;
             border-radius: 4px;
             font-size: 0.95em;
             display: none;
+        }
+        /* Barvy rámečků podle úspěšnosti */
+        .explanation.success {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            color: #155724;
+        }
+        .explanation.error {
+            background-color: #fff3cd;
+            border-left: 5px solid #dc3545;
+            color: #856404;
         }
         #result {
             font-size: 1.5em;
@@ -99,11 +112,11 @@
 <body>
 
     <h1>Státnicový test z ČJ (Otázka 8)</h1>
-    <p style="text-align:center;">Didaktické využití filmu, Obraz 1. a 2. světové války, Ota Pavel: Smrt krásných srnců</p>
+    <p style="text-align:center;">Didaktické využití filmu, Obraz 1. a 2. světové války, Ota Pavel: Smrt krásných srnců<br><strong>Vyberte odpověď – výsledek a zdůvodnění se zobrazí okamžitě.</strong></p>
     
     <div id="quiz-container"></div>
     
-    <button onclick="vyhodnotitTest()">Vyhodnotit test</button>
+    <button onclick="zobrazitKonecneSkore()">Zobrazit celkové skóre</button>
     <div id="result"></div>
 
     <script>
@@ -159,12 +172,16 @@
             { q: "V povídce 'Králíci s moudrýma očima' tatínek začne chovat šampiony králíky. Jak reaguje, když mu je na výstavě zkritizují kvůli banalitám (neumyté genitálie)?", options: ["Přijme kritiku a králíky umyje", "Králíky prodá na maso", "Rozčílí se, vypustí šampiony zpět do přírody, odejde domů a po čase zkolabuje a zemře", "Vyhraje soudní spor"], a: 2, exp: "Tatínek neustojí nespravedlnost komise, vypustí králíky na svobodu, vrátí se zlomený domů a nakonec umírá." }
         ];
 
+        let score = 0;
+        let answeredQuestions = 0;
+
         const container = document.getElementById('quiz-container');
 
         // Generování HTML
         otazky.forEach((otazka, index) => {
             const card = document.createElement('div');
             card.className = 'question-card';
+            card.id = `q-card-${index}`;
             
             const title = document.createElement('div');
             title.className = 'question-title';
@@ -181,6 +198,37 @@
                 radio.name = `q${index}`;
                 radio.value = optIndex;
                 
+                // OKAMŽITÉ VYHODNOCENÍ PO KLIKNUTÍ
+                radio.addEventListener('change', function() {
+                    const currentCard = document.getElementById(`q-card-${index}`);
+                    const allRadios = currentCard.querySelectorAll('input[type="radio"]');
+                    const labels = currentCard.querySelectorAll('label');
+                    const expDiv = document.getElementById(`exp${index}`);
+                    
+                    // Uzamknutí otázky (deaktivace tlačítek a změna kurzoru)
+                    allRadios.forEach(r => r.disabled = true);
+                    currentCard.classList.add('locked');
+
+                    const selectedVal = parseInt(this.value);
+                    const correctVal = otazky[index].a;
+
+                    labels[correctVal].classList.add('correct');
+
+                    if (selectedVal === correctVal) {
+                        score++;
+                        expDiv.className = 'explanation success';
+                        expDiv.innerHTML = `<strong>Správně!</strong><br><strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
+                    } else {
+                        labels[selectedVal].classList.add('incorrect');
+                        expDiv.className = 'explanation error';
+                        expDiv.innerHTML = `<strong>Špatně.</strong><br>
+                                            <strong>Správná odpověď:</strong> <em>${otazky[index].options[correctVal]}</em><br>
+                                            <strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
+                    }
+                    expDiv.style.display = 'block';
+                    answeredQuestions++;
+                });
+
                 label.appendChild(radio);
                 label.appendChild(document.createTextNode(opt));
                 optionsDiv.appendChild(label);
@@ -196,48 +244,18 @@
             container.appendChild(card);
         });
 
-        // Vyhodnocení
-        function vyhodnotitTest() {
-            let score = 0;
-            const cards = document.querySelectorAll('.question-card');
-
-            cards.forEach((card, index) => {
-                const selected = card.querySelector(`input[name="q${index}"]:checked`);
-                const labels = card.querySelectorAll('label');
-                const expDiv = document.getElementById(`exp${index}`);
-                
-                labels.forEach(l => {
-                    l.classList.remove('correct');
-                    l.classList.remove('incorrect');
-                });
-                expDiv.style.display = 'none';
-
-                if (selected) {
-                    const ans = parseInt(selected.value);
-                    if (ans === otazky[index].a) {
-                        score++;
-                        selected.parentElement.classList.add('correct');
-                    } else {
-                        selected.parentElement.classList.add('incorrect');
-                        labels[otazky[index].a].classList.add('correct');
-                        
-                        expDiv.style.display = 'block';
-                        expDiv.innerHTML = `<strong>Špatně.</strong><br>
-                                            <strong>Správná odpověď:</strong> <em>${otazky[index].options[otazky[index].a]}</em><br>
-                                            <strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
-                    }
-                } else {
-                    labels[otazky[index].a].classList.add('correct');
-                    expDiv.style.display = 'block';
-                    expDiv.innerHTML = `<strong>Neodpověděli jste.</strong><br>
-                                        <strong>Správná odpověď:</strong> <em>${otazky[index].options[otazky[index].a]}</em><br>
-                                        <strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
-                }
-            });
-
+        // Finální shrnutí na konci
+        function zobrazitKonecneSkore() {
             const resultDiv = document.getElementById('result');
+            
+            if (answeredQuestions < otazky.length) {
+                resultDiv.style.color = '#e67e22';
+                resultDiv.innerHTML = `Zatím jste odpověděl/a na ${answeredQuestions} z ${otazky.length} otázek. <br> Průběžné skóre: ${score} správně.`;
+                return;
+            }
+
             const percent = Math.round((score / otazky.length) * 100);
-            resultDiv.innerHTML = `Váš výsledek: ${score} z ${otazky.length} bodů (${percent} %).`;
+            resultDiv.innerHTML = `Váš konečný výsledek: ${score} z ${otazky.length} bodů (${percent} %).`;
             
             if(percent >= 80) {
                 resultDiv.style.color = '#27ae60';
