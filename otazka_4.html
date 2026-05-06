@@ -3,270 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Státnicový test ČJ - Otázka 4: Didaktika a Meziválečná poezie</title>
+    <title>Státnicový test ČJ - Otázka 4</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
-            color: #333;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-            line-height: 1.6;
-        }
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
-        }
-        .question-card {
-            background: #fff;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            border-left: 5px solid #3498db;
-        }
-        .question-title {
-            font-weight: bold;
-            font-size: 1.1em;
-            margin-bottom: 15px;
-        }
-        .options label {
-            display: block;
-            background: #f9f9f9;
-            padding: 10px 15px;
-            margin-bottom: 8px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: 0.2s;
-            border: 1px solid #e0e0e0;
-        }
-        .options label:hover {
-            background: #eef2f5;
-        }
-        input[type="radio"] {
-            margin-right: 10px;
-        }
-        button {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            font-size: 1.2em;
-            background-color: #27ae60;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 30px;
-            margin-bottom: 50px;
-        }
-        button:hover {
-            background-color: #219653;
-        }
-        .correct {
-            background-color: #d4edda !important;
-            border-color: #c3e6cb !important;
-            color: #155724;
-            font-weight: bold;
-        }
-        .incorrect {
-            background-color: #f8d7da !important;
-            border-color: #f5c6cb !important;
-            color: #721c24;
-        }
-        .explanation {
-            margin-top: 15px;
-            padding: 15px;
-            background-color: #fff3cd;
-            border-left: 5px solid #ffc107;
-            color: #856404;
-            border-radius: 4px;
-            font-size: 0.95em;
-            display: none;
-        }
-        #result {
-            font-size: 1.5em;
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #2c3e50;
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; }
+        h1 { text-align: center; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        .question-card { background: #fff; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 5px solid #3498db; }
+        .question-title { font-weight: bold; font-size: 1.1em; margin-bottom: 15px; }
+        .options label { display: block; background: #f9f9f9; padding: 10px 15px; margin-bottom: 8px; border-radius: 5px; cursor: pointer; transition: 0.2s; border: 1px solid #e0e0e0; }
+        .options label:hover { background: #eef2f5; }
+        .locked label { cursor: not-allowed; pointer-events: none; }
+        input[type="radio"] { margin-right: 10px; }
+        button { display: block; width: 100%; padding: 15px; font-size: 1.2em; background-color: #2c3e50; color: white; border: none; border-radius: 8px; cursor: pointer; transition: 0.3s; margin-top: 30px; margin-bottom: 50px; }
+        button:hover { background-color: #1a252f; }
+        .correct { background-color: #d4edda !important; border-color: #c3e6cb !important; color: #155724; font-weight: bold; }
+        .incorrect { background-color: #f8d7da !important; border-color: #f5c6cb !important; color: #721c24; }
+        .explanation { margin-top: 15px; padding: 15px; border-radius: 4px; font-size: 0.95em; display: none; }
+        .explanation.success { background-color: #d4edda; border-left: 5px solid #28a745; color: #155724; }
+        .explanation.error { background-color: #fff3cd; border-left: 5px solid #dc3545; color: #856404; }
+        #result { font-size: 1.5em; text-align: center; font-weight: bold; margin-bottom: 20px; color: #2c3e50; }
     </style>
 </head>
 <body>
 
     <h1>Státnicový test z ČJ (Otázka 4)</h1>
-    <p style="text-align:center;">Didaktika (Role učitele, přístupy) a Meziválečná poezie (Proletářská, Poetismus, Surrealismus, Katolická, Osobití)</p>
+    <p style="text-align:center;">Didaktika (Role učitele, přístupy) a Meziválečná poezie (Proletářská, Poetismus, Surrealismus, Osobití)</p>
     
     <div id="quiz-container"></div>
-    
-    <button onclick="vyhodnotitTest()">Vyhodnotit test</button>
+    <button onclick="zobrazitKonecneSkore()">Zobrazit celkové skóre</button>
     <div id="result"></div>
 
     <script>
         const otazky = [
-            // Didaktika - Role učitele
             { q: "Kdo tvoří centrum v TRADIČNÍ roli učitele literární výchovy (odvíjející se od herbartovského systému)?", options: ["Žák", "Učitel", "Učivo", "Umělecký text"], a: 1, exp: "V tradiční výuce je centrem učitel, žáci jsou pasivními příjemci a převládá monologická metoda." },
             { q: "V jaké pozici vystupuje učitel v INOVATIVNÍ (transformované) roli?", options: ["Jako garant pravdy", "Jako neomylný vykladač", "Jako garant metody", "Jako pasivní pozorovatel"], a: 2, exp: "V transformované roli učitel již není garantem pravdy, ale garantem metody – hledá tvořivou cestu, jak žákovi poznatky předat." },
-            { q: "Který myšlenkový postup se přednostně využívá v transformované roli literární výchovy?", options: ["Dedukce", "Indukce", "Memorování", "Abstrakce"], a: 1, exp: "Využívá se postup indukce, kdy žáci vyvozují z jednotlivin obecné poznatky (např. sami objeví znaky bajky)." },
+            { q: "Který myšlenkový postup se přednostně využívá v transformované roli literární výchovy?", options: ["Dedukce", "Indukce", "Memorování", "Abstrakce"], a: 1, exp: "Využívá se postup indukce, kdy žáci vyvozují z jednotlivin obecné poznatky." },
             { q: "Jaký přístup v literární výchově operuje především s poznatky literárněhistorické povahy, kterých je velké množství, ale nejsou pevně ukotveny?", options: ["Interpretativní", "Naukový (faktografický)", "Čtenářský", "Komunikativní"], a: 1, exp: "Jedná se o naukový (faktografický) přístup. Protikladem je přístup interpretativní." },
-            { q: "Jak by měl učitel vybalancovat naukový a interpretativní přístup v hodině?", options: ["Nechat celou hodinu jen na čtení bez výkladu", "Vůbec neinterpretovat, jen zkoušet roky narození", "Vhodně kombinovat výklad a interpretaci, přičemž interpretaci by měl věnovat nejméně 10 minut", "Nechat žáky učit se teorii doma"], a: 2, exp: "Podle poznámek by se měly oba přístupy kombinovat a interpretaci ukázek by mělo být věnováno alespoň 10 minut." },
-            { q: "Jaká je role žáka v transformované výuce (ovlivněné pedagogickým konstruktivismem)?", options: ["Je partnerem učitele, dospívá k poznatkům vlastním přičiněním a může ventilovat své pocity", "Pouze zapisuje výklad učitele do sešitu", "Je zkoušen výhradně z letopočtů", "Nemá právo zasahovat do průběhu hodiny"], a: 0, exp: "Žák je podněcován k aktivitě, zasahuje do hodiny a učí se kriticky posuzovat informace." },
-            { q: "Kdo je autorem publikace z roku 2014 'Didaktika literatury: výzvy oboru, od textu umělecké povahy k didaktice esteticko-výchovného oboru'?", options: ["Ondřej Hník", "Josef Topol", "Karel Teige", "Vladimír Holan"], a: 0, exp: "Tuto odbornou didaktickou publikaci napsal Ondřej Hník." },
-
-            // Meziválečná poezie - Obecně a Devětsil
-            { q: "Jaký spolek (založený V. Vančurou a K. Teigem) sdružoval autory levicové, proletářské poezie a poetismu?", options: ["Májovci", "Ruchovci", "Devětsil", "Skupina 42"], a: 2, exp: "Spolek Devětsil byl založen na programu oživení české kultury a řešení sociálních problémů. Představiteli byli např. Wolker, Nezval, Teige." },
-            { q: "Jaké jsou hlavní rysy 1. proletářské poezie?", options: ["Únik do fantazie a exotiky", "Individualismus, melancholie, smutek", "Kolektivismus, optimismus, revolučnost, orientace na dělnictvo", "Oslava šlechty a historie"], a: 2, exp: "Proletářská poezie (literatura dělnictva) byla levicově orientovaná, reagovala na politickou situaci a prosazovala kolektivismus a revolučnost." },
-
-            // Jiří Wolker
+            { q: "Jak by měl učitel vybalancovat naukový a interpretativní přístup v hodině?", options: ["Nechat celou hodinu jen na čtení bez výkladu", "Vůbec neinterpretovat", "Vhodně kombinovat výklad a interpretaci, přičemž interpretaci věnovat nejméně 10 minut", "Nechat žáky učit se teorii doma"], a: 2, exp: "Podle poznámek by se měly oba přístupy kombinovat a interpretaci ukázek by mělo být věnováno alespoň 10 minut." },
+            { q: "Jaká je role žáka v transformované výuce (ovlivněné pedagogickým konstruktivismem)?", options: ["Je partnerem učitele, dospívá k poznatkům vlastním přičiněním a může ventilovat pocity", "Pouze zapisuje výklad učitele", "Je zkoušen výhradně z letopočtů", "Nemá právo zasahovat do hodiny"], a: 0, exp: "Žák je podněcován k aktivitě, zasahuje do hodiny a učí se kriticky posuzovat informace." },
+            { q: "Kdo je autorem publikace 'Didaktika literatury: výzvy oboru, od textu umělecké povahy k didaktice esteticko-výchovného oboru' (2014)?", options: ["Ondřej Hník", "Josef Topol", "Karel Teige", "Vladimír Holan"], a: 0, exp: "Tuto odbornou didaktickou publikaci napsal Ondřej Hník." },
+            { q: "Jaký spolek (založený V. Vančurou a K. Teigem) sdružoval autory levicové, proletářské poezie a poetismu?", options: ["Májovci", "Ruchovci", "Devětsil", "Skupina 42"], a: 2, exp: "Spolek Devětsil byl založen na programu oživení české kultury a řešení sociálních problémů." },
+            { q: "Jaké jsou hlavní rysy 1. proletářské poezie?", options: ["Únik do fantazie a exotiky", "Individualismus, melancholie, smutek", "Kolektivismus, optimismus, revolučnost, orientace na dělnictvo", "Oslava šlechty a historie"], a: 2, exp: "Proletářská poezie byla levicově orientovaná, reagovala na politickou situaci a prosazovala kolektivismus." },
             { q: "Ve kterém městě se narodil a studoval gymnázium Jiří Wolker?", options: ["V Brně", "V Prostějově", "V Praze", "V Olomouci"], a: 1, exp: "Wolker pocházel z Prostějova a často pobýval u babičky na Svatém Kopečku." },
             { q: "Kterou teoretickou stať napsal Jiří Wolker společně s Karlem Teigem?", options: ["Slova a věci", "Proletářské umění", "Podivuhodný kouzelník", "Manifest poetismu"], a: 1, exp: "Společně zformulovali stať Proletářské umění." },
-            { q: "Jaký charakter mají básně v první Wolkerově sbírce 'Host do domu'?", options: ["Revoluční, plné sociálních balad", "Temné, pesimistické a nemelodické", "Téma každodennosti, lyrické, křehké, bezkonfliktní", "Surrealistické s volným tokem myšlenek"], a: 2, exp: "Host do domu je plný touhy po harmonii a lepším světě, básně jsou křehké a bezkonfliktní (obsahuje např. oddíly Chlapec, Ukřižované srdce)." },
-            { q: "Která rozsáhlá Wolkrova báseň je vzpomínkou na mládí a představuje přechodový bod v jeho tvorbě?", options: ["Balada o snech", "Svatý Kopeček", "Těžká hodina", "Edison"], a: 1, exp: "Báseň Svatý Kopeček z oddílu Host do domu je vzpomínkou na mládí u babičky a prolínají se v ní lyrické a epické pasáže." },
-            { q: "Co je hlavním tématem Wolkrovy druhé sbírky 'Těžká hodina'?", options: ["Radost ze života, cirkusy, poutě", "Kritika fašismu", "Sociální balady o lidech drcených sociálními problémy a nutnost revoluce", "Intimní milostná lyrika"], a: 2, exp: "Těžká hodina obsahuje revoluční sociální balady (Balada o očích topičových, Balada o nenarozeném dítěti)." },
-            { q: "Na co zemřel Jiří Wolker ve velmi mladém věku (napsal si předtím vlastní epitaf)?", options: ["Na zápal plic", "Na tuberkulózu", "Padl ve válce", "Při autonehodě"], a: 1, exp: "Zemřel na tuberkulózu (před smrtí si stihl sepsat svůj známý epitaf)." },
-
-            // Poetismus
-            { q: "Který literární směr vznikl v 20. letech 20. století specificky u nás uvnitř spolku Devětsil jako umění 'žít a užívat si'?", options: ["Surrealismus", "Proletářská poezie", "Poetismus", "Existencialismus"], a: 2, exp: "Poetismus (Nezval, Teige) byl hravý, plný fantazie a reagoval na vážnost proletářského umění." },
+            { q: "Jaký charakter mají básně v první Wolkerově sbírce 'Host do domu'?", options: ["Revoluční, plné sociálních balad", "Temné, pesimistické a nemelodické", "Téma každodennosti, lyrické, křehké, bezkonfliktní", "Surrealistické s volným tokem myšlenek"], a: 2, exp: "Host do domu je plný touhy po harmonii a lepším světě, básně jsou křehké a bezkonfliktní." },
+            { q: "Která rozsáhlá Wolkrova báseň je vzpomínkou na mládí a představuje přechodový bod v jeho tvorbě?", options: ["Balada o snech", "Svatý Kopeček", "Těžká hodina", "Edison"], a: 1, exp: "Báseň Svatý Kopeček z oddílu Host do domu je vzpomínkou na mládí u babičky." },
+            { q: "Co je hlavním tématem Wolkrovy druhé sbírky 'Těžká hodina'?", options: ["Radost ze života, cirkusy, poutě", "Kritika fašismu", "Sociální balady o lidech drcených sociálními problémy a nutnost revoluce", "Intimní milostná lyrika"], a: 2, exp: "Těžká hodina obsahuje revoluční sociální balady." },
+            { q: "Na co zemřel Jiří Wolker ve velmi mladém věku?", options: ["Na zápal plic", "Na tuberkulózu", "Padl ve válce", "Při autonehodě"], a: 1, exp: "Zemřel na tuberkulózu (před smrtí si stihl sepsat svůj známý epitaf)." },
+            { q: "Který literární směr vznikl ve 20. letech u nás uvnitř spolku Devětsil jako umění 'žít a užívat si'?", options: ["Surrealismus", "Proletářská poezie", "Poetismus", "Existencialismus"], a: 2, exp: "Poetismus byl hravý, plný fantazie a reagoval na vážnost proletářského umění." },
             { q: "Co tvořilo typické prostředí v básních poetismu?", options: ["Cirkus, poutě, exotika, cestování", "Továrny, doly a předměstí", "Hřbitovy a márnice", "Venkovské statky"], a: 0, exp: "Poetismus oslavoval radost, spontánnost a typickým prostředím mu byly cirkusy, poutě a daleké cesty." },
-            { q: "Který z autorů je autorem 'Pantomimy' a básně 'Podivuhodný kouzelník' (která učí lidi radosti ze života)?", options: ["Konstantin Biebl", "Vítězslav Nezval", "Jiří Wolker", "František Halas"], a: 1, exp: "Báseň Podivuhodný kouzelník i sbírka Pantomima (obsahující kaligramy a hříčky) jsou stěžejními díly Vítězslava Nezvala." },
-            { q: "Která Nezvalova polytematická skladba ze sbírky 'Básně v noci' se zamýšlí nad tím, 'co zůstane po člověku po jeho smrti'?", options: ["Akrobat", "Zloděj z Bagdádu", "Edison", "Nový Ikaros"], a: 2, exp: "Skladba Edison oslavuje lidskou tvořivost a ptá se, jaké dílo po člověku přetrvá." },
-            { q: "Který básník poetismu procestoval Jávu a Cejlon a inspiroval se tím ve sbírce 'S lodí, jež dováží čaj a kávu'?", options: ["Konstantin Biebl", "Vítězslav Nezval", "Karel Teige", "Josef Hora"], a: 0, exp: "Byl to Konstantin Biebl, cestovatel a dobrodruh, který nakonec spáchal sebevraždu skokem z okna." },
-            { q: "Která polytematická báseň Konstantina Biebla je silně vzpomínková, smutná a vyobrazuje marnost a nicotu?", options: ["Zlatými řetězy", "Nový Ikaros", "Zloděj z Bagdádu", "Edison"], a: 1, exp: "Nový Ikaros je Bieblovou hluboce reflexivní a spíše melancholickou básní o nicotě a smrti." },
-
-            // Surrealismus
-            { q: "Kdo byli zakladatelé surrealismu ve Francii, od kterých tento směr čeští autoři převzali?", options: ["Baudelaire a Rimbaud", "Breton a Eluard", "Apollinaire a Tzara", "Hugo a Zola"], a: 1, exp: "Zakladatelem surrealismu byl André Breton (a představitelem Paul Eluard)." },
-            { q: "Co je základním principem surrealistické poezie?", options: ["Přísné dodržování rýmů a pravidelného rytmu", "Návrat k historickým tématům a mýtům", "Uplatňování volného proudu myšlení, potlačování logiky a důraz na fantazii", "Pouze náboženské motivy"], a: 2, exp: "Surrealismus pracoval s podvědomím, sny, potlačoval rozumovou kontrolu (rým a logiku) a využíval volný proud myšlení." },
-            { q: "Která z těchto sbírek Vítězslava Nezvala patří do období surrealismu?", options: ["Host do domu", "Absolutní hrobař", "Těžká hodina", "Máchovské variace"], a: 1, exp: "Absolutní hrobař je surrealistická sbírka V. Nezvala (společně s Praha s prsty deště)." },
-            { q: "Kteří výtvarníci (malíři) působili v českém surrealismu (byli proti proudu)?", options: ["Lada a Aleš", "Toyen a Jindřich Štyrský", "Mucha a Slavíček", "Čapek a Filla"], a: 1, exp: "Hlavními surrealistickými malíři v Československu byli Toyen a Jindřich Štyrský." },
-            { q: "Co vyjadřuje sbírka 'Matka naděje' od V. Nezvala?", options: ["Odpor k Francii", "Oslavu komunistické strany", "Paralelu mezi umírající matkou a osudem ohroženého Československa (fašismem)", "Zážitky z cirkusu"], a: 2, exp: "Sbírka reaguje na hrozbu fašismu a autor v ní ztotožňuje nemoc a osud své matky s osudem národa." },
-
-            // Katolická poezie a J. Zahradníček
-            { q: "Jaký byl životní osud katolického básníka Jana Zahradníčka?", options: ["Měl bezstarostný život diplomata", "Pohmoždil si hrudník a byl hrbatý, po roce 1951 byl 13 let politickým vězněm", "Zemřel ve 24 letech na TBC", "Emigroval do Kanady"], a: 1, exp: "Zahradníček trpěl tělesným postižením, v 50. letech byl vykonstruovaně odsouzen na 13 let vězení a brzy po propuštění zemřel." },
-            { q: "Která rozsáhlá Zahradníčkova báseň (o 6 částech) byla věnována Jakubu Demlovi a reagovala na politickou situaci v ČSR po roce 1948 s hlubokým zklamáním?", options: ["Korouhve", "La Saletta", "Rouška Veroničina", "Znamení moci"], a: 1, exp: "La Saletta kritizuje odchýlení od pravdy, poukazuje na odlidštění a obavy z budoucnosti po Únoru." },
+            { q: "Který autor napsal 'Pantomimu' a báseň 'Podivuhodný kouzelník'?", options: ["Konstantin Biebl", "Vítězslav Nezval", "Jiří Wolker", "František Halas"], a: 1, exp: "Báseň Podivuhodný kouzelník i sbírka Pantomima (kaligramy) jsou díly V. Nezvala." },
+            { q: "Která Nezvalova polytematická skladba se zamýšlí nad tím, 'co zůstane po člověku po jeho smrti'?", options: ["Akrobat", "Zloděj z Bagdádu", "Edison", "Nový Ikaros"], a: 2, exp: "Skladba Edison oslavuje lidskou tvořivost a ptá se, jaké dílo po člověku přetrvá." },
+            { q: "Který básník poetismu procestoval Jávu a Cejlon a inspiroval se tím ve sbírce 'S lodí, jež dováží čaj a kávu'?", options: ["Konstantin Biebl", "Vítězslav Nezval", "Karel Teige", "Josef Hora"], a: 0, exp: "Byl to Konstantin Biebl, cestovatel a dobrodruh." },
+            { q: "Která polytematická báseň K. Biebla je silně vzpomínková, smutná a vyobrazuje marnost a nicotu?", options: ["Zlatými řetězy", "Nový Ikaros", "Zloděj z Bagdádu", "Edison"], a: 1, exp: "Nový Ikaros je Bieblovou hluboce reflexivní a melancholickou básní o nicotě a smrti." },
+            { q: "Kdo byli zakladatelé surrealismu ve Francii?", options: ["Baudelaire a Rimbaud", "Breton a Eluard", "Apollinaire a Tzara", "Hugo a Zola"], a: 1, exp: "Zakladatelem surrealismu byl André Breton a představitelem Paul Eluard." },
+            { q: "Co je základním principem surrealistické poezie?", options: ["Přísné dodržování rýmů", "Návrat k historickým mýtům", "Uplatňování volného proudu myšlení, potlačování logiky a důraz na fantazii", "Pouze náboženské motivy"], a: 2, exp: "Surrealismus pracoval s podvědomím, sny a potlačoval rozumovou kontrolu." },
+            { q: "Která z těchto sbírek Vítězslava Nezvala patří do období surrealismu?", options: ["Host do domu", "Absolutní hrobař", "Těžká hodina", "Máchovské variace"], a: 1, exp: "Absolutní hrobař je surrealistická sbírka V. Nezvala (spolu s Praha s prsty deště)." },
+            { q: "Kteří výtvarníci (malíři) působili v českém surrealismu?", options: ["Lada a Aleš", "Toyen a Jindřich Štyrský", "Mucha a Slavíček", "Čapek a Filla"], a: 1, exp: "Hlavními surrealistickými malíři v Československu byli Toyen a Jindřich Štyrský." },
+            { q: "Co vyjadřuje sbírka 'Matka naděje' od V. Nezvala?", options: ["Odpor k Francii", "Oslavu komunistické strany", "Paralelu mezi umírající matkou a osudem ohroženého Československa", "Zážitky z cirkusu"], a: 2, exp: "Sbírka reaguje na hrozbu fašismu a autor v ní ztotožňuje nemoc matky s osudem národa." },
+            { q: "Jaký byl životní osud katolického básníka Jana Zahradníčka?", options: ["Měl bezstarostný život diplomata", "Pohmoždil si hrudník, byl hrbatý a po roce 1951 byl 13 let politickým vězněm", "Zemřel ve 24 letech na TBC", "Emigroval do Kanady"], a: 1, exp: "Zahradníček trpěl postižením, v 50. letech byl odsouzen na 13 let vězení a brzy po propuštění zemřel." },
+            { q: "Která Zahradníčkova báseň reagovala na politickou situaci v ČSR po roce 1948 s hlubokým zklamáním?", options: ["Korouhve", "La Saletta", "Rouška Veroničina", "Znamení moci"], a: 1, exp: "La Saletta kritizuje odchýlení od pravdy, poukazuje na odlidštění a obavy z budoucnosti po Únoru." },
             { q: "Která Zahradníčkova sbírka je označována za nejkritičtější vůči komunismu?", options: ["Znamení moci", "Pokušení smrti", "Jeřáby", "Stará země"], a: 0, exp: "Znamení moci patří mezi nejradikálnější a nejkritičtější díla vůči totalitní moci." },
-            { q: "Jaké motivy se obecně objevují v Zahradníčkově tvorbě?", options: ["Pokora, vyrovnání se s osudem (vidí v tom Boží záměr)", "Zábava, humor, groteska", "Beznaděj vedoucí k sebevraždě", "Oslava technického pokroku"], a: 0, exp: "Typickými motivy katolické poezie a speciálně Zahradníčka je pokora a chápání životních ran jako Božího záměru." },
-            { q: "Který další básník (původem z Havlíčkova Brodu) tvořil spirituální a křesťanskou poezii a vzal si za ženu malířku Suzanne Renaud?", options: ["František Halas", "Vladimír Holan", "Bohuslav Reynek", "Josef Hora"], a: 2, exp: "Bohuslav Reynek (autor sbírek Podzimní motýli, Rybí šupiny) spojil svůj život s Francouzkou S. Renaud." },
-
-            // Osobití poetikové - F. Halas, V. Holan, J. Hora
-            { q: "Která charakteristika přesně sedí na poezii Františka Halase?", options: ["Lehká, hravá, melodická s tématem cestování", "Nelíbivá, nemelodická, silně metaforická, často pracující s motivem smrti a melancholií", "Náboženská, dogmatická, psaná volným veršem", "Kolektivistická, oslavující dělníky v továrnách"], a: 1, exp: "Halas tvořil poezii osobitou, plnou tvrdých a nelíbivých metafor, kde dominantním motivem byla smrt (např. Kohout plaší smrt)." },
-            { q: "Ve které sbírce František Halas reaguje na Mnichovskou dohodu a zradu spojenců (Velké Británie a Francie)?", options: ["Sepie", "Staré ženy", "Dokořán", "Torzo naděje"], a: 3, exp: "Torzo naděje je Halasovou bezprostřední a drásavou reakcí na dny kolem Mnichova." },
-            { q: "Jakou postavu využil Halas k přirovnání k tragickému osudu českého národa?", options: ["Babičku z ratibořického údolí", "Terezku Planetovou", "Naši paní Boženu Němcovou", "Ježíše Krista"], a: 2, exp: "V cyklu Naše paní Božena Němcová staví paralelu mezi tragickým osudem spisovatelky a osudem Československa." },
-            { q: "Jaký básník (překladatel z francouzštiny a dramaturg u E. F. Buriana) představoval tzv. absolutní, nezávislou poezii (složité novotvary, introvertní meditace, Triumf smrti)?", options: ["Vladimír Holan", "František Halas", "Josef Hora", "Vítězslav Nezval"], a: 0, exp: "Vladimír Holan je tvůrcem nesmírně obtížné, absolutní a abstraktní poezie plné novotvarů." },
-            { q: "O čem pojednává Holanova lyricko-epická skladba 'Terezka Planetová'?", options: ["O vzniku fašismu v Německu", "Příběh o nenaplněné lásce k dívce Terezce, vzpomínka na dětství a hledání smyslu života", "O ženách pracujících v továrnách", "O pobytu autora ve vězení"], a: 1, exp: "Je to intimní a tajemný lyricko-epický příběh vzpomínající na nenaplněnou lásku z dětství." },
-            { q: "Která Holanova sbírka podobně jako Halasovo Torzo naděje reaguje na Mnichovskou dohodu?", options: ["Září 1938", "Kameni přicházíš", "Triumf smrti", "Máchovské variace"], a: 0, exp: "Holan reagoval na události konce 30. let sbírkou Září 1938." },
-            { q: "Kdo byl označován jako 'básník lidského nitra' či čistý lyrik a napsal sbírku Máchovské variace?", options: ["Jiří Wolker", "Josef Hora", "František Halas", "Karel Teige"], a: 1, exp: "Josef Hora (původem z Roudnice n. Labem) je mistrem čisté intimní lyriky a velkým obdivovatelem K. H. Máchy." },
-            { q: "Jaký je hlavní kontrastní motiv v Horově sbírce 'Srdce a vřava světa'?", options: ["Bůh vs. Ďábel", "Kontrast mezi intimním a veřejným (společenským) světem", "Zima vs. Léto", "Smrt vs. Nesmrtelnost"], a: 1, exp: "Srdce (intimita nitra) a vřava světa (veřejný shon a politika) představují základní rozpor této sbírky." },
-
-            // Rozbor básně: Staré ženy (F. Halas)
-            { q: "Do jakého literárního žánru duchovní lyriky Halas báseň 'Staré ženy' stylizuje (využívá opakování prozeb)?", options: ["Sonet", "Epos", "Litanické líčení (litanie)", "Epitaf"], a: 2, exp: "Báseň využívá formu litanie – původně modlitby za dlouhotrvající zdraví, zde použité ironicky či s hlubokou lítostí k popisu stárnutí." },
-            { q: "Co metaforicky znamená barva 'šedá' a 'bílá' v prvních slokách Starých žen?", options: ["Šedá = stereotypnost, bílá = prázdnota stáří", "Šedá = naděje, bílá = mír", "Šedá = špína, bílá = zima", "Odkazují na barvy oblečení zdravotních sester"], a: 0, exp: "Fáze evokace vysvětluje: bílá = prázdnota stáří, šedá = stereotypnost, černá = kulhání ke smrti." },
-            { q: "Jakými zvukovými vjemy básník vyjadřuje pocit neúprosného ubíhání času a prázdnoty ve Starých ženách?", options: ["Křik z ulice, štěkot psů", "Kapání vody, tikající hodiny, ticho nebo zvuk starých gramofonových desek", "Hlasitá moderní hudba", "Sirény z továren"], a: 1, exp: "Zvukovou atmosféru stáří evokuje přes kapání vody, tikot hodin a gramofon." },
-            { q: "Co představuje vizuální podoba 'oříšky bez jádra' ve Starých ženách?", options: ["Nemocné zuby", "Dutý, neúčastný pohled pravdy bez života (oči starých žen)", "Jídlo, které jim dává rodina", "Chudobu domácnosti"], a: 1, exp: "Metafora 'oříšků bez jádra' směřuje na oči starých žen – pohled zbavený energie, dutý a vyhaslý." },
-            { q: "Jak na člověka působí opakování motivů (litanie) v básni Staré ženy podle výkladu?", options: ["Uklidňuje čtenáře k spánku", "Zdůrazňuje stereotypnost a osamělost života stárnoucích žen", "Vyvolává smích a pocit grotesky", "Tvoří napětí jako v detektivce"], a: 1, exp: "Neustálé opakování podtrhuje hlavní myšlenku – neměnnost, bezvýchodnost, osamělost a stereotypnost stáří." },
+            { q: "Jaké motivy se objevují v Zahradníčkově tvorbě?", options: ["Pokora, vyrovnání se s osudem (vidí v tom Boží záměr)", "Zábava, humor", "Beznaděj vedoucí k sebevraždě", "Oslava technického pokroku"], a: 0, exp: "Typickými motivy je pokora a chápání životních ran jako Božího záměru." },
+            { q: "Který básník tvořil křesťanskou poezii a vzal si za ženu malířku Suzanne Renaud?", options: ["František Halas", "Vladimír Holan", "Bohuslav Reynek", "Josef Hora"], a: 2, exp: "Bohuslav Reynek spojil svůj život s Francouzkou S. Renaud." },
+            { q: "Která charakteristika přesně sedí na poezii Františka Halase?", options: ["Lehká, hravá, melodická", "Nelíbivá, nemelodická, silně metaforická, často pracující s motivem smrti a melancholií", "Náboženská, dogmatická", "Kolektivistická"], a: 1, exp: "Halas tvořil poezii osobitou, nelíbivou a dominantním motivem byla smrt." },
+            { q: "Ve které sbírce F. Halas reaguje na Mnichovskou dohodu a zradu spojenců?", options: ["Sepie", "Staré ženy", "Dokořán", "Torzo naděje"], a: 3, exp: "Torzo naděje je Halasovou drásavou reakcí na dny kolem Mnichova." },
+            { q: "Jakou postavu využil Halas k přirovnání k tragickému osudu českého národa?", options: ["Babičku", "Terezku Planetovou", "Naši paní Boženu Němcovou", "Ježíše Krista"], a: 2, exp: "V cyklu Naše paní Božena Němcová staví paralelu mezi tragickým osudem spisovatelky a osudem ČSR." },
+            { q: "Jaký básník představoval absolutní poezii (složité novotvary, introvertní meditace, Triumf smrti)?", options: ["Vladimír Holan", "František Halas", "Josef Hora", "Vítězslav Nezval"], a: 0, exp: "Vladimír Holan je tvůrcem nesmírně obtížné, absolutní a abstraktní poezie plné novotvarů." },
+            { q: "O čem pojednává Holanova lyricko-epická skladba 'Terezka Planetová'?", options: ["O fašismu v Německu", "Příběh o nenaplněné lásce k dívce Terezce, vzpomínka na dětství a hledání smyslu života", "O ženách v továrnách", "O pobytu ve vězení"], a: 1, exp: "Je to intimní příběh vzpomínající na nenaplněnou lásku z dětství." },
+            { q: "Která Holanova sbírka reaguje na Mnichovskou dohodu?", options: ["Září 1938", "Kameni přicházíš", "Triumf smrti", "Máchovské variace"], a: 0, exp: "Holan reagoval na události konce 30. let sbírkou Září 1938." },
+            { q: "Kdo byl označován jako 'básník lidského nitra' a napsal Máchovské variace?", options: ["Jiří Wolker", "Josef Hora", "František Halas", "Karel Teige"], a: 1, exp: "Josef Hora je mistrem čisté intimní lyriky a obdivovatelem K. H. Máchy." },
+            { q: "Jaký je hlavní kontrastní motiv v Horově sbírce 'Srdce a vřava světa'?", options: ["Bůh vs. Ďábel", "Kontrast mezi intimním a veřejným (společenským) světem", "Zima vs. Léto", "Smrt vs. Nesmrtelnost"], a: 1, exp: "Srdce (intimita nitra) a vřava světa (veřejný shon a politika) představují základní rozpor." },
+            { q: "Do jakého literárního žánru duchovní lyriky Halas stylizuje báseň 'Staré ženy'?", options: ["Sonet", "Epos", "Litanické líčení (litanie)", "Epitaf"], a: 2, exp: "Báseň využívá formu litanie – původně modlitby za zdraví, zde k popisu stárnutí." },
+            { q: "Co metaforicky znamená barva 'šedá' a 'bílá' ve Starých ženách?", options: ["Šedá = stereotypnost, bílá = prázdnota stáří", "Šedá = naděje, bílá = mír", "Šedá = špína, bílá = zima", "Odkazují na barvy oblečení zdravotních sester"], a: 0, exp: "Fáze evokace vysvětluje: bílá = prázdnota stáří, šedá = stereotypnost." },
+            { q: "Jakými zvukovými vjemy básník vyjadřuje pocit neúprosného ubíhání času ve Starých ženách?", options: ["Křik z ulice", "Kapání vody, tikající hodiny, zvuk starých gramofonových desek", "Moderní hudba", "Sirény"], a: 1, exp: "Zvukovou atmosféru stáří evokuje kapání vody, tikot hodin a gramofon." },
+            { q: "Co představuje vizuální podoba 'oříšky bez jádra' ve Starých ženách?", options: ["Nemocné zuby", "Dutý, neúčastný pohled pravdy bez života (oči starých žen)", "Jídlo", "Chudobu domácnosti"], a: 1, exp: "Metafora 'oříšků bez jádra' směřuje na oči starých žen – pohled zbavený energie." },
+            { q: "Jak na člověka působí opakování motivů (litanie) v básni Staré ženy?", options: ["Uklidňuje čtenáře", "Zdůrazňuje stereotypnost a osamělost života stárnoucích žen", "Vyvolává smích", "Tvoří napětí"], a: 1, exp: "Neustálé opakování podtrhuje hlavní myšlenku – neměnnost a osamělost stáří." },
             { q: "Jaký by byl rozdíl, kdyby Halas popsal 'nedělní odpoledne' místo 'neděle'?", options: ["Žádný", "Báseň by byla kratší", "Pozbývalo by to svátečnosti a klidu", "Urychlilo by to děj"], a: 2, exp: "Neděle představuje symbolický svátek a svátečnost klidu. Slovo 'odpoledne' by tento pocit narušilo." },
-            { q: "Jaký pokus o vlastní metaforu na 'oči starých žen' nabízejí poznámky (konkretizační fáze)?", options: ["Slepé zrcadlo", "Zavřené okno", "Studánky bez vody, studny vyschlé, pomněnky odkvetlé, ohniště vyhaslá", "Vyhaslé slunce"], a: 2, exp: "Mezi návrhy vlastních metafor pro oči byly: studánky bez vody, vyschlé studny nebo odkvetlé pomněnky." },
-            { q: "Z čeho mají podle Halasova výkladu strach muži a z čeho ženy na prahu stáří?", options: ["Ženy z nemocí, muži ze samoty", "Ženy ztrácí krásu, muži ztrácí sílu", "Oba se bojí výhradně chudoby", "Muži se bojí ztráty peněz, ženy ztráty přátel"], a: 1, exp: "Poznámky uvádějí jasný psychologický rozpor obav: ženy se bojí ztráty krásy, muži ztráty síly." }
+            { q: "Jaký pokus o vlastní metaforu na 'oči starých žen' nabízejí poznámky?", options: ["Slepé zrcadlo", "Zavřené okno", "Studánky bez vody, studny vyschlé, pomněnky odkvetlé, ohniště vyhaslá", "Vyhaslé slunce"], a: 2, exp: "Mezi návrhy vlastních metafor pro oči byly: studánky bez vody, vyschlé studny nebo odkvetlé pomněnky." },
+            { q: "Z čeho mají podle Halasova výkladu strach muži a z čeho ženy na prahu stáří?", options: ["Ženy z nemocí, muži ze samoty", "Ženy ztrácí krásu, muži ztrácí sílu", "Oba se bojí výhradně chudoby", "Muži z peněz, ženy z přátel"], a: 1, exp: "Ženy se bojí ztráty krásy, muži ztráty síly." }
         ];
 
+        let score = 0; let answeredQuestions = 0;
         const container = document.getElementById('quiz-container');
 
-        // Generování HTML pro otázky
         otazky.forEach((otazka, index) => {
-            const card = document.createElement('div');
-            card.className = 'question-card';
-            
-            const title = document.createElement('div');
-            title.className = 'question-title';
-            title.textContent = `${index + 1}. ${otazka.q}`;
-            card.appendChild(title);
-
-            const optionsDiv = document.createElement('div');
-            optionsDiv.className = 'options';
+            const card = document.createElement('div'); card.className = 'question-card'; card.id = `q-card-${index}`;
+            const title = document.createElement('div'); title.className = 'question-title'; title.textContent = `${index + 1}. ${otazka.q}`; card.appendChild(title);
+            const optionsDiv = document.createElement('div'); optionsDiv.className = 'options';
 
             otazka.options.forEach((opt, optIndex) => {
-                const label = document.createElement('label');
-                const radio = document.createElement('input');
-                radio.type = 'radio';
-                radio.name = `q${index}`;
-                radio.value = optIndex;
+                const label = document.createElement('label'); const radio = document.createElement('input');
+                radio.type = 'radio'; radio.name = `q${index}`; radio.value = optIndex;
                 
-                label.appendChild(radio);
-                label.appendChild(document.createTextNode(opt));
-                optionsDiv.appendChild(label);
+                radio.addEventListener('change', function() {
+                    const currentCard = document.getElementById(`q-card-${index}`);
+                    const allRadios = currentCard.querySelectorAll('input[type="radio"]');
+                    const labels = currentCard.querySelectorAll('label');
+                    const expDiv = document.getElementById(`exp${index}`);
+                    
+                    allRadios.forEach(r => r.disabled = true); currentCard.classList.add('locked');
+                    const selectedVal = parseInt(this.value); const correctVal = otazky[index].a;
+                    labels[correctVal].classList.add('correct');
+
+                    if (selectedVal === correctVal) {
+                        score++; expDiv.className = 'explanation success';
+                        expDiv.innerHTML = `<strong>Správně!</strong><br><strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
+                    } else {
+                        labels[selectedVal].classList.add('incorrect'); expDiv.className = 'explanation error';
+                        expDiv.innerHTML = `<strong>Špatně.</strong><br><strong>Správná odpověď:</strong> <em>${otazky[index].options[correctVal]}</em><br><strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
+                    }
+                    expDiv.style.display = 'block'; answeredQuestions++;
+                });
+
+                label.appendChild(radio); label.appendChild(document.createTextNode(opt)); optionsDiv.appendChild(label);
             });
-
             card.appendChild(optionsDiv);
-
-            // Skrytý div pro vysvětlení špatné odpovědi
-            const explanationDiv = document.createElement('div');
-            explanationDiv.className = 'explanation';
-            explanationDiv.id = `exp${index}`;
-            card.appendChild(explanationDiv);
-
-            container.appendChild(card);
+            const explanationDiv = document.createElement('div'); explanationDiv.className = 'explanation'; explanationDiv.id = `exp${index}`;
+            card.appendChild(explanationDiv); container.appendChild(card);
         });
 
-        // Vyhodnocovací logika
-        function vyhodnotitTest() {
-            let score = 0;
-            const cards = document.querySelectorAll('.question-card');
-
-            cards.forEach((card, index) => {
-                const selected = card.querySelector(`input[name="q${index}"]:checked`);
-                const labels = card.querySelectorAll('label');
-                const expDiv = document.getElementById(`exp${index}`);
-                
-                // Reset stylů z předchozího hodnocení
-                labels.forEach(l => {
-                    l.classList.remove('correct');
-                    l.classList.remove('incorrect');
-                });
-                expDiv.style.display = 'none';
-
-                if (selected) {
-                    const ans = parseInt(selected.value);
-                    if (ans === otazky[index].a) {
-                        // Správná odpověď
-                        score++;
-                        selected.parentElement.classList.add('correct');
-                    } else {
-                        // Špatná odpověď -> ukaž správnou a vysvětlení
-                        selected.parentElement.classList.add('incorrect');
-                        labels[otazky[index].a].classList.add('correct');
-                        
-                        expDiv.style.display = 'block';
-                        expDiv.innerHTML = `<strong>Špatně.</strong><br>
-                                            <strong>Správná odpověď:</strong> <em>${otazky[index].options[otazky[index].a]}</em><br>
-                                            <strong>Zdůvodnění z poznámek:</strong> ${otazky[index].exp}`;
-                    }
-                } else {
-                    // Nevybral nic -> ukázat jen správnou a vysvětlení
-                    labels[otazky[index].a].classList.add('correct');
-                    expDiv.style.display = 'block';
-                    expDiv.innerHTML = `<strong>Neodpověděli jste.</strong><br>
-                                        <strong>Správná odpověď:</strong> <em>${otazky[index].options[otazky[index].a]}</em><br>
-                                        <strong>Zdůvodnění z poznámek:</strong> ${otazky[index].exp}`;
-                }
-            });
-
+        function zobrazitKonecneSkore() {
             const resultDiv = document.getElementById('result');
-            const percent = Math.round((score / otazky.length) * 100);
-            resultDiv.innerHTML = `Váš výsledek: ${score} z ${otazky.length} bodů (${percent} %).`;
-            
-            if(percent >= 80) {
-                resultDiv.style.color = '#27ae60';
-                resultDiv.innerHTML += "<br>Bravurní práce! V meziválečné poezii i didaktice jste jako doma.";
-            } else if (percent >= 50) {
-                resultDiv.style.color = '#f39c12';
-                resultDiv.innerHTML += "<br>Velmi solidní základ. Projděte si vysvětlení u chyb, ať se vám autoři lépe spojí se směry.";
-            } else {
-                resultDiv.style.color = '#c0392b';
-                resultDiv.innerHTML += "<br>Tahle otázka vyžaduje přesnost. Určitě si pročtěte vysvětlení u otázek, pomůže vám to udělat si v Devětsilu a autorech pořádek.";
+            if (answeredQuestions < otazky.length) {
+                resultDiv.style.color = '#e67e22'; resultDiv.innerHTML = `Zatím jste odpověděl/a na ${answeredQuestions} z ${otazky.length} otázek. <br> Průběžné skóre: ${score} správně.`; return;
             }
+            const percent = Math.round((score / otazky.length) * 100); resultDiv.innerHTML = `Váš konečný výsledek: ${score} z ${otazky.length} bodů (${percent} %).`;
         }
     </script>
 </body>
