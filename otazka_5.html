@@ -3,97 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Státnicový test ČJ - Otázka 5: Didaktika a Drama 19. století</title>
+    <title>Státnicový test ČJ - Otázka 5</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
-            color: #333;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-            line-height: 1.6;
-        }
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
-        }
-        .question-card {
-            background: #fff;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            border-left: 5px solid #3498db;
-        }
-        .question-title {
-            font-weight: bold;
-            font-size: 1.1em;
-            margin-bottom: 15px;
-        }
-        .options label {
-            display: block;
-            background: #f9f9f9;
-            padding: 10px 15px;
-            margin-bottom: 8px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: 0.2s;
-            border: 1px solid #e0e0e0;
-        }
-        .options label:hover {
-            background: #eef2f5;
-        }
-        input[type="radio"] {
-            margin-right: 10px;
-        }
-        button {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            font-size: 1.2em;
-            background-color: #27ae60;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 30px;
-            margin-bottom: 50px;
-        }
-        button:hover {
-            background-color: #219653;
-        }
-        .correct {
-            background-color: #d4edda !important;
-            border-color: #c3e6cb !important;
-            color: #155724;
-            font-weight: bold;
-        }
-        .incorrect {
-            background-color: #f8d7da !important;
-            border-color: #f5c6cb !important;
-            color: #721c24;
-        }
-        .explanation {
-            margin-top: 15px;
-            padding: 15px;
-            background-color: #fff3cd;
-            border-left: 5px solid #ffc107;
-            color: #856404;
-            border-radius: 4px;
-            font-size: 0.95em;
-            display: none;
-        }
-        #result {
-            font-size: 1.5em;
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #2c3e50;
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; }
+        h1 { text-align: center; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        .question-card { background: #fff; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 5px solid #3498db; }
+        .question-title { font-weight: bold; font-size: 1.1em; margin-bottom: 15px; }
+        .options label { display: block; background: #f9f9f9; padding: 10px 15px; margin-bottom: 8px; border-radius: 5px; cursor: pointer; transition: 0.2s; border: 1px solid #e0e0e0; }
+        .options label:hover { background: #eef2f5; }
+        .locked label { cursor: not-allowed; pointer-events: none; }
+        input[type="radio"] { margin-right: 10px; }
+        button { display: block; width: 100%; padding: 15px; font-size: 1.2em; background-color: #2c3e50; color: white; border: none; border-radius: 8px; cursor: pointer; transition: 0.3s; margin-top: 30px; margin-bottom: 50px; }
+        button:hover { background-color: #1a252f; }
+        .correct { background-color: #d4edda !important; border-color: #c3e6cb !important; color: #155724; font-weight: bold; }
+        .incorrect { background-color: #f8d7da !important; border-color: #f5c6cb !important; color: #721c24; }
+        .explanation { margin-top: 15px; padding: 15px; border-radius: 4px; font-size: 0.95em; display: none; }
+        .explanation.success { background-color: #d4edda; border-left: 5px solid #28a745; color: #155724; }
+        .explanation.error { background-color: #fff3cd; border-left: 5px solid #dc3545; color: #856404; }
+        #result { font-size: 1.5em; text-align: center; font-weight: bold; margin-bottom: 20px; color: #2c3e50; }
     </style>
 </head>
 <body>
@@ -102,13 +29,11 @@
     <p style="text-align:center;">Didaktika (Literární dílo jako učivo a umění) a Dramatická tvorba 2. pol. 19. století</p>
     
     <div id="quiz-container"></div>
-    
-    <button onclick="vyhodnotitTest()">Vyhodnotit test</button>
+    <button onclick="zobrazitKonecneSkore()">Zobrazit celkové skóre</button>
     <div id="result"></div>
 
     <script>
         const otazky = [
-            // Didaktika
             { q: "Z jakých tří složek se skládá obsah školního vzdělávání?", options: ["Vědomosti, dovednosti a hodnotová orientace žáka", "Teorie, praxe a historie", "Čtení, psaní a recitace", "Autor, dílo a kontext"], a: 0, exp: "Učivo školního vzdělávání obsahuje tři složky: vědomosti, dovednosti a hodnotovou orientaci žáka." },
             { q: "Jaké dvě hlavní složky má literární výchova?", options: ["Informativní (poznatky) a komunikativní (recepce)", "Naukobou a memorovací", "Subjektivní a objektivní", "Estetickou a hudební"], a: 0, exp: "Literární výchova má podle poznámek dvě složky: informativní (poznatky) a komunikativní (recepce)." },
             { q: "Jak nahlíží didaktika na umělecký text?", options: ["Výhradně jako na učivo k naučení zpaměti", "Výhradně jako na nedotknutelné umění", "Zároveň jako na učivo i umění (didaktické zúročení estetické funkce)", "Jako na zastaralý materiál"], a: 2, exp: "Text je zároveň uměním i učivem, což představuje didaktické zúročení estetické funkce." },
@@ -120,43 +45,33 @@
             { q: "Co je podle vašich materiálů cílem u uměleckého textu vůči čtenáři?", options: ["Vychovat kultivovaného čtenáře schopného zhodnotit komunikaci s dílem", "Aby se z něj stal budoucí spisovatel", "Aby zpaměti odříkal obsah klasiky", "Aby přečetl minimálně 10 knih měsíčně"], a: 0, exp: "Kultivovaný čtenář by měl být schopen zhodnotit čtenářskou komunikaci s díly krásné literatury." },
             { q: "Jakými otázkami povzbuzuje Petr Poslední interpretaci?", options: ["Kdy se autor narodil?", "Kde se příběh odehrává?", "Co bys na hrdinově místě dělal a co bys z četby namaloval?", "V jakém nakladatelství kniha vyšla?"], a: 2, exp: "P. Poslední ve svých otázkách pro interpretaci vybízí žáky k přemýšlení, jak by se zachovali na místě hrdiny a jak to na ně zapůsobilo." },
             { q: "Pokud text posuzujeme primárně jako 'učivo', která metoda je na místě?", options: ["Metoda tvůrčího psaní", "Reprodukce příběhu či vyjmenování postav", "Volný rozhovor nespadající do didaktiky", "Improvizovaná scénka"], a: 1, exp: "Když je text vnímán primárně jako učivo, přistupuje se k metodám jako reprodukce příběhu nebo vyjmenování postav." },
-
-            // Drama - Národní divadlo a instituce
             { q: "Ve kterém roce byla otevřena první česká divadelní scéna – Prozatímní divadlo?", options: ["1848", "1862", "1868", "1881"], a: 1, exp: "Prozatímní divadlo, jako první česká divadelní scéna, bylo otevřeno v roce 1862." },
             { q: "Kdo zásadně prosadil výstavbu Prozatímního divadla skrze Sbor pro zbudování ND?", options: ["František Palacký", "Josef Zítek", "František Ladislav Rieger", "Josef Kajetán Tyl"], a: 2, exp: "Výstavbu Prozatímního divadla prosadil František Ladislav Rieger." },
             { q: "Jakou hrou zahajovalo Prozatímní divadlo svou činnost?", options: ["Braniboři v Čechách (Smetana)", "Baron Goertz (Bozděch)", "Jedenácté přikázání (Šamberk)", "Král Vukašín (Hálek)"], a: 3, exp: "Prozatímní divadlo zahajovalo svou činnost historickým dramatem Král Vukašín od Vítězslava Hálka." },
-            { q: "Kdo byl autorem historických dramat Baron Goertz a Dobrodruzi (a odešel z divadla pro neshody)?", options: ["Emanuel Bozděch", "Ladislav Stroupežnický", "František Ferdinand Šamberk", "Jan Nepomuk Mayr"], a: 0, exp: "Emanuel Bozděch byl významný dramatik historických her (Baron Goertz, Dobrodruzi), který odešel kvůli neshodám." },
-            { q: "Který rok byl položen základní kámen Národního divadla?", options: ["1862", "1868", "1881", "1883"], a: 1, exp: "Základní kámen Národního divadla byl položen 16. 5. 1868 a obsahoval 19 kamenů z různých míst (Říp, Blaník atd.)." },
+            { q: "Kdo byl autorem historických dramat Baron Goertz a Dobrodruzi (a odešel z divadla pro neshody)?", options: ["Emanuel Bozděch", "Ladislav Stroupežnický", "František Ferdinand Šamberk", "Jan Nepomuk Mayr"], a: 0, exp: "Emanuel Bozděch byl významný dramatik historických her (Baron Goertz, Dobrodruzi)." },
+            { q: "Který rok byl položen základní kámen Národního divadla?", options: ["1862", "1868", "1881", "1883"], a: 1, exp: "Základní kámen Národního divadla byl položen 16. 5. 1868 a obsahoval 19 kamenů z různých míst." },
             { q: "Kdo byl architektem budovy Národního divadla?", options: ["Vojtěch Hynais", "Josef Zítek", "Josef Schulz", "Mikoláš Aleš"], a: 1, exp: "Architektem novorenesanční stavby Národního divadla byl Josef Zítek." },
             { q: "Který malíř je autorem slavné opony Národního divadla?", options: ["Josef Ženíšek", "Václav Brožík", "Vojtěch Hynais", "Mikoláš Aleš"], a: 2, exp: "Slavnou oponu Národního divadla vytvořil Vojtěch Hynais." },
             { q: "Jakým dílem bylo 1. otevření ND v roce 1881 slavnostně zahájeno (za přítomnosti prince Rudolfa)?", options: ["Smetanovou operou Libuše", "Dvořákovou Rusalkou", "Tyllovým Strakonickým dudákem", "Stroupežnického Našimi furianty"], a: 0, exp: "První otevření ND proběhlo v roce 1881 a hrála se Smetanova opera Libuše." },
-            { q: "Kdo převzal práce na obnově Národního divadla po zničujícím požáru v roce 1881?", options: ["Josef Zítek", "Josef Schulz", "František Adolf Šubert", "Jan Nepomuk Mayr"], a: 1, exp: "Po požáru ND v roce 1881 se vybralo 1 milion zlatých za 2 měsíce a nové práce vedl Josef Schulz." },
-            { q: "Kdy se uskutečnilo 2. (definitivní) otevření Národního divadla?", options: ["1881", "1883", "1894", "1868"], a: 1, exp: "Dramaturgem Národního divadla při jeho druhém otevření (1883) se stal Ladislav Stroupežnický." },
-
-            // Repertoár a autoři 19. století
+            { q: "Kdo převzal práce na obnově Národního divadla po zničujícím požáru v roce 1881?", options: ["Josef Zítek", "Josef Schulz", "František Adolf Šubert", "Jan Nepomuk Mayr"], a: 1, exp: "Po požáru ND v roce 1881 se vybralo 1 milion zlatých a nové práce vedl Josef Schulz." },
+            { q: "Kdy se uskutečnilo 2. (definitivní) otevření Národního divadla?", options: ["1881", "1883", "1894", "1868"], a: 1, exp: "K definitivnímu otevření došlo roku 1883." },
             { q: "Jaký je definován rozdíl mezi operou a operetou v repertoáru 19. století?", options: ["Opera je zcela mluvená, opereta pouze zpívaná", "Opera je snoubení hudby s uměleckým textem, opereta je mluvené slovo spojené se zpěvem", "Opereta je pouze pro cizojazyčné hry, opera pro české", "Žádný, jde o synonyma"], a: 1, exp: "Opereta je snoubení mluveného slova a zpěvu, do tohoto žánru spadá např. Polská krev od Oskara Nedbala." },
             { q: "Kdo v roce 1887 ostře kritizoval tehdejší novoromantismus a dal tak podnět ke vzniku českého realistického dramatu?", options: ["Karel Čapek", "T. G. Masaryk v časopise Čas", "František Palacký v Lumíru", "Alois Mrštík ve Světozoru"], a: 1, exp: "České realistické drama vymezil svou kritikou novoromantismu T. G. Masaryk v roce 1887." },
             { q: "O čem vypráví drama 'Jan Výrava' (autor F. A. Šubert)?", options: ["O bojích husitů proti Zikmundovi", "O zámožném sedlákovi, který se přidá na stranu nespokojených vesničanů", "O chudém měšťanovi, který nalezne poklad", "O básníku v renesanční Praze"], a: 1, exp: "Drama pojednává o zámožném sedlákovi, který se postaví na stranu vzbouřených vesničanů." },
-            { q: "Kdo byl po druhém otevření ND jeho prvním dramaturgem, ačkoliv měl po pokusu o sebevraždu zohavený obličej?", options: ["Emanuel Bozděch", "František Adolf Šubert", "Ladislav Stroupežnický", "Jan Nepomuk Mayr"], a: 2, exp: "Dramaturgem Národního divadla při jeho druhém otevření (1883) se stal Ladislav Stroupežnický." },
-            { q: "Kde se odehrává slavná hra 'Naši furianti' od L. Stroupežnického?", options: ["Ve Slezsku", "V jihočeské vesnici Honice", "Na moravské Hané", "V Krkonoších"], a: 1, exp: "Děj dramatu Naši furianti (Stroupežnický) se odehrává v jihočeské vesnici Honice." },
+            { q: "Kdo byl po druhém otevření ND jeho prvním dramaturgem, ačkoliv měl po pokusu o sebevraždu zohavený obličej?", options: ["Emanuel Bozděch", "František Adolf Šubert", "Ladislav Stroupežnický", "Jan Nepomuk Mayr"], a: 2, exp: "Dramaturgem Národního divadla při jeho druhém otevření se stal Ladislav Stroupežnický." },
+            { q: "Kde se odehrává slavná hra 'Naši furianti' od L. Stroupežnického?", options: ["Ve Slezsku", "V jihočeské vesnici Honice", "Na moravské Hané", "V Krkonoších"], a: 1, exp: "Děj dramatu Naši furianti se odehrává v jihočeské vesnici Honice." },
             { q: "O jaké povolání (post) spolu vesničané (voják Bláha vs. krejčí Fiala) ve hře Naši furianti soupeří?", options: ["O post starosty", "O post učitele", "O post místního lékaře", "O post ponocného"], a: 3, exp: "Ve hře Naši furianti spolu bojují vysloužilý voják Bláha a krejčí Fiala o místo ponocného." },
             { q: "Která historická postava vystupuje v L. Stroupežnického veselohrách Paní mincmistrová a Zvíkovský rarášek?", options: ["Jan Hus", "Básník Mikuláš Dačický z Heslova", "Karel IV.", "Mistr Jan z Rokycan"], a: 1, exp: "Veselohry Paní mincmistrová a Zvíkovský rarášek vyprávějí o básníku Mikuláši Dačickém z Heslova." },
-
-            // Preissová
             { q: "Kteří spisovatelé a intelektuálové ovlivnili tvorbu Gabriely Preissové?", options: ["Masaryk a Šalda", "Arbes, Karolina Světlá a Eliška Krásnohorská", "Tyl a Mácha", "Mrštíkové a Čapek"], a: 1, exp: "Gabriela Preissová psala dramata kritizující majetek a s důrazem na ženské role. Tvorba byla ovlivněna Arbesem, Světlou a Krásnohorskou." },
             { q: "Jaký osud potká hlavní hrdinku Evu na konci tragédie Gazdina roba (od G. Preissové)?", options: ["Zůstane s Mánkem šťastně až do smrti", "Zavraždí Mánka ze msty", "Zoufalá skočí do Dunaje, když Mánek podlehne nátlaku matky", "Stane se úspěšnou podnikatelkou ve Vídni"], a: 2, exp: "Hlavní hrdinka Gazdiny roby, Eva, uteče s Mánkem, ale po jeho donuceném návratu skočí do Dunaje." },
             { q: "Který skladatel složil slavnou operu 'Eva', inspirovanou Gazdinou robou?", options: ["Bedřich Smetana", "Antonín Dvořák", "Josef Bohuslav Foerster", "Leoš Janáček"], a: 2, exp: "Operní zpracování dramatu Gazdina roba (s názvem Eva) složil Josef Bohuslav Foerster." },
-            { q: "Co strašlivého spáchá Kostelnička v dramatu 'Její pastorkyňa' od Preissové?", options: ["Zabije Jenůfu ze žárlivosti", "Utopí Jenůfčino nemanželské dítě pod ledem, aby zachránila její pověst", "Podpálí mlýn", "Udá Laca četníkům"], a: 1, exp: "V dramatu Její pastorkyňa (Preisová) Kostelnička utopí Jenůfčino dítě pod ledem, aby uchránila její čest." },
+            { q: "Co strašlivého spáchá Kostelnička v dramatu 'Její pastorkyňa' od Preissové?", options: ["Zabije Jenůfu ze žárlivosti", "Utopí Jenůfčino nemanželské dítě pod ledem, aby zachránila její pověst", "Podpálí mlýn", "Udá Laca četníkům"], a: 1, exp: "V dramatu Její pastorkyňa Kostelnička utopí Jenůfčino dítě pod ledem, aby uchránila její čest." },
             { q: "Kdo je autorem světoznámé opery podle hry 'Její pastorkyňa'?", options: ["Bohuslav Martinů", "Leoš Janáček", "Bedřich Smetana", "Zdeněk Fibich"], a: 1, exp: "Operu Její pastorkyňa vytvořil hudební skladatel Leoš Janáček." },
-
-            // Mrštíkové
-            { q: "Jakou rozsáhlou románovou kroniku zachycující detailní život, zvyklosti a tradice na Hané napsal Alois Mrštík?", options: ["Rok na vsi", "Santa Lucia", "Naši furianti", "Dědina"], a: 0, exp: "Alois Mrštík je autorem rozsáhlé románové kroniky Rok na vsi, která zachycuje život a tradice na Hané." },
-            { q: "Jaký cizí jazyk ovládal Vilém Mrštík a přinášel z něj do Čech vlivy kritického realismu?", options: ["Francouzštinu", "Němčinu", "Ruštinu", "Angličtinu"], a: 2, exp: "Vilém Mrštík překládal z ruštiny, byl ovlivněn kritickým realismem a později spáchal sebevraždu kvůli psychickým problémům." },
-            { q: "O čem je lyrický příběh 'Pohádka máje' (od Viléma Mrštíka)?", options: ["O chudém pražském studentovi", "O lásce dcery revírníka Helenky k právníkovi Ríšovi v přírodním prostředí", "O politických vězních", "O husitských bojích"], a: 1, exp: "Pohádka máje od V. Mrštíka vypráví o lásce dcery revírníka Helenky k právníkovi Ríšovi." },
+            { q: "Jakou rozsáhlou románovou kroniku zachycující detailní život, zvyklosti a tradice na Hané napsal Alois Mrštík?", options: ["Rok na vsi", "Santa Lucia", "Naši furianti", "Dědina"], a: 0, exp: "Alois Mrštík je autorem rozsáhlé románové kroniky Rok na vsi." },
+            { q: "Jaký cizí jazyk ovládal Vilém Mrštík a přinášel z něj do Čech vlivy kritického realismu?", options: ["Francouzštinu", "Němčinu", "Ruštinu", "Angličtinu"], a: 2, exp: "Vilém Mrštík překládal z ruštiny a byl ovlivněn kritickým realismem." },
+            { q: "O čem je lyrický příběh 'Pohádka máje' (od Viléma Mrštíka)?", options: ["O chudém pražském studentovi", "O lásce dcery revírníka Helenky k právníkovi Ríšovi v přírodním prostředí", "O politických vězních", "O husitských bojích"], a: 1, exp: "Pohádka máje vypráví o lásce dcery revírníka Helenky k právníkovi Ríšovi." },
             { q: "Kdo je hlavním hrdinou románu Santa Lucia (V. Mrštík) a jaký je jeho osud?", options: ["Mlynář Vávra, kterého otráví", "Voják Bláha, který se stane starostou", "Chudý student Jordán, který v Praze umírá na tuberkulózu", "Bohatý sedlák, který uteče do Vídně"], a: 2, exp: "V románu Santa Lucia zachycuje V. Mrštík osud chudého studenta Jordána, který v Praze umírá na TBC." },
-
-            // Maryša
-            { q: "Jaký literární žánr měla původně Maryša být, než ji bratři přetvořili v drama?", options: ["Epos", "Lyrická báseň", "Román", "Operní libreto"], a: 2, exp: "Drama Maryša od bratrů Mrštíků mělo původně být románem (jak zamýšlel Alois). Nakonec jej společně přetvořili v drama." },
+            { q: "Jaký literární žánr měla původně Maryša být, než ji bratři přetvořili v drama?", options: ["Epos", "Lyrická báseň", "Román", "Operní libreto"], a: 2, exp: "Drama Maryša od bratrů Mrštíků mělo původně být románem (jak zamýšlel Alois)." },
             { q: "Které dvě jednání (akty) v Maryše jsou zcela smyšlená autory a neopírají se o skutečný případ?", options: ["První a pátý", "Třetí a čtvrtý", "První a čtvrtý", "Druhý a třetí"], a: 2, exp: "V dramatu Maryša jsou zcela smyšlené a přidané autory první a čtvrtý akt." },
             { q: "Komu bratři Mrštíkové hru Maryša (1894) věnovali?", options: ["Svému otci", "Národnímu divadlu", "Památce své matky", "T. G. Masarykovi"], a: 2, exp: "Maryša byla vydána jako kniha roku 1894 a je věnována památce matky bratrů Mrštíků." },
             { q: "Jaká je povaha otce Lízala a uvědomí si někdy na konci hry svou chybu?", options: ["Je štědrý a laskavý, chybu si neuvědomí", "Je to lakomý vychytralec; na konci hry si chybu uvědomuje a podvědomě se bojí o dceru", "Je to ziskuchtivý tyran, který nikdy nelituje", "Je to blázen, kterého na konci zavřou"], a: 1, exp: "Postava sedláka Lízala je líčena jako lakomá a vychytralá; na konci díla si však svou chybu uvědomuje a podvědomě se bojí o osud dcery." },
@@ -172,96 +87,51 @@
             { q: "V jakém aktu se Maryša definitivně obléká do kroje a s pláčem po nátlaku rodičů a Strouhalky odjíždí s Vávrou na ohlášky?", options: ["V 1. jednání", "Ve 2. jednání", "Ve 3. jednání", "Ve 4. jednání"], a: 1, exp: "Ve 2. jednání po nátlaku Lízalky a Strouhalky se Maryša podvolí, oblékne se do kroje a odjíždí s Vávrou na ohlášky." }
         ];
 
+        let score = 0; let answeredQuestions = 0;
         const container = document.getElementById('quiz-container');
 
-        // Generování HTML
         otazky.forEach((otazka, index) => {
-            const card = document.createElement('div');
-            card.className = 'question-card';
-            
-            const title = document.createElement('div');
-            title.className = 'question-title';
-            title.textContent = `${index + 1}. ${otazka.q}`;
-            card.appendChild(title);
-
-            const optionsDiv = document.createElement('div');
-            optionsDiv.className = 'options';
+            const card = document.createElement('div'); card.className = 'question-card'; card.id = `q-card-${index}`;
+            const title = document.createElement('div'); title.className = 'question-title'; title.textContent = `${index + 1}. ${otazka.q}`; card.appendChild(title);
+            const optionsDiv = document.createElement('div'); optionsDiv.className = 'options';
 
             otazka.options.forEach((opt, optIndex) => {
-                const label = document.createElement('label');
-                const radio = document.createElement('input');
-                radio.type = 'radio';
-                radio.name = `q${index}`;
-                radio.value = optIndex;
+                const label = document.createElement('label'); const radio = document.createElement('input');
+                radio.type = 'radio'; radio.name = `q${index}`; radio.value = optIndex;
                 
-                label.appendChild(radio);
-                label.appendChild(document.createTextNode(opt));
-                optionsDiv.appendChild(label);
+                radio.addEventListener('change', function() {
+                    const currentCard = document.getElementById(`q-card-${index}`);
+                    const allRadios = currentCard.querySelectorAll('input[type="radio"]');
+                    const labels = currentCard.querySelectorAll('label');
+                    const expDiv = document.getElementById(`exp${index}`);
+                    
+                    allRadios.forEach(r => r.disabled = true); currentCard.classList.add('locked');
+                    const selectedVal = parseInt(this.value); const correctVal = otazky[index].a;
+                    labels[correctVal].classList.add('correct');
+
+                    if (selectedVal === correctVal) {
+                        score++; expDiv.className = 'explanation success';
+                        expDiv.innerHTML = `<strong>Správně!</strong><br><strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
+                    } else {
+                        labels[selectedVal].classList.add('incorrect'); expDiv.className = 'explanation error';
+                        expDiv.innerHTML = `<strong>Špatně.</strong><br><strong>Správná odpověď:</strong> <em>${otazky[index].options[correctVal]}</em><br><strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
+                    }
+                    expDiv.style.display = 'block'; answeredQuestions++;
+                });
+
+                label.appendChild(radio); label.appendChild(document.createTextNode(opt)); optionsDiv.appendChild(label);
             });
-
             card.appendChild(optionsDiv);
-
-            const explanationDiv = document.createElement('div');
-            explanationDiv.className = 'explanation';
-            explanationDiv.id = `exp${index}`;
-            card.appendChild(explanationDiv);
-
-            container.appendChild(card);
+            const explanationDiv = document.createElement('div'); explanationDiv.className = 'explanation'; explanationDiv.id = `exp${index}`;
+            card.appendChild(explanationDiv); container.appendChild(card);
         });
 
-        // Vyhodnocení
-        function vyhodnotitTest() {
-            let score = 0;
-            const cards = document.querySelectorAll('.question-card');
-
-            cards.forEach((card, index) => {
-                const selected = card.querySelector(`input[name="q${index}"]:checked`);
-                const labels = card.querySelectorAll('label');
-                const expDiv = document.getElementById(`exp${index}`);
-                
-                labels.forEach(l => {
-                    l.classList.remove('correct');
-                    l.classList.remove('incorrect');
-                });
-                expDiv.style.display = 'none';
-
-                if (selected) {
-                    const ans = parseInt(selected.value);
-                    if (ans === otazky[index].a) {
-                        score++;
-                        selected.parentElement.classList.add('correct');
-                    } else {
-                        selected.parentElement.classList.add('incorrect');
-                        labels[otazky[index].a].classList.add('correct');
-                        
-                        expDiv.style.display = 'block';
-                        expDiv.innerHTML = `<strong>Špatně.</strong><br>
-                                            <strong>Správná odpověď:</strong> <em>${otazky[index].options[otazky[index].a]}</em><br>
-                                            <strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
-                    }
-                } else {
-                    labels[otazky[index].a].classList.add('correct');
-                    expDiv.style.display = 'block';
-                    expDiv.innerHTML = `<strong>Neodpověděli jste.</strong><br>
-                                        <strong>Správná odpověď:</strong> <em>${otazky[index].options[otazky[index].a]}</em><br>
-                                        <strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
-                }
-            });
-
+        function zobrazitKonecneSkore() {
             const resultDiv = document.getElementById('result');
-            const percent = Math.round((score / otazky.length) * 100);
-            resultDiv.innerHTML = `Váš výsledek: ${score} z ${otazky.length} bodů (${percent} %).`;
-            
-            if(percent >= 80) {
-                resultDiv.style.color = '#27ae60';
-                resultDiv.innerHTML += "<br>Fantastické! Divadlo 19. století i didaktika jsou pro vás hračkou.";
-            } else if (percent >= 50) {
-                resultDiv.style.color = '#f39c12';
-                resultDiv.innerHTML += "<br>To je dobrý základ, ale nezapomeňte si projít vysvětlení u chyb k Maryše a Národnímu divadlu, rády se tam pletou detaily.";
-            } else {
-                resultDiv.style.color = '#c0392b';
-                resultDiv.innerHTML += "<br>Ještě to bude chtít trochu pročíst poznámky. Udělejte si klidně test ještě jednou s pomocí rámečků!";
+            if (answeredQuestions < otazky.length) {
+                resultDiv.style.color = '#e67e22'; resultDiv.innerHTML = `Zatím jste odpověděl/a na ${answeredQuestions} z ${otazky.length} otázek. <br> Průběžné skóre: ${score} správně.`; return;
             }
+            const percent = Math.round((score / otazky.length) * 100); resultDiv.innerHTML = `Váš konečný výsledek: ${score} z ${otazky.length} bodů (${percent} %).`;
         }
     </script>
 </body>
