@@ -3,112 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Státnicový test ČJ - Otázka 6: Didaktika a Meziválečná próza</title>
+    <title>Státnicový test ČJ - Otázka 6</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
-            color: #333;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-            line-height: 1.6;
-        }
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
-        }
-        .question-card {
-            background: #fff;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            border-left: 5px solid #3498db;
-        }
-        .question-title {
-            font-weight: bold;
-            font-size: 1.1em;
-            margin-bottom: 15px;
-        }
-        .options label {
-            display: block;
-            background: #f9f9f9;
-            padding: 10px 15px;
-            margin-bottom: 8px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: 0.2s;
-            border: 1px solid #e0e0e0;
-        }
-        .options label:hover {
-            background: #eef2f5;
-        }
-        input[type="radio"] {
-            margin-right: 10px;
-        }
-        button {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            font-size: 1.2em;
-            background-color: #27ae60;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 30px;
-            margin-bottom: 50px;
-        }
-        button:hover {
-            background-color: #219653;
-        }
-        .correct {
-            background-color: #d4edda !important;
-            border-color: #c3e6cb !important;
-            color: #155724;
-            font-weight: bold;
-        }
-        .incorrect {
-            background-color: #f8d7da !important;
-            border-color: #f5c6cb !important;
-            color: #721c24;
-        }
-        .explanation {
-            margin-top: 15px;
-            padding: 15px;
-            background-color: #fff3cd;
-            border-left: 5px solid #ffc107;
-            color: #856404;
-            border-radius: 4px;
-            font-size: 0.95em;
-            display: none;
-        }
-        #result {
-            font-size: 1.5em;
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #2c3e50;
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; color: #333; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; }
+        h1 { text-align: center; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        .question-card { background: #fff; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 5px solid #3498db; }
+        .question-title { font-weight: bold; font-size: 1.1em; margin-bottom: 15px; }
+        .options label { display: block; background: #f9f9f9; padding: 10px 15px; margin-bottom: 8px; border-radius: 5px; cursor: pointer; transition: 0.2s; border: 1px solid #e0e0e0; }
+        .options label:hover { background: #eef2f5; }
+        .locked label { cursor: not-allowed; pointer-events: none; }
+        input[type="radio"] { margin-right: 10px; }
+        button { display: block; width: 100%; padding: 15px; font-size: 1.2em; background-color: #2c3e50; color: white; border: none; border-radius: 8px; cursor: pointer; transition: 0.3s; margin-top: 30px; margin-bottom: 50px; }
+        button:hover { background-color: #1a252f; }
+        .correct { background-color: #d4edda !important; border-color: #c3e6cb !important; color: #155724; font-weight: bold; }
+        .incorrect { background-color: #f8d7da !important; border-color: #f5c6cb !important; color: #721c24; }
+        .explanation { margin-top: 15px; padding: 15px; border-radius: 4px; font-size: 0.95em; display: none; }
+        .explanation.success { background-color: #d4edda; border-left: 5px solid #28a745; color: #155724; }
+        .explanation.error { background-color: #fff3cd; border-left: 5px solid #dc3545; color: #856404; }
+        #result { font-size: 1.5em; text-align: center; font-weight: bold; margin-bottom: 20px; color: #2c3e50; }
     </style>
 </head>
 <body>
 
     <h1>Státnicový test z ČJ (Otázka 6)</h1>
-    <p style="text-align:center;">Didaktické principy, Meziválečná próza (1918-1939), Pražská německá literatura, Olbracht: Žalář nejtemnější</p>
+    <p style="text-align:center;">Didaktické principy, Meziválečná próza, Pražská německá literatura, Olbracht: Žalář nejtemnější</p>
     
     <div id="quiz-container"></div>
-    
-    <button onclick="vyhodnotitTest()">Vyhodnotit test</button>
+    <button onclick="zobrazitKonecneSkore()">Zobrazit celkové skóre</button>
     <div id="result"></div>
 
     <script>
         const otazky = [
-            // Didaktika
             { q: "Kdo se v didaktice systematicky zabýval pravidly školní literárněvědecké interpretace?", options: ["P. Poslední", "V. Obert", "O. Hník", "J. Vala"], a: 1, exp: "Pravidly školní literárněvědecké interpretace se zabýval V. Obert." },
             { q: "Co je podle poznámek první (1.) determinantou didaktické interpretace?", options: ["Úroveň čtenářské kompetence žáka", "Samotný text (jeho struktura a specifičnost působení)", "Vzdělanost učitele", "Školní vzdělávací program"], a: 1, exp: "První determinantou je samotný text (vyžaduje specifický interpretační postup)." },
             { q: "Na čem závisí úroveň čtenářské kompetence žáka (2. determinanta)?", options: ["Na délce vyučovací hodiny", "Na věku, emocích a procesu identifikace s hrdinou", "Na přečtení povinné literatury", "Pouze na genetických předpokladech"], a: 1, exp: "Úroveň čtenářské kompetence závisí na věku, schopnosti identifikace s hrdinou a emocích." },
@@ -121,24 +46,18 @@
             { q: "Zásada autentičnosti textu znamená, že:", options: ["K interpretaci si vybíráme původní texty", "Učitel text přečte vlastními slovy", "Text je přeložen do slangu", "Žáci si text vymyslí sami"], a: 0, exp: "Podle zásady autentičnosti si k interpretaci vybíráme vždy původní texty." },
             { q: "Podle Zásady interpretačního postupu si student v prvotní fázi uvědomuje více:", options: ["Historická fakta", "Pocity než samotný význam textu", "Životopis autora", "Jazykové figury"], a: 1, exp: "Student si v prvotní fázi uvědomuje dojmy a soustředí se více na pocity než na význam textu." },
             { q: "Která zásada říká, že nemáme studentovi vnucovat své požadavky, ale motivovat ho k určitému obrazu?", options: ["Zásada autentičnosti", "Zásada variability interpretačního postupu", "Zásada autonomnosti", "Zásada komplexnosti"], a: 1, exp: "Zásada variability interpretačního postupu radí nevnucovat své požadavky, ale motivovat studenta." },
-            
-            // Meziválečná próza - Legionářská a Expresionismus
             { q: "Který český autor legionářské literatury přešel z legií do Rudé armády a působil v ní?", options: ["Josef Kopta", "Jaroslav Hašek", "Rudolf Medek", "František Langer"], a: 1, exp: "Jaroslav Hašek se zúčastnil bitev v legiích, ale později přešel k Rudé armádě." },
             { q: "Jak se jmenovala politická strana, kterou s recesí založil Jaroslav Hašek?", options: ["Strana pracujícího lidu", "Strana mírného pokroku v mezích zákona", "Československá strana anarchistická", "Agrární strana"], a: 1, exp: "Hašek byl zakladatelem Strany mírného pokroku v mezích zákona." },
             { q: "Kdo původně ilustroval Haškovy Osudy dobrého vojáka Švejka?", options: ["Josef Čapek", "Toyen", "Josef Lada", "Mikoláš Aleš"], a: 2, exp: "Původní povídky a celou knihu legendárně ilustroval Josef Lada." },
             { q: "Jaký je podle poznámek hlavní hrdina Švejk?", options: ["Válečný hrdina a stratég", "Úřední prosťáček, který se zchytrale vyhýbá vojenským povinnostem", "Krutý vojevůdce", "Smutný filozof"], a: 1, exp: "Švejk je úřední prosťáček s humorným jazykem, který se vyhýbá vojenským povinnostem." },
             { q: "Který román Vladislava Vančury oslavuje zloděje a vraha, který se paradoxně stává válečným hrdinou?", options: ["Markéta Lazarová", "Pole orná a válečná", "Rozmarné léto", "Pekař Jan Marhoul"], a: 1, exp: "Román Pole orná a válečná reaguje na 1. SV a ústředním paradoxem je oslava zloděje, který se stává hrdinou." },
             { q: "Kde měla centrum expresionistická literatura a jaké byly její motivy?", options: ["Ve Francii; optimismus, příroda", "V Německu; negativní motivy odcizení, strachu, prázdnoty a absurdity", "V Anglii; detektivní zápletky", "V Rusku; kolektivismus a revoluce"], a: 1, exp: "Expresionismus měl centrum v Německu a vyznačoval se pocity úzkosti, strachu a absurdity." },
-            { q: "O čem pojednává expresionistický román Ladislava Klímy 'Utrpení knížete Sternenhocha'?", options: ["Kníže odjíždí na frontu", "Kníže zabije manželku Helgu, zblázní se a umírá na otravu krve po souloži s její mrtvolou", "O chudém šlechtici, který hledá Boha", "O budování nového státu"], a: 1, exp: "Jde o bizarní a sadomasochistické dílo plné hrůzy, kde kníže zešílí a umírá po styku s mrtvou Helgou." },
-            
-            // Ruralisté a Karel Čapek
-            { q: "Co je typické pro ruralistickou literaturu (např. Jan Čarek, František Křelina)?", options: ["Téma města a průmyslu", "Téma venkova, tradic, vztahu k domovu a rodového majetku", "Odpor k zemědělství", "Sci-fi a utopie"], a: 1, exp: "Ruralisté kladli důraz na venkov, tradice, vztah k domovu a podporovali agrární stranu." },
-            { q: "Co vynalezne inženýr Prokop v utopickém románu Karla Čapka 'Krakatit'?", options: ["Umělou inteligenci", "Lék na Bílou nemoc", "Třaskavinu s obrovskou ničivou silou, která je následně ukradena", "Robotický stroj na výrobu absolutna"], a: 2, exp: "V Krakatitu vynalezne inženýr Prokop strašlivou třaskavinu, před jejímž zneužitím Čapek varuje." },
+            { q: "O čem pojednává expresionistický román Ladislava Klímy 'Utrpení knížete Sternenhocha'?", options: ["Kníže odjíždí na frontu", "Kníže zabije manželku Helgu, zblázní se a umírá na otravu po souloži s její mrtvolou", "O chudém šlechtici, který hledá Boha", "O budování nového státu"], a: 1, exp: "Jde o bizarní a sadomasochistické dílo plné hrůzy, kde kníže zešílí a umírá po styku s mrtvou Helgou." },
+            { q: "Co je typické pro ruralistickou literaturu?", options: ["Téma města a průmyslu", "Téma venkova, tradic, vztahu k domovu a rodového majetku", "Odpor k zemědělství", "Sci-fi a utopie"], a: 1, exp: "Ruralisté kladli důraz na venkov, tradice, vztah k domovu a podporovali agrární stranu." },
+            { q: "Co vynalezne inženýr Prokop v utopickém románu Karla Čapka 'Krakatit'?", options: ["Umělou inteligenci", "Lék na Bílou nemoc", "Třaskavinu s obrovskou ničivou silou, která je následně ukradena", "Robotický stroj"], a: 2, exp: "V Krakatitu vynalezne inženýr Prokop strašlivou třaskavinu, před jejímž zneužitím Čapek varuje." },
             { q: "Jaký společenský problém reflektuje Čapkova 'Válka s mloky'?", options: ["Ochranu životního prostředí", "Lidé najímají mloky jako levnou sílu, ti se vzbouří (reakce na rozpínající se nacismus)", "Nedostatek potravin", "Objevení nových kontinentů"], a: 1, exp: "Válka s mloky je silnou alegorií a reakcí na rozpínající se fašismus a nacismus." },
             { q: "Jaké tři knihy tvoří tzv. noetickou trilogii Karla Čapka?", options: ["R.U.R., Krakatit, Továrna na absolutno", "Hordubal, Povětroň, Obyčejný život", "Bílá nemoc, Matka, Věc Makropulos", "Dášeňka, Měl jsem psa a kočku, Zahradníkův rok"], a: 1, exp: "Noetická trilogie (díla o poznání) zahrnuje: Hordubal, Povětroň a Obyčejný život." },
-            { q: "O čem pojednává Čapkova divadelní hra 'Bílá nemoc'?", options: ["O vzteklých mlocích", "Lékař Galén vyléčí nemocné (včetně diktátora), pouze pokud se přestane zbrojit a válčit", "Matka posílá své syny do války", "O vynálezu umělých lidí (robotů)"], a: 1, exp: "Doktor Galén nalezne lék na malomocenství (bílou nemoc), ale lék vydá jen výměnou za světový mír." },
-            
-            // Poláček, Bass, Vančura, Levicová a Katolická
+            { q: "O čem pojednává Čapkova divadelní hra 'Bílá nemoc'?", options: ["O vzteklých mlocích", "Lékař Galén vyléčí nemocné, pouze pokud se přestane zbrojit a válčit", "Matka posílá své syny do války", "O vynálezu robotů"], a: 1, exp: "Doktor Galén nalezne lék na malomocenství (bílou nemoc), ale lék vydá jen výměnou za světový mír." },
             { q: "Kdo je autorem humoristické prózy pro děti 'Bylo nás pět' a knihy 'Muži v ofsajdu'?", options: ["Karel Čapek", "Josef Čapek", "Karel Poláček", "Eduard Bass"], a: 2, exp: "Karel Poláček (později umučený v Osvětimi) je autorem Bylo nás pět a Mužů v ofsajdu." },
             { q: "Který autor vytvořil román 'Klapzubova jedenáctka' o fotbalovém týmu složeném z jedenácti bratrů?", options: ["Eduard Bass", "Karel Poláček", "Vladislav Vančura", "Jaroslav Hašek"], a: 0, exp: "Klapzubova jedenáctka, stejně jako Cirkus Humberto, je dílem Eduarda Basse." },
             { q: "Do jakého literárního proudu patří Vladislav Vančura (podle Pekaře Jana Marhoula a Rozmarného léta)?", options: ["Legionářská literatura", "Imaginativní literatura", "Ruralistická literatura", "Pražská německá literatura"], a: 1, exp: "Vančura tvořil imaginativní literaturu využívající bohatý, obrazný básnický jazyk a archaismy." },
@@ -146,116 +65,67 @@
             { q: "Kteří autoři reprezentují levicově orientovanou meziválečnou literaturu?", options: ["Durych, Deml, Čep", "Marie Pujmanová, Marie Majerová, Ivan Olbracht", "Poláček, Bass", "Rilke, Kafka"], a: 1, exp: "Patří sem Marie Pujmanová (Lidé na křižovatce), Marie Majerová (Siréna) a Ivan Olbracht." },
             { q: "Kdo je autorem katolického historického románu z období valdštejnského s názvem 'Bloudění'?", options: ["Jakub Deml", "Jan Čep", "Jaroslav Durych", "Jan Zahradníček"], a: 2, exp: "Historický román Bloudění napsal katolicky orientovaný Jaroslav Durych." },
             { q: "Kdo psal psychologickou literaturu a je autorem děl 'Neviditelný', 'Helimadoe' a 'Petrolejové lampy'?", options: ["Jaroslav Havlíček", "Ladislav Klíma", "Richard Weiner", "Vladislav Vančura"], a: 0, exp: "Jaroslav Havlíček je klíčovým představitelem české psychologické prózy." },
-            
-            // Pražská německá literatura
             { q: "Kdo patřil k Pražské německé literatuře a napsal mystické 'Sonety Orfeovy' a 'Knihu hodinek'?", options: ["Franz Kafka", "Gustav Meyrink", "Erich Maria Rilke", "Egon Erwin Kisch"], a: 2, exp: "Básník Erich Maria Rilke patřil k pražské německé literatuře a je autorem těchto sbírek." },
             { q: "Jak se přezdívalo novináři Egonu Erwinu Kischovi?", options: ["Básník smrti", "Zuřivý reportér", "Otec Kafky", "Pražský Golem"], a: 1, exp: "Egon Erwin Kisch byl celosvětově známý jako 'zuřivý reportér'." },
             { q: "Kdo napsal mystický román 'Golem' odehrávající se ve staré Praze?", options: ["Franz Kafka", "Gustav Meyrink", "Franz Werfel", "Max Brod"], a: 1, exp: "Gustav Meyrink je autorem románu Golem." },
             { q: "Kdo z přátel posmrtně vydal stěžejní díla Franze Kafky (Proces atd.)?", options: ["Egon Erwin Kisch", "Max Brod", "Franz Werfel", "Gustav Meyrink"], a: 1, exp: "Díla Franze Kafky vydal posmrtně (proti jeho vůli) jeho přítel Max Brod." },
-
-            // Ivan Olbracht a Žalář nejtemnější
-            { q: "Jaké bylo vlastní jméno levicového autora Ivana Olbrachta?", options: ["Emil Frída", "Kamil Zeman", "Karel Teige", "Antonín Zeman"], a: 1, exp: "Ivan Olbracht se narodil jako Kamil Zeman (syn spisovatele Antala Staška - vl. jménem Antonína Zemana)." },
+            { q: "Jaké bylo vlastní jméno levicového autora Ivana Olbrachta?", options: ["Emil Frída", "Kamil Zeman", "Karel Teige", "Antonín Zeman"], a: 1, exp: "Ivan Olbracht se narodil jako Kamil Zeman (syn spisovatele Antala Staška)." },
             { q: "O kom pojednává Olbrachtův román 'Nikola Šuhaj loupežník'?", options: ["O vojákovi z 1. SV", "O zidealizovaném loupežníkovi, který bohatým bral a chudým dával, nakonec zrazen kamarády", "O dělníkovi z Kladna", "O pražském herci"], a: 1, exp: "Nikola Šuhaj je příběh o zidealizovaném loupežníkovi z Podkarpatské Rusi, kterého zradí vlastní přátelé." },
             { q: "Jaký žánr má Olbrachtovo dílo 'Žalář nejtemnější' (rok 1916) a čím je ovlivněno?", options: ["Pohádka; ovlivněna folklorem", "Psychologický román; ovlivněn Freudovou psychoanalýzou", "Cestopis; ovlivněn Ruskem", "Historický román; ovlivněn obrozením"], a: 1, exp: "Jde o psychologický román, zkoumající nitro hrdiny pod vlivem Freudovy psychoanalýzy." },
             { q: "Jakou hlavní duševní vlastností trpí Karel Mach, hlavní hrdina Žaláře nejtemnějšího?", options: ["Je naivní a všem věří", "Je chorobně žárlivý a neustále žije v nejistotě, kterou si sám utváří", "Je nepoučitelný optimista", "Je toužící po bohatství"], a: 1, exp: "Karel Mach je chorobně žárlivý, podezíravý úředník žijící v neustálé vnitřní nejistotě." },
             { q: "Kdo je v románu 'Žalář nejtemnější' Jarmila?", options: ["Zlá macecha", "Služka, která Macha okrade", "Machova milá, dobrosrdečná a poslušná manželka, která mu říká Karlouš", "Machova tajná milenka"], a: 2, exp: "Jarmila je Machova obětavá a poslušná žena." },
             { q: "Co se stane se zrakem Karla Macha během románu?", options: ["Zrak se mu zázračně uzdraví", "Zcela oslepne na obě oči (ztratí i pravé oko), což jeho žárlivost ještě zhorší", "Odmítne nosit brýle", "Oslepne pouze dočasně na pár dní"], a: 1, exp: "Mach, který už měl levé oko zavázané, během děje oslepne dočista i na pravé oko, čímž jeho paranoia vrcholí." },
             { q: "Koho si Mach chorobně představuje jako Jarmilina milence?", options: ["Doktora Hartla", "Listonoše", "Mladého sextána Krále, který s Jarmilou vede hovory o životě", "Stavitele Chaloupeckého"], a: 2, exp: "Mach podezírá mladého studenta Krále, který s nimi bydlí a baví se s Jarmilou o životě." },
-            { q: "Co podle úvah Karla Macha v kapitole Olověný mrak způsobuje, že 'láska je žalář nejtemnější'?", options: ["Láska vzbuzuje sobectví, závist a připravuje nás o svobodu víc než samotná fyzická slepota", "Láska stojí příliš mnoho peněz", "Láska ho nutí cestovat", "Láska je nuda"], a: 0, exp: "Mach si uvědomuje, že horší než vnější tma (slepota) je tma vnitřní – žárlivost, a že láska (sobectví) je tím nejtemnějším žalářem." },
-            { q: "Co udělá Karel Mach ve chvíli (v kapitole Sedlák Mach účtuje), kdy vytuší, že Jarmila zřejmě odchází do předsíně za milencem?", options: ["Rozpláče se a prosí ji", "Vezme pušku, vyžene ji do ložnice, zamkne se s údajným milencem v pokoji a žádá ho, aby se mu představil", "Zavolá policii", "Skočí z okna"], a: 1, exp: "Mach vezme pušku, zavře se v pokoji s 'milencem' a požaduje, aby se mu do rána představil (přičemž ráno zjistí, že to byla služebná Andula)." },
-            { q: "Jak končí příběh Žaláře nejtemnějšího?", options: ["Mach Jarmilu zastřelí", "Mach zůstává v domě sám a najednou mu někdo sevře hrdlo (autor nechává otevřené, zda je to mladík Král)", "Mach odjede se služebnou", "Machovi se vrátí zrak"], a: 1, exp: "Dílo je zakončeno tím, že Mach zůstává sám, když mu náhle někdo sevře hrdlo (pravděpodobně dorazil údajný milenec Král)." }
+            { q: "Co podle úvah Karla Macha způsobuje, že 'láska je žalář nejtemnější'?", options: ["Láska vzbuzuje sobectví, závist a připravuje nás o svobodu víc než samotná fyzická slepota", "Láska stojí příliš mnoho peněz", "Láska ho nutí cestovat", "Láska je nuda"], a: 0, exp: "Mach si uvědomuje, že horší než vnější tma (slepota) je tma vnitřní – žárlivost, a že láska (sobectví) je tím nejtemnějším žalářem." },
+            { q: "Co udělá Karel Mach ve chvíli, kdy vytuší, že Jarmila odchází do předsíně za milencem?", options: ["Rozpláče se", "Vezme pušku, vyžene ji do ložnice, zamkne se s údajným milencem v pokoji a žádá ho, aby se mu představil", "Zavolá policii", "Skočí z okna"], a: 1, exp: "Mach vezme pušku, zavře se v pokoji s 'milencem' a požaduje, aby se mu do rána představil (ráno zjistí, že to byla služebná Andula)." },
+            { q: "Jak končí příběh Žaláře nejtemnějšího?", options: ["Mach Jarmilu zastřelí", "Mach zůstává v domě sám a najednou mu někdo sevře hrdlo (autor nechává otevřené, zda je to Král)", "Mach odjede se služebnou", "Machovi se vrátí zrak"], a: 1, exp: "Dílo je zakončeno tím, že Mach zůstává sám, když mu náhle někdo sevře hrdlo (pravděpodobně dorazil údajný milenec Král)." }
         ];
 
+        let score = 0; let answeredQuestions = 0;
         const container = document.getElementById('quiz-container');
 
-        // Generování HTML
         otazky.forEach((otazka, index) => {
-            const card = document.createElement('div');
-            card.className = 'question-card';
-            
-            const title = document.createElement('div');
-            title.className = 'question-title';
-            title.textContent = `${index + 1}. ${otazka.q}`;
-            card.appendChild(title);
-
-            const optionsDiv = document.createElement('div');
-            optionsDiv.className = 'options';
+            const card = document.createElement('div'); card.className = 'question-card'; card.id = `q-card-${index}`;
+            const title = document.createElement('div'); title.className = 'question-title'; title.textContent = `${index + 1}. ${otazka.q}`; card.appendChild(title);
+            const optionsDiv = document.createElement('div'); optionsDiv.className = 'options';
 
             otazka.options.forEach((opt, optIndex) => {
-                const label = document.createElement('label');
-                const radio = document.createElement('input');
-                radio.type = 'radio';
-                radio.name = `q${index}`;
-                radio.value = optIndex;
+                const label = document.createElement('label'); const radio = document.createElement('input');
+                radio.type = 'radio'; radio.name = `q${index}`; radio.value = optIndex;
                 
-                label.appendChild(radio);
-                label.appendChild(document.createTextNode(opt));
-                optionsDiv.appendChild(label);
+                radio.addEventListener('change', function() {
+                    const currentCard = document.getElementById(`q-card-${index}`);
+                    const allRadios = currentCard.querySelectorAll('input[type="radio"]');
+                    const labels = currentCard.querySelectorAll('label');
+                    const expDiv = document.getElementById(`exp${index}`);
+                    
+                    allRadios.forEach(r => r.disabled = true); currentCard.classList.add('locked');
+                    const selectedVal = parseInt(this.value); const correctVal = otazky[index].a;
+                    labels[correctVal].classList.add('correct');
+
+                    if (selectedVal === correctVal) {
+                        score++; expDiv.className = 'explanation success';
+                        expDiv.innerHTML = `<strong>Správně!</strong><br><strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
+                    } else {
+                        labels[selectedVal].classList.add('incorrect'); expDiv.className = 'explanation error';
+                        expDiv.innerHTML = `<strong>Špatně.</strong><br><strong>Správná odpověď:</strong> <em>${otazky[index].options[correctVal]}</em><br><strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
+                    }
+                    expDiv.style.display = 'block'; answeredQuestions++;
+                });
+
+                label.appendChild(radio); label.appendChild(document.createTextNode(opt)); optionsDiv.appendChild(label);
             });
-
             card.appendChild(optionsDiv);
-
-            const explanationDiv = document.createElement('div');
-            explanationDiv.className = 'explanation';
-            explanationDiv.id = `exp${index}`;
-            card.appendChild(explanationDiv);
-
-            container.appendChild(card);
+            const explanationDiv = document.createElement('div'); explanationDiv.className = 'explanation'; explanationDiv.id = `exp${index}`;
+            card.appendChild(explanationDiv); container.appendChild(card);
         });
 
-        // Vyhodnocení
-        function vyhodnotitTest() {
-            let score = 0;
-            const cards = document.querySelectorAll('.question-card');
-
-            cards.forEach((card, index) => {
-                const selected = card.querySelector(`input[name="q${index}"]:checked`);
-                const labels = card.querySelectorAll('label');
-                const expDiv = document.getElementById(`exp${index}`);
-                
-                labels.forEach(l => {
-                    l.classList.remove('correct');
-                    l.classList.remove('incorrect');
-                });
-                expDiv.style.display = 'none';
-
-                if (selected) {
-                    const ans = parseInt(selected.value);
-                    if (ans === otazky[index].a) {
-                        score++;
-                        selected.parentElement.classList.add('correct');
-                    } else {
-                        selected.parentElement.classList.add('incorrect');
-                        labels[otazky[index].a].classList.add('correct');
-                        
-                        expDiv.style.display = 'block';
-                        expDiv.innerHTML = `<strong>Špatně.</strong><br>
-                                            <strong>Správná odpověď:</strong> <em>${otazky[index].options[otazky[index].a]}</em><br>
-                                            <strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
-                    }
-                } else {
-                    labels[otazky[index].a].classList.add('correct');
-                    expDiv.style.display = 'block';
-                    expDiv.innerHTML = `<strong>Neodpověděli jste.</strong><br>
-                                        <strong>Správná odpověď:</strong> <em>${otazky[index].options[otazky[index].a]}</em><br>
-                                        <strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
-                }
-            });
-
+        function zobrazitKonecneSkore() {
             const resultDiv = document.getElementById('result');
-            const percent = Math.round((score / otazky.length) * 100);
-            resultDiv.innerHTML = `Váš výsledek: ${score} z ${otazky.length} bodů (${percent} %).`;
-            
-            if(percent >= 80) {
-                resultDiv.style.color = '#27ae60';
-                resultDiv.innerHTML += "<br>Dokonalé! Tento nabitý test jste zvládl/a levou zadní.";
-            } else if (percent >= 50) {
-                resultDiv.style.color = '#f39c12';
-                resultDiv.innerHTML += "<br>Skvělá práce, meziválečná literatura je složitá, ale máte v ní slušný přehled. Zkontrolujte si chybky u Olbrachta či didaktiky.";
-            } else {
-                resultDiv.style.color = '#c0392b';
-                resultDiv.innerHTML += "<br>Tohle je těžká látka. Určitě se nevzdávejte a projděte si vysvětlující rámečky, tam máte to nejdůležitější shrnuto.";
+            if (answeredQuestions < otazky.length) {
+                resultDiv.style.color = '#e67e22'; resultDiv.innerHTML = `Zatím jste odpověděl/a na ${answeredQuestions} z ${otazky.length} otázek. <br> Průběžné skóre: ${score} správně.`; return;
             }
+            const percent = Math.round((score / otazky.length) * 100); resultDiv.innerHTML = `Váš konečný výsledek: ${score} z ${otazky.length} bodů (${percent} %).`;
         }
     </script>
 </body>
