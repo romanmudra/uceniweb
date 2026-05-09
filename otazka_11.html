@@ -1,1 +1,221 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Státnicový test ČJ - Otázka 11 (Zvýšená obtížnost)</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .question-card {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-left: 5px solid #3498db;
+        }
+        .question-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+        .options label {
+            display: block;
+            background: #f9f9f9;
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid #e0e0e0;
+        }
+        .options label:hover {
+            background: #eef2f5;
+        }
+        .locked label {
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 30px;
+            margin-bottom: 50px;
+        }
+        button:hover {
+            background-color: #1a252f;
+        }
+        .correct {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+            color: #155724;
+            font-weight: bold;
+        }
+        .incorrect {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+            color: #721c24;
+        }
+        .explanation {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 4px;
+            font-size: 0.95em;
+            display: none;
+        }
+        .explanation.success {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            color: #155724;
+        }
+        .explanation.error {
+            background-color: #fff3cd;
+            border-left: 5px solid #dc3545;
+            color: #856404;
+        }
+        #result {
+            font-size: 1.5em;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
 
+    <h1>Státnicový test z ČJ (Otázka 11)</h1>
+    <p style="text-align:center;">Didaktická interpretace epiky, Próza 60. let, Hrabal, Kundera, Páral a Ladislav Fuks<br><strong>Vyberte odpověď – výsledek a zdůvodnění se zobrazí okamžitě.</strong></p>
+    
+    <div id="quiz-container"></div>
+    
+    <button onclick="zobrazitKonecneSkore()">Zobrazit celkové skóre</button>
+    <div id="result"></div>
+
+    <script>
+        const otazky = [
+            // Didaktika
+            { q: "V rámci didaktické interpretace epického a dramatického textu je pro žákovo porozumění vyprávění primárně klíčové:", options: ["Aby si čtenář vytvářel konkrétní představy o vztazích mezi postavou a dějem v určitém prostředí, včetně vnímání kauzálních vazeb.", "Aby žák dokázal bezchybně zařadit autora do literárněhistorického kontextu a vyjmenovat jeho nejdůležitější díla z paměti.", "Aby se vyučující zcela vyhnul kladení otázek na historický kontext, protože to narušuje plynulost žákova emocionálního zážitku.", "Aby student nejprve analyzoval jazykové a stylistické prostředky díla, aniž by se jakkoliv soustředil na samotný děj a postavy."], a: 0, exp: "Podle poznámek je pro vyprávění příběhu důležitá konkrétní představa celků, částí a detailů obrazů, ukazující zřetelně i podmíněnost kauzálních vazeb, přičemž si čtenář vytváří představy o vztazích mezi postavou a dějem." },
+            { q: "Ve fázi apercepce a percepce učitel často využívá metodu 'vytváření vnitřních fotografií'. Co je podstatou tohoto didaktického postupu?", options: ["Učitel ukazuje žákům dobové fotografie a historické obrazy na interaktivní tabuli, aby jim přesně vizualizoval reálnou podobu popisovaných míst.", "Žák je veden k verbalizování svých představ o postavách (věk, fyziognomie, oblečení, povaha) na základě přímých i nepřímých informací z textu.", "Studenti mají za úkol nakreslit nebo jinak výtvarně ztvárnit hlavní scénu z právě přečteného literárního úryvku a odprezentovat ji.", "Jedná se o nácvik plynulého čtení nahlas, při kterém si žák zrakově 'fotografuje' strukturu textu, aby se vyhnul chybám v intonaci před třídou."], a: 1, exp: "Metoda verbalizování a vytváření vnitřních fotografií spočívá v tom, že žák z textu zjišťuje informace (věk, fyziognomie, povaha, oblečení) a ty následně slovně formuluje." },
+            { q: "Jak by měl učitel adekvátně reagovat, pokud žák ve fázi percepce popíše antického hrdinu oblečeného do moderních džínových kalhot?", options: ["Měl by tuto představu plně akceptovat, protože moderní didaktika klade důraz především na naprosto neomezenou dětskou fantazii a kreativní svobodu.", "Měl by žáka přísně napomenout za hrubou neznalost dějepisu a okamžitě mu zadat referát o odívání ve starověkém Řecku a Římě.", "Měl by žákovy odpovědi korigovat z hlediska historických determinant, upřesnit jeho představy a uvést zajímavosti z dobové módy či obrazů.", "Měl by tuto odpověď zcela ignorovat a plynule přejít k fázi interpretace, aby zbytečným rozborem detailů nezdržoval výklad hlavní myšlenky díla."], a: 2, exp: "Poznámky výslovně uvádějí, že odpovědi korigujeme z hlediska historických determinant (např. antického hrdinu nelze obléknout do džín), díváme se na společenské postavení a představy žáka upřesňujeme (např. dobovými zajímavostmi)." },
+            { q: "Která z následujících charakteristik nejlépe popisuje tzv. fázi interpretace v didaktickém procesu podle dodaných materiálů?", options: ["Učitel se zaměřuje pouze na to, aby žáci pochopili základní dějovou linii, uměli ji vlastními slovy převyprávět a odhalili hlavní zápletku díla.", "Žáci dostávají otázky vedoucí k uvědomění si sociálního cítění, etiky a morálky, často s využitím metody vnitřního monologu a případné aktualizace textu.", "Tato fáze slouží výhradně k frontálnímu procvičení literární teorie, kde žáci v textu schematicky vyhledávají básnické figury a určují druh a žánr.", "Učitel zde uplatňuje výhradně jednosměrný výklad, aby zcela zabránil jakýmkoliv mylným žákovským interpretacím a dezinformacím o historickém pozadí knihy."], a: 1, exp: "Fáze interpretace cílí na podstatné informace vedoucí k uvědomění si sociálního cítění, etiky a morálky. Ptáme se na názory dětí, využíváme vnitřní monology, tvořivou dramatiku a sledujeme možnou aktualizaci." },
+            { q: "Ve které fázi didaktické interpretace se žáci konečně dostávají k metodám kritického myšlení, tvůrčímu psaní (např. pětilístek) a dokážou jasně vyřknout hlavní poselství celého díla?", options: ["Ve fázi apercepce, kde se teprve utváří prvotní očekávání a zájem o text pomocí motivačních rozhovorů.", "Ve fázi percepce, kdy dochází k prvnímu přímému kontaktu s úryvkem a ověřování základního pochopení slovní zásoby.", "Ve fázi interpretace, kdy se rozebírají konkrétní vlastnosti hlavních hrdinů a jejich zasazení do společenského kontextu.", "Ve fázi konkretizace, kde je již plně zohledněn kulturně-historický kontext, podpořen emocionální zážitek a využívá se tvůrčích metod."], a: 3, exp: "Fáze konkretizace je vrcholem, kde je již zohledněn historicko-kulturní kontext, uplatňují se tvořivé metody, kritické myšlení (např. pětilístek) a vyřkne se hlavní poselství díla." },
+
+            // Doba 60. let a Próza
+            { q: "Jaký zásadní politický a společenský vývoj je charakteristický pro Československo v 60. letech 20. století (až do srpna 1968)?", options: ["Dochází k prudkému utužení stalinského křídla, zavírání malých divadel a přísné státní cenzuře, což vrcholí čtvrtým sjezdem spisovatelů v roce 1967.", "Společenský život se postupně liberalizuje, dochází k rehabilitacím politických vězňů z 50. let a vznikají nezávislé malé divadelní scény jako Semafor či Reduta.", "Komunistická strana se zcela vzdává své moci pod tlakem masivních studentských protestů a do čela demokratického státu jsou dosazeni reformní ekonomové.", "Je to období tuhé normalizace, kdy je po krátkém demokratickém uvolnění společnost opět pevně kontrolována a autoři hromadně odcházejí do západního exilu."], a: 1, exp: "60. léta přinesla uvolnění politického klimatu, rehabilitaci politických vězňů, liberalizaci společenského života a zakládání malých scén (Semafor, Reduta, Ypsilonka)." },
+            { q: "Jaká událost z roku 1967 byla výrazným projevem nespokojenosti studentů a začala původně pouze jako protest proti špatným ubytovacím podmínkám a výpadkům elektřiny?", options: ["Pražský Majáles, při kterém byl slavný americký básník Allen Ginsberg zvolen králem a krátce nato zásahem státní bezpečnosti vyhoštěn ze země.", "Rozsáhlé vystoupení Milana Kundery a Václava Havla na 4. sjezdu spisovatelů, kde před studenty ostře odsoudili tehdejší státní kulturní politiku.", "Masové oslavy u příležitosti tajného sepsání Manifestu 2000 slov, které se v centru Prahy zvrhly v násilné pouliční střety s příslušníky Veřejné bezpečnosti.", "Studentská bouře na strahovských kolejích pod heslem 'Chceme světlo!', která vedla k rozehnání průvodu, zbití části studentů a jejich nucenému odchodu ze studií."], a: 3, exp: "V roce 1967 proběhla studentská bouře na Strahově. Začala kvůli výpadkům elektřiny (heslo 'Chceme světlo!'), průvod byl ale rozehnán, část studentů zbita a nucena odejít ze studií." },
+            { q: "V čem spočívala stěžejní změna v prozaické tvorbě 60. let ve srovnání s přísně kontrolovanou budovatelskou literaturou předchozí dekády?", options: ["Autoři se začali masivně vracet k tvorbě historických eposů a oslavám národního obrození, aby v tehdejších lidech znovu probudili silné vlastenecké cítění.", "Došlo k výrazné žánrové a stylové diferenciaci děl, hlavním tématem se stal obyčejný 'život kolem nás' a mnohem větší roli začalo hrát zvolené prostředí, psychologie postav i autentický jazyk.", "Veškerá literatura se násilně sjednotila do jednoho oficiálního socialisticko-realistického proudu, který se zaměřoval výhradně na dělnickou tematiku, kolektivizaci venkova a tvrdý třídní boj.", "Literatura se plně oprostila od jakékoliv tradiční dějovosti a zaměřila se čistě na provokativní experimenty s formou, typické pro pozdní dadaismus a francouzské absurdní divadlo."], a: 1, exp: "V próze 60. let dochází k žánrové i stylové diferenciaci děl. Základním tématem je 'život kolem nás', přičemž větší roli hraje zvolené téma, prostředí, postavy, jazyk a konflikt." },
+            { q: "Jakou tematikou a formou se vyznačuje kniha 'Marie' od autora Alexandra Klimenta?", options: ["Jedná se o historický román z konce 19. století, který detailně mapuje osudy chudé dělnické rodiny na Kladensku během průmyslové revoluce a stávkových hnutí.", "Kniha se skládá z deseti očíslovaných kapitol a sleduje vnitřní monology třicetileté ženy v domácnosti, jejíž osobní krizi vyvolá zamilování se do závodní lékařky Zdenky.", "Jde o klasický budovatelský román oslavující mladou úderníci Marii, která svými inovativními postupy výrazně zvyšuje efektivitu práce v severočeském textilním závodě.", "Je to rozsáhlá epická sága o rodině odsunutých sudetských Němců, do níž se prolínají prvky magického realismu, halucinací a dobových komunistických represí."], a: 1, exp: "Klimentova 'Marie' (obsahující 10 číslovaných kapitol) sleduje psychiku a vnitřní monology 30leté ženy v domácnosti, která zažívá krizi a zamiluje se do závodní lékařky Zdenky." },
+            { q: "O čem převážně vypráví literární dílo 'Smuteční slavnost' od spisovatelky a komunistické novinářky Evy Kantůrkové (vydáno v roce 1967)?", options: ["Jedná se o silně autobiografický a humorný příběh z prostředí dekadentních pražských kaváren, kde se pravidelně setkávají nejrůznější disidenti a intelektuálové.", "Autorka v románu zavádí čtenáře do malé vesničky v 60. letech a prostřednictvím vzpomínek hlavní postavy oživuje pohnutou dobu drsné poválečné kolektivizace zemědělství.", "Kniha líčí napínavé osudy mladého studenta medicíny, který se během 2. světové války musí pod falešnou identitou skrývat před zátahy gestapa na moravském venkově.", "Román popisuje strmý vzestup a následný tvrdý pád komunistického funkcionáře Deveri, který nakonec zradí své ideály kvůli tajné lásce k mladé venkovské dívce Toničce."], a: 1, exp: "Smuteční slavnost (1967) čtenáře zavádí do vesničky v 60. letech a hlavní postavy se ve svých vzpomínkách vracejí do doby poválečné a zejména do doby surové kolektivizace." },
+            { q: "Která výrazná postava ze 'Smuteční slavnosti' E. Kantůrkové představuje bývalého kulaka, který byl nucen opustit svůj statek, a po jehož smrti uspořádají vesničané tichou manifestaci odporu?", options: ["Václav Januš, neoblíbený a arogantní okresní tajemník strany, jehož fanatická žena se ve svém myšlení považuje za umučenou mučednici.", "Komunistický činitel Devera, který si z naprostého donucení vezme Toničku, aby získal společenský status, a později bez milosti rozprodá veškerý majetek sedláků.", "Manžel Matyldy Chladilové (Jan Chladil), který byl nucen vystěhovat se na státní statek, a jehož důstojný pohřeb vyvolá mezi ujařmenými sedláky manifestaci.", "Mladý radikální venkovan, který se zoufale vzepře násilné kolektivizaci tím, že tajně v noci zničí všechny zemědělské stroje v místním JZD, za což je následně tvrdě uvězněn."], a: 2, exp: "Matylda Chladilová se po smrti svého manžela (Jana Chladila), bývalého kulaka nuceně vystěhovaného na státní statek, postará o jeho důstojný pohřeb, což vyvolá manifestaci sedláků." },
+            { q: "Jaký specifický typ hrdinů velmi často vystupuje v prozaických dílech Jana Procházky (např. v jeho známé novele Zelené obzory)?", options: ["Bývalí aristokraté a vysoce vzdělaní intelektuálové, kteří nedokážou po únorovém převratu najít své místo v nově vznikající, rovnostářské socialistické společnosti.", "Lidé cílevědomě pracující ve vysokých politických a státních funkcích, u nichž autor detailně zkoumá postupnou ztrátu osobní morálky a podléhání korupci.", "Vyvrhelové z prostředí pražského undergroundu a disentu, kteří programově odmítají systém, žijí na okraji společnosti a věnují se pouze neoficiálnímu umění.", "Prostí lidé, často z drsného zemědělského nebo pohraničního prostředí, například mladý a nezkušený člověk, který se zřekne svého dosavadního života pro náročný odchod na farmu."], a: 3, exp: "Jan Procházka psal často o prostých lidech z venkova a zemědělství. V Zelených obzorech jde o mladého člověka, který se zřekne svého života a odchází na farmu." },
+
+            // Arnošt Lustig
+            { q: "Z jakého hluboce osobního zdroje čerpá spisovatel Arnošt Lustig prakticky veškeré náměty pro svou prozaickou tvorbu z 2. poloviny 20. století?", options: ["Z traumatizujících zážitků z dlouhých bojů na nebezpečné východní frontě, kde během druhé světové války aktivně působil jako příslušník československého dělostřelectva.", "Z drastických prožitků spojených s jeho židovským původem, z věznění v několika koncentračních táborech (Terezín, Osvětim, Buchenwald) a z riskantního útěku z pochodu smrti.", "Z obsáhlých historických archivů, které detailně dokumentovaly vznik státu Izrael, poválečné sionistické hnutí a komplikované osudy prvních židovských osadníků na Blízkém východě.", "Z absurdního a dusivého prostředí komunistických vyšetřovacích vazeb v 50. letech, kde byl na dlouhou dobu nespravedlivě držen za vykonstruovanou protistátní činnost a velezradu."], a: 1, exp: "Lustigova tvorba je prostoupena tematikou 2. světové války a židovství, přičemž osobně zažil koncentrační tábory (Terezín, Osvětim, Buchenwald) a útěk z pochodu smrti do Dachau." },
+            { q: "V čem spočívá absolutní, vnitřní tragika známé novely 'Dita Saxová' od autora Arnošta Lustiga?", options: ["Hlavní hrdinka se po válce odmítá smířit se ztrátou rodiny, nedokáže najít své žijící příbuzné, a ze zoufalství se rozhodne ilegálně vrátit a zemřít ve zničeném terezínském ghettu.", "Dívka sice fyzicky přežije nesmírné hrůzy koncentračního tábora, ale nedokáže se už nikdy psychicky začlenit do normálního života, odjíždí do Švýcarska, kde nakonec páchá sebevraždu.", "Dita se v poválečném Československu stane nevinnou obětí vykonstruovaného politického procesu, protože je kvůli svému krátkému pobytu na Západě absurdně označena za imperialistickou špionku.", "Hrdinka v sobě nenalezne sílu odpustit a vědomě naváže romantický vztah s bývalým dozorcem z Osvětimi, což nutně vede k jejímu naprostému a trvalému společenskému vyvržení."], a: 1, exp: "Novela Dita Saxová zachycuje život dívky navracející se z koncentračního tábora, která se nedokáže začlenit do normálního života, odjíždí do Švýcarska a tam páchá sebevraždu." },
+            { q: "Jaká skutečná, historicky doložená událost přímo inspirovala mrazivou Lustigovu novelu 'Modlitba pro Kateřinu Horovitzovou'?", options: ["Tragický pokus rozsáhlé skupiny vězňů o ozbrojené povstání a hromadný útěk z vyhlazovacího tábora Treblinka v létě roku 1943, který byl brutálně a krvavě potlačen.", "Otřesný příběh skupiny italských válečných zajatců, kteří byli v roce 1943 zcela falešně obviněni ze sabotáže zbrojního průmyslu a bez milosti popraveni gestapem na území Protektorátu.", "Skutečná událost z roku 1943 v Itálii, kdy byla skupina bohatých židovských podnikatelů krutě oklamána a pod falešným slibem záchrany a finanční výměny cynicky zavražděna nacisty.", "Odvážná záchranná akce pracovníků britského Červeného kříže, při níž se podařilo na úplně poslední chvíli transportovat vlakem stovky židovských dětí do absolutního bezpečí v Anglii."], a: 2, exp: "Modlitba pro Kateřinu Horovitzovou (1964) byla inspirována skutečnou událostí z roku 1943 v Itálii (podvod s bohatými americkými Židy, kterým byla naslibována záchrana výměnou za obrovské peníze, a nakonec byli posláni do plynu)." },
+            { q: "Ve které sbírce povídek Arnošt Lustig popisuje osobní zážitky z terezínského ghetta a zkoumá, jak si lidé i v krizových situacích dokáží zachovat lidskou tvář?", options: ["Noc a naděje", "Modlitba pro Kateřinu Horovitzovou", "Dita Saxová", "Smuteční slavnost"], a: 0, exp: "Noc a naděje je sbírka 7 povídek přímo inspirovaných osobními zážitky z terezínského ghetta." },
+
+            // Bohumil Hrabal
+            { q: "Která z následujících charakteristik nejlépe a nejkomplexněji vystihuje životní dráhu a cenné zkušenosti Bohumila Hrabala, z nichž později bohatě těžil ve svých nezaměnitelných dílech?", options: ["Po celou dobu drsného socialismu působil výhradně a pouze jako oficiálně uznávaný a státem oceňovaný redaktor v Literárních novinách, což trvale formovalo jeho strnulý akademický styl.", "Byl to původně nemanželský syn, který během života vystřídal neuvěřitelné množství podřadných povolání (notář, výpravčí, traťový dělník, balič papíru) a intenzivně se setkával s lidmi ze samotného okraje společnosti.", "Pocházel z vysoké aristokratické rodiny, naprostou většinu dospělého života strávil v dobrovolné emigraci v západním Německu a Finsku, odkud českou venkovskou společnost pozoroval s velkým kritickým odstupem.", "V mládí úspěšně vystudoval prestižní pražskou FAMU, pracoval dlouhá léta jako hlavní dramaturg filmových studií Barrandov a klasické literatuře se věnoval pouze okrajově, spíše ve svém volném čase."], a: 1, exp: "Hrabal byl nemanželský syn, život strávil v Nymburce v pivovaře. Vystřídal ohromné množství povolání – notář, skladník, traťový dělník, výpravčí, pojišťovák, brigádník v ocelárnách Kladno a balič papíru, kde nasával atmosféru pro svá díla." },
+            { q: "Kdo jsou to tzv. 'pábitelé' v typickém, originálním pojetí spisovatele Bohumila Hrabala?", options: ["Chladní a vysoce postavení straničtí úředníci, kteří se snaží svým nekompromisním byrokratickým jednáním zkomplikovat život prostým pracujícím lidem a libují si v nesmyslně přísných pravidlech.", "Naprosto obyčejní, často nenápadní lidé, kteří však hluboce milují život, disponují nezkrotnou fantazií, na nic si nehrají, jsou doslova posedlí svými zážitky a svým specifickým, neustálým žvaněním vytvářejí neuvěřitelně působivé obrazy.", "Profesionálně vyškolení příslušníci státní tajné policie, kteří nenápadně odposlouchávají běžné rozhovory v pražských dělnických hospodách a na základě nich pak zakládají na hosty obsáhlé kompromitující složky.", "Tragičtí vojenští hrdinové tajně bojující v protinacistickém domácím odboji, kteří se za všech okolností vyznačují nekompromisní morálkou, hluboko ukrytým smutkem a přísným mlčením i při mučení."], a: 1, exp: "Pábitelé jsou u Hrabala lidé milující život, mající fantazii, na nic si nehrají, jsou posedlí zážitky a třeštěním. Jejich typickým znakem je setkání muže se známým malířem, který tvoří barevné působivé obrazy (i když žije v prachu cementu)." },
+            { q: "V nesmírně úspěšné novele 'Ostře sledované vlaky' se plachý hlavní hrdina Miloš Hrma nakonec stane obětí nečekané tragické události. Co této události bezprostředně dějově předchází?", options: ["Zoufalý Miloš je falešně obviněn z aktivní spolupráce s místním gestapem a při snaze naivně utéct přes střežené hranice je nemilosrdně zastřelen ostražitými příslušníky pohraniční stráže.", "Poté, co se po trapném pokusu o sebevraždu úspěšně 'zocelí' a stane se opravdovým mužem po intimním styku s partyzánkou Viktorií, vyleze na sloup a vhodí výbušninu do německého vojenského vlaku, než je sám zasažen střelbou.", "Miloš se naprosto neúspěšně a amatérsky pokusí o noční sabotáž zbraněmi naloženého vojenského transportu, je okamžitě zajat německými vojáky, několik dní krutě mučen a následně pro výstrahu veřejně popraven na nádraží.", "Mladík náhodou zjistí, že jeho hluboce milovaná Máša potají čeká dítě s jeho autoritativním nadřízeným, výpravčím Hubičkou, a ve stadiu naprostého životního zoufalství se vrhne pod přijíždějící rychlík."], a: 1, exp: "Miloš Hrma má komplexy z nedokonalého pohlavního styku s Mášou, pokusí se o sebevraždu. Po návratu ho zaučí partyzánka Viktorie, čímž se stane mužem, a následně vhodí nálož do německého vlaku, při čemž je zastřelen." },
+
+            // Milan Kundera & Vladimír Páral
+            { q: "Jaké zásadní a opakující se téma je stěžejní pro povídkový soubor 'Směšné lásky' od světoznámého autora Milana Kundery?", options: ["Ústřední hrdinové se s naivní nadějí uchylují k nejrůznějším životním a milostným hrám ve snaze nalézt alespoň zdání osobní svobody, ale tato rozehraná hra se nakonec absurdně obrátí proti nim a oni se stávají její obětí.", "Autor v tomto rozsáhlém cyklu velmi lyricky popisuje naprosto čisté, vysoce platonické vztahy mladých studentů, kteří se snaží uniknout všudypřítomné tvrdé realitě budovatelských 50. let do snových, romantických vizí.", "Celý soubor se zaměřuje téměř výhradně na chladnou, detailní historickou rekonstrukci hrůzných politických procesů, na jejichž napjatém pozadí se odehrávají ty nejrozmanitější tragické rodinné a sousedské spory.", "Hlavními hrdiny povídek jsou stateční protinacističtí partyzáni, kteří během války schovaní v lesích zažívají tragikomické milostné pletky, jež narušují plnění jejich tajných a velmi nebezpečných diverzních úkolů."], a: 0, exp: "Směšné lásky pracují s motivem, že se hrdinové uchylují k životním a milostným hrám s nadějí (hledají svobodu ve světě politické disciplíny), ale hra se často obrátí proti nim a stávají se její obětí." },
+            { q: "Co úzce a nemilosrdně spojuje osud hlavního hrdiny Ludvíka Jahna v Kunderově prvním velkém románu 'Žert'?", options: ["Během prestižních studií v Paříži nerozvážně vydá do místního tisku silně satirický článek o francouzské radikální levici, kvůli kterému je komunisty zbaven československého občanství a musí se vrátit do Prahy, kde je uvržen do naprosté izolace.", "Zaníceného mladého komunistu zradí jeho vlastní nevinný a pubertální žert (napsaný z legrace dívce na pohlednici), který mu neúprosně zničí celou slibnou kariéru i život, a jeho mnohem pozdější promyšlená snaha o krutou pomstu se pak míjí svým účinkem.", "Zklamaný hrdina úmyslně a promyšleně mystifikuje státní tajnou policii nejrůznějšími falešnými a vtipnými zprávami, aby ochránil své stíhané přátele, ale po čase nakonec uvěří svým vlastním důmyslným lžím a ztratí jakýkoliv kontakt s realitou.", "Z nudy se snaží absurdním způsobem zesměšnit maloměšťácké zvyky tehdejšího lázeňského města tím, že potají organizuje falešné oslavy narozenin významných osobností, což ale nakonec nečekaně vede k sérii nešťastných náhod a opravdové vraždě."], a: 1, exp: "Žert je příběh mladého komunisty, kterého zradí nevinný žert (vzkaz na pohlednici), který se s ním táhne celý život. Jeho pozdější snaha o pomstu je marná." },
+            { q: "V jakém specifickém prostředí se velice často odehrávají prozaická díla Vladimíra Párala (jako například v novele Soukromá vichřice) a co mají za primární literární cíl v čtenáři vyvolat či zachytit?", options: ["V romantickém prostředí starobylé historické Prahy na samotném konci 19. století, s jasným cílem zachytit postupný, ale nezadržitelný rozpad tradičních vlasteneckých a křesťanských hodnot vlivem agresivně postupující germanizace.", "V nehostinném prostředí znárodněných venkovských statků v divokém období násilné kolektivizace, s cílem ukázat čtenářům nezlomný a hrdinný odpor drobných, dříve nezávislých zemědělců proti zvůli a hamižnosti centrální státní moci.", "V odlidštěném prostředí velkých chemických závodů a severočeských průmyslových měst, s jasným cílem syrově zachytit drtivou ubíjející stereotypnost, pracovní automatizaci a naprosté citové vyprázdnění života tehdejších obyčejných lidí.", "V silně melancholickém prostředí českých exilových skupin usazených v západní Evropě a USA, s cílem autenticky popsat jejich neustálé vnitřní politické spory, palčivou touhu po ztraceném domově a naprostou ztrátu životní motivace."], a: 2, exp: "Páral (původně chemik) zasazoval svá díla do prostředí průmyslu a chemických závodů. Soukromá vichřice zachycuje skupinu 8 lidí z chemického závodu, aby demonstrovala naprostou stereotypnost jejich životů." },
+            { q: "Které dílo Milana Kundery se stalo jeho celosvětově nejznámějším a zachycuje období normalizace na osudech dvou mileneckých párů (hlavní myšlenkou jsou protiklady vnitřní a vnější svobody)?", options: ["Směšné lásky", "Nesnesitelná lehkost bytí", "Valčík na rozloučenou", "Žert"], a: 1, exp: "Nesnesitelná lehkost bytí je jeho stěžejním románem zachycujícím období normalizace na příkladu dvou párů, řeší otázky svobody, protikladů a smyslu života." },
+
+            // Ladislav Fuks
+            { q: "Která z podrobně uvedených charakteristik je tím nejtypičtějším znakem pro prozaickou tvorbu Ladislava Fukse (autora např. Pan Theodor Mundstock, Variace na temnou strunu)?", options: ["Velký ideologický důraz na kolektivní hrdinství pracující třídy, okázalá oslava fyzické síly proletariátu a konečné spravedlivé vítězství zdravého selského rozumu nad zkorumpovanou buržoazní byrokracií.", "Próza hluboce prostoupená tematikou lidské úzkosti, tíživého ohrožení židovství před i během holokaustu, protkaná groteskními prvky a zaměřená na slabé, trpící jedince stahující se do svého izolovaného vnitřního světa.", "Tvorba primárně a téměř výhradně zaměřená na lehký humoristický a komunální satirický žánr, kde autor nesmírně vtipně a s nadhledem glosuje každodenní banální problémy běžných zaměstnanců pražských státních úřadů.", "Psaní striktně nezaujatých, strohých dokumentárních děl a objektivní literatury faktu bez jakýchkoliv rušivých psychologických ponorů do mysli postav či vkládání vlastních traumatizujících autobiografických motivů."], a: 1, exp: "Fuks (tvořící v 2. pol. 20. stol.) se vyznačuje tematikou úzkosti, židovství (návrat k 2. SV a holokaustu), velkou mírou autobiografičnosti a soustředěním na trpící slabé lidi, žijící si ve vnitřním světě (často s groteskními prvky, např. Myši N. Mooshabrové)." },
+            { q: "Jakým, pro čtenáře až šokujícím způsobem, se chová hlavní hrdina mistrného psychologického románu 'Pan Theodor Mundstock' v tísnivé předtuše svého nevyhnutelného zařazení do nacistického transportu smrti?", options: ["S chladnou hlavou se rozhodne brilantně zfalšovat své oficiální dokumenty a s využitím nové falešné árijské identity dobrovolně nastoupí jako obyčejný dělník do německé zbrojovky, aby splynul s davem.", "Z hrůzy před budoucností se zcela a nevratně psychicky zhroutí, úzkostlivě odmítá vůbec vycházet ze svého temného bytu a veškerý zbývající čas tráví jen patetickým sepisováním plačtivých dopisů na rozloučenou pro své dávné známé.", "Pod tlakem okolností začne prožívat silné absurdní halucinace, ve kterých noc co noc nahlas komunikuje s dávno mrtvými duchy svých židovských předků, a následkem toho neplánovaně skončí v chráněném ústavu pro choromyslné.", "Dokáže v sobě nalézt jakousi relativní, byť chorobnou rovnováhu a začne si ve svém bytě nesmírně důkladně, krok za krokem, prakticky nacvičovat veškeré možné postupy a drsné situace spojené s transportem v čiré naději, že mu právě tenhle trénink následně umožní přežít."], a: 3, exp: "Pan Theodor Mundstock (žid ochromený strachem z transportu) v sobě nalezne relativní rovnováhu tím, že se začne systematicky a absurdně fyzicky i psychicky připravovat a nacvičovat si postupy spojené s transportem, aby přežil." },
+            { q: "Jaký smutný a fatální příběh vypráví Fuksova atmosférická povídka s názvem 'Cesta do zaslíbené země'?", options: ["Pojednává o odhodlané skupině židovských uprchlíků, kterým se po mnoha hrůzných útrapách přes celou Evropu nakonec podaří úspěšně a bezpečně dorazit do Palestiny a s radostí tam založit nový, prosperující zemědělský kibuc.", "Vypráví o fiktivní a velmi naivní výpravě levicových pražských intelektuálů přímo do srdce Sovětského svazu ve 30. letech, která bohužel končí jejich drsným, bolestivým vystřízlivěním z oblíbených komunistických ideálů.", "Příběh sleduje patnáct zoufalých rakouských Židů, kteří unikají těsně po anšlusu na malé lodi po řece Dunaji, nesmí však v žádném státě přistát, a kvůli zničujícím technickým problémům lodi nakonec volí společnou dobrovolnou smrt.", "Jde o silně autobiografické a dojemné vzpomínky samotného autora na jeho těžkou poválečnou emigraci do Spojených států amerických, kde po příjezdu dlouhé měsíce zcela marně a s ponižováním hledá uplatnění jako spisovatel."], a: 2, exp: "Povídka vypráví o 15 rakouských Židech po anšlusu prchajících lodí po Dunaji, kteří nesmí nikde přistát, loď se pokazí a oni volí dobrovolnou smrt." },
+            { q: "V jakém historickém románu L. Fukse najdeme autobiografické prvky zasazené do období konce Rakouska-Uherska a zaměřené na záhady a tajemství šlechty?", options: ["Myši Natálie Mooshabrové", "Variace na temnou strunu", "Pan Theodor Mundstock", "Vévodkyně a kuchařka"], a: 3, exp: "Vévodkyně a kuchařka je historický román zasazený do konce Rakouska-Uherska plný záhad a tajemství postav." }
+        ];
+
+        let score = 0; let answeredQuestions = 0;
+        const container = document.getElementById('quiz-container');
+
+        otazky.forEach((otazka, index) => {
+            const card = document.createElement('div'); card.className = 'question-card'; card.id = `q-card-${index}`;
+            const title = document.createElement('div'); title.className = 'question-title'; title.textContent = `${index + 1}. ${otazka.q}`; card.appendChild(title);
+            const optionsDiv = document.createElement('div'); optionsDiv.className = 'options';
+
+            otazka.options.forEach((opt, optIndex) => {
+                const label = document.createElement('label'); const radio = document.createElement('input');
+                radio.type = 'radio'; radio.name = `q${index}`; radio.value = optIndex;
+                
+                radio.addEventListener('change', function() {
+                    const currentCard = document.getElementById(`q-card-${index}`);
+                    const allRadios = currentCard.querySelectorAll('input[type="radio"]');
+                    const labels = currentCard.querySelectorAll('label');
+                    const expDiv = document.getElementById(`exp${index}`);
+                    
+                    allRadios.forEach(r => r.disabled = true); currentCard.classList.add('locked');
+                    const selectedVal = parseInt(this.value); const correctVal = otazky[index].a;
+                    labels[correctVal].classList.add('correct');
+
+                    if (selectedVal === correctVal) {
+                        score++; expDiv.className = 'explanation success';
+                        expDiv.innerHTML = `<strong>Správně!</strong><br><strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
+                    } else {
+                        labels[selectedVal].classList.add('incorrect'); expDiv.className = 'explanation error';
+                        expDiv.innerHTML = `<strong>Špatně.</strong><br><strong>Správná odpověď:</strong> <em>${otazky[index].options[correctVal]}</em><br><strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
+                    }
+                    expDiv.style.display = 'block'; answeredQuestions++;
+                });
+
+                label.appendChild(radio); label.appendChild(document.createTextNode(opt)); optionsDiv.appendChild(label);
+            });
+            card.appendChild(optionsDiv);
+            const explanationDiv = document.createElement('div'); explanationDiv.className = 'explanation'; explanationDiv.id = `exp${index}`;
+            card.appendChild(explanationDiv); container.appendChild(card);
+        });
+
+        function zobrazitKonecneSkore() {
+            const resultDiv = document.getElementById('result');
+            if (answeredQuestions < otazky.length) {
+                resultDiv.style.color = '#e67e22'; resultDiv.innerHTML = `Zatím jste odpověděl/a na ${answeredQuestions} z ${otazky.length} otázek. <br> Průběžné skóre: ${score} správně.`; return;
+            }
+            const percent = Math.round((score / otazky.length) * 100); resultDiv.innerHTML = `Váš konečný výsledek: ${score} z ${otazky.length} bodů (${percent} %).`;
+            
+            if(percent >= 80) {
+                resultDiv.style.color = '#27ae60';
+                resultDiv.innerHTML += "<br>Vynikající výkon! Výrazně těžší otázky vám nedělaly problém.";
+            } else if (percent >= 50) {
+                resultDiv.style.color = '#f39c12';
+                resultDiv.innerHTML += "<br>Slušný výsledek. Otázky byly tentokrát mnohem náročnější na detaily.";
+            } else {
+                resultDiv.style.color = '#c0392b';
+                resultDiv.innerHTML += "<br>Bylo to těžké. Určitě si pečlivě pročtěte zdůvodnění u každé otázky, abyste pochytal/a ty jemné nuance.";
+            }
+        }
+    </script>
+</body>
+</html>
