@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Státnicový test ČJ - Otázka 12 (Vyvážená obtížnost - Část 1)</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 0.9em;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+        .question-card {
+            background: #fff;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            border-left: 5px solid #3498db;
+        }
+        .question-title {
+            font-weight: bold;
+            font-size: 1.15em;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        .options label {
+            display: block;
+            background: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid #e0e0e0;
+            line-height: 1.5;
+        }
+        .options label:hover {
+            background: #eef2f5;
+        }
+        .locked label {
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        input[type="radio"] {
+            margin-right: 15px;
+            margin-top: 4px;
+            float: left;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            font-size: 1.2em;
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 40px;
+            margin-bottom: 50px;
+        }
+        button:hover {
+            background-color: #1a252f;
+        }
+        .correct {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+            color: #155724;
+            font-weight: bold;
+        }
+        .incorrect {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+            color: #721c24;
+        }
+        .explanation {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            font-size: 0.95em;
+            display: none;
+            line-height: 1.6;
+        }
+        .explanation.success {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            color: #155724;
+        }
+        .explanation.error {
+            background-color: #fff3cd;
+            border-left: 5px solid #dc3545;
+            color: #856404;
+        }
+        #result {
+            font-size: 1.6em;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Státnicový test z ČJ (Otázka 12 - Část 1)</h1>
+    <div class="subtitle">Didaktika recepce, Literatura 2. pol. 19. století, Malostranské povídky<br><strong>Vyberte odpověď – výsledek a zdůvodnění se zobrazí okamžitě.</strong></div>
+    
+    <div id="quiz-container"></div>
+    
+    <button onclick="zobrazitKonecneSkore()">Zobrazit celkové skóre</button>
+    <div id="result"></div>
+
+    <script>
+        const otazky = [
+            // Didaktika
+            { q: "Jaký je v didaktice literatury primární rozdíl mezi fází percepce a fází apercepce při žákově recepci uměleckého textu?", options: [
+                "Percepce se zaměřuje na historicko-společenský kontext doby, ve které autor tvořil, zatímco apercepce je ryze jazykový rozbor, při kterém žáci určují přesný druh rýmu a metrum v básni.", 
+                "Zatímco percepční aktivity jsou vázány na přímé smyslové (auditivní či vizuální) vnímání textu a jeho zvukové stránky, apercepce rozvíjí čtenářskou představivost, fantazii a utváří imaginativní rovinu významů na základě vlastních zkušeností.", 
+                "Fáze percepce spočívá v tichém, rychlém čtení rozsáhlých epických děl bez přerušování, kdežto apercepce představuje následné psaní kontrolních vědomostních testů zaměřených na zapamatování hlavních postav.", 
+                "Percepce je metoda určená výhradně pro mladší žáky na prvním stupni, kterým se pouští pouze zvukové nahrávky, apercepce se naopak používá na středních školách k výuce složitých literárních směrů a dějin umění."
+            ], a: 1, exp: "Fáze percepce (přímé smyslové vnímání) zahrnuje např. kultivaci auditivního vnímání (zvuková stránka, intonace). Fáze apercepce rozvíjí čtenářskou představivost a fantazii, žák si utváří imaginativní rovinu významů na základě svých zkušeností." },
+            { q: "Proč se při interpretaci zvukového komplexu básně v percepční fázi nedoporučuje, aby hra s barvami nebo výběrem hudby (tzv. metoda substituce) trvala příliš dlouho?", options: [
+                "Dlouhá aktivita by totiž žáky příliš emocionálně vyčerpala, což by mohlo vést k projevům agresivity nebo pláče, které do objektivní literární výchovy podle moderních norem nepatří.", 
+                "Úkoly tohoto typu nesmějí být zdlouhavé proto, aby žák neztratil primární kontakt se samotným textem a aby se z interpretační aktivity nestala pouhá samoúčelná, prázdná hra s barvami oddělená od literárního díla.", 
+                "Delší časová dotace by nevyhnutelně vedla k tomu, že by žáci začali objevovat chyby v autorově rytmice a metrice, čímž by se narušila didaktická autorita klasických spisovatelů 19. století.", 
+                "Tato metoda by při delším trvání odhalila, že žáci ve skutečnosti neznají historická data vzniku básně, což by učitele přinutilo odklonit se od estetiky a vrátit se zpět k memorování životopisů."
+            ], a: 1, exp: "Při interpretaci zvukového komplexu (např. 'Vyberte barvu k básni') úkoly nesmějí být zdlouhavé, aby žák neztratil přímý kontakt s textem a aby se z didaktické aktivity nestala jen samoúčelná hra s barvami. Vždy musí následovat zdůvodnění volby opřené o text." },
+            { q: "Při didaktické komunikaci se syžetovým (epickým) textem hraje klíčovou roli pochopení vztahu mezi syžetem a fabulí. Jak tyto dva pojmy definujeme?", options: [
+                "Syžet představuje chronologický, přirozený sled událostí přesně tak, jak se historicky staly, zatímco fabule je tvořena výhradně dialogy a přímou řečí jednotlivých postav bez zásahu vypravěče.", 
+                "Oba pojmy znamenají totéž; používají se pouze k odlišení toho, zda je literární text napsán ve verších (syžet) nebo v souvislé prozaické formě (fabule).", 
+                "Syžet je způsob, jakým jsou v literárním díle autorem uspořádány tematické složky (děj může být podán s časovými inverzemi či složitě propleten), zatímco fabule je původní chronologický a logický sled informací a děje.", 
+                "Fabule je abstraktní myšlenka nebo morální poselství, které chce autor čtenáři předat, kdežto syžet označuje geografické prostředí a dobu, do které je historický román fyzicky zasazen."
+            ], a: 2, exp: "Syžet je konkrétní způsob, jakým autor v díle uspořádal tematické složky (informace o ději mohou být seřazeny s časovými inverzemi, retrospektivou atd.). Fabule představuje samotný obsah děje seřazený v přirozené, chronologické a logické posloupnosti." },
+
+            // Májovci, Ruchovci, Lumírovci
+            { q: "Literární generace Májovců, která vstoupila na scénu almanachem Máj (1858), přinesla do české literatury nový program. Které z následujících tvrzení přesně popisuje jejich literární a společenské priority?", options: [
+                "Májovci naprosto odmítali jakékoliv zahraniční vlivy; prosazovali únik z reality do staroslovanské mytologie a svá díla psali výhradně formou hrdinských eposů oslavujících husitské vojevůdce a bitvy.", 
+                "Jejich hlavním cílem bylo zcela se distancovat od Karla Hynka Máchy, kterého považovali za příliš depresivního; namísto toho požadovali literaturu plnou náboženského fanatismu a slepé oddanosti katolické církvi.", 
+                "Navazovali na odkaz Máchy, Havlíčka a Erbena; nechtěli se obracet pouze do historie, ale kladli zásadní důraz na současnost, prosazovali zájem o lidovou tvorbu, skutečné zobrazení denní reality a řešení tehdejší složité sociální situace.", 
+                "Skupina Májovců se formovala kolem časopisu Lumír a jejich jediným programem bylo překládat starofrancouzskou poezii, přičemž se naprosto izolovali od politického dění a problémů obyčejného českého venkova."
+            ], a: 2, exp: "Májovci (Hálek, Neruda, Světlá, Heyduk, Arbes) se odvolávali na odkaz Máchy (i K.H. Borovského a Erbena). Neobraceli se jen do historie, ale zajímali se o současnost, reálné zobrazení reality, lidovou tvorbu a řešení dobové sociální a evropské situace." },
+            { q: "Jakub Arbes, tvůrce specifického literárního žánru zvaného 'romaneto', napsal své stěžejní dílo 'Svatý Xaverius'. Jaká je ústřední myšlenka a zápletka tohoto tajemného příběhu?", options: [
+                "Příběh je oslavou fanatické náboženské víry; mladý chlapec Xaverius v malostranském chrámu zázračně oživí barokní sochu světce, která následně potrestá všechny nevěřící obyvatele Prahy za jejich lakomství.", 
+                "Hlavním motivem je vítězství chladného rozumu nad náboženskou vírou. Malíř Xaverius se snaží racionálně rozluštit tajnou šifru ukrytou v obraze v chrámu sv. Mikuláše, jež má vést k nesmírnému pokladu; po neúspěchu a věznění však nakonec tragicky umírá na tuberkulózu.", 
+                "Děj vypráví o milostném trojúhelníku mezi studentem, krásnou Josefínkou a bohatým starcem Xaveriem. Osobní spory vyústí v krvavý souboj přímo na Karlově mostě, kde Xaverius získá lásku za pomoci černé magie.", 
+                "Romaneto popisuje utopickou společnost budoucnosti. Vědec Xaverius sestrojí v katakombách pod Prahou stroj času a vydává se do doby ukřižování Krista, aby empiricky dokázal, že bible je pouze snůška lží."
+            ], a: 1, exp: "Romaneto (rozsáhlejší povídka s napínavým, rozumově vysvětleným tajemstvím) Svatý Xaverius pojednává o vítězství rozumu nad vírou. Xaverius se snaží pomocí logiky a překreslování obrazu v chrámu sv. Mikuláše najít poklad. Skončí ovšem neúspěchem, je zatčen a umírá marně na souchotiny (tuberu)." },
+            { q: "Generace Ruchovců (Škola národní) a Lumírovců (Škola kosmopolitní) formovaly českou literaturu v 70. a 80. letech 19. století. Jaký byl mezi nimi hlavní názorový a umělecký rozdíl?", options: [
+                "Ruchovci psali výhradně německy a podporovali silnou orientaci na Vídeň, zatímco Lumírovci byli zarytými českými nacionalisty, kteří zakazovali překlady cizojazyčných knih a čerpali pouze z Kosmovy kroniky.", 
+                "Ruchovci se vyznačovali silným vlastenectvím, obraceli se k Rusku (slovanství) a upřednostňovali venkov a historická témata. Lumírovci se naopak snažili povznést českou literaturu na světovou úroveň, překládali západní díla a experimentovali s novými formami jako sonety či rondely.", 
+                "Lumírovci byli představitelé tvrdého, syrového naturalismu opisujícího život pražské lůzy a dělníků, kdežto Ruchovci se zabývali pouze psaním bezobsažných pohádek a milostných románků pro mladé dívky z vyšší společnosti.", 
+                "Obě skupiny měly naprosto stejný program zaměřený na boj proti rakouské cenzuře; lišily se pouze v tom, že Ruchovci publikovali své texty ilegálně v zahraničí, zatímco Lumírovci je předčítali přímo v budově Národního divadla."
+            ], a: 1, exp: "Ruchovci (S. Čech, E. Krásnohorská) byli 'Školou národní', prosazovali vlastenectví, slovanství, obdiv k venkovu a národní historii. Lumírovci (Vrchlický, Zeyer, Sládek) představovali 'Školu kosmopolitní', otevírali literaturu Západu, překládali a experimentovali s formami (sonety), aby povznesli českou literaturu na světovou úroveň." },
+            { q: "Významný představitel Lumírovců, Julius Zeyer, ve svém díle často využíval exotické motivy, mystiku a novoromantismus. O čem pojednává část jeho knihy 'Tři legendy o krucifixu' s názvem 'Inultus'?", options: [
+                "Vypráví se zde příběh italské sochařky Flavie, která ze zoufalství a snahy zachytit absolutní, realistický výraz umučení a bolesti pro svůj kříž krutě a záměrně utýrá a probodne mladého modela Inulta; sochařka nakonec pod tíhou svého svědomí a viny spáchá v žaláři sebevraždu.", 
+                "Děj sleduje putování osiřelého chlapce Inulta, který se vydává do Palestiny hledat původní kříž, na němž zemřel Kristus. Po cestě koná zázraky, obrátí na víru sultána a je anděly vzat zaživa do nebe.", 
+                "Je to temný příběh z pražského židovského města, kde bohatý kupec Inultus z nenávisti otráví posvátnou hostii; za trest se promění ve stvůru podobnou Golemovi, která musí navěky bloudit starým hřbitovem.", 
+                "Pojednává o sochaři Inultovi, který se nešťastně zamiluje do vlastní mramorové sochy madony; svými modlitbami sochu oživí, ale zjistí, že dívka je ve skutečnosti zlý démon toužící zničit celé město požárem."
+            ], a: 0, exp: "Tři legendy o krucifixu spojuje téma kříže a utrpení. Příběh 'Inultus' se odehrává v Praze, kde fanatická sochařka Flavia (sympatizantka Španělů) pro zobrazení utrpení Krista pomalu ubodá chudého mladíka Inulta. Sama se pod tíhou uznání svého hrůzného díla a svědomí oběsí ve sklepě." },
+
+            // Historická a venkovská próza
+            { q: "Česká historická próza 19. století je úzce spjata se jmény Aloise Jiráska a Václava Beneše Třebízského. V čem spočívá hlavní rozdíl mezi tvorbou těchto dvou klasiků?", options: [
+                "Jirásek psal svá díla s obrovskou dávkou sarkasmu a humoru a zesměšňoval husity jako pouhé rváče, zatímco Třebízský psal tlusté a vážné historické knihy opěvující krásu habsburského panovnického dvora.", 
+                "Třebízský se soustředil na obsáhlé, vícedílné chronologické fresky mapující celá staletí dějin od husitství až po obrození (např. F.L. Věk), kdežto Jirásek tvořil pouze krátké hororové povídky z pražských hřbitovů.", 
+                "Jirásek je autorem rozsáhlých chronologických epochálních cyklů a fresek zachycujících husitství, pobělohorské temno či národní obrození s cílem povzbudit národ (Mezi proudy, Bratrstvo, Temno). Třebízský (katolický kněz) se naopak obliboval v lokálnějších, melancholických a tragických námětech ze selských bouří a pobělohorské doby (Bludné duše).", 
+                "Jirásek se ve svém díle zabýval výhradně překlady antických eposů o pádu Tróje, zatímco Třebízský založil literární časopis Ruch a diktoval směr celé mladé generace autorů zajímajících se o moderní průmysl."
+            ], a: 2, exp: "Jirásek mapoval formou románových fresek a velkých cyklů ucelená období národních dějin (husitství – Mezi proudy, Proti všem; Temno, F.L. Věk). Třebízský se jako kněz zajímal o husitství, ale zejména o tragické osudy, pobělohorské melancholické úpadky a lokální selské vzpoury (Bludné duše, Královna Dagmar)." },
+            { q: "Karel Václav Rais, představitel venkovské prózy, se ve svých románech zabýval sociálními a generačními problémy venkova. O čem pojednává jeho tragický román 'Kalibův zločin'?", options: [
+                "Příběh vypráví o brutálním sériovém vrahovi Kalibovi, který po nocích přepadává formanské vozy v hlubokých podkrkonošských lesích, dokud není polapen a spravedlivě popraven místním farářem.", 
+                "Zachycuje tragédii vesnického dobráka Vojty Kaliby, kterého jeho vlastní manželka (Karla) a chamtivá tchyně svými neustálými intrikami, nevěrou a psychickým terorem doženou k absolutnímu šílenství, které vyvrcholí tím, že Kaliba svou ženu v afektu zavraždí a sám umírá.", 
+                "Jedná se o vtipnou komedii plnou omylů, kdy hloupý, ale dobrosrdečný sedlák Kaliba omylem ukradne starostovi obecní pokladnu, ale po řadě absurdních situací ji nepozorovaně vrátí zpět a stane se místním hrdinou.", 
+                "Děj sleduje úpadek zbohatlické mlynářské rodiny Kalibů; starý mlynář z přepychu zešílí, zapálí svůj vlastní mlýn, aby ho nemusel předat synovi, a rodina končí po zbytek života v naprosté a bolestivé bídě ve městě."
+            ], a: 1, exp: "Kalibův zločin je krutá tragédie. Dobrosrdečný, starší a měkký Vojta Kaliba se ožení s mladší Karlou. Ta ho i se svou matkou (Boučkovou) systematicky psychicky deptají, ponižují, vyženou z domu a Karla je mu nevěrná. Kaliba v návalu zoufalství a šílenství manželku zabije a sám vzápětí umírá na mrtvici." },
+            { q: "Dalším významným autorem a fejetonistou byl Ignát Herrmann. V jeho románu 'U snědeného krámu' je zobrazen pád pražského obchodníka Martina Žemly. Kdo nese hlavní vinu na jeho naprosté existenční a životní katastrofě?", options: [
+                "Jeho zkázu způsobí nemilosrdný konkurenční židovský obchodník z vedlejší ulice, který Žemlovi cíleně podpaluje sklady a neustále znehodnocuje a špiní jeho pověst v místních vlivných novinách.", 
+                "Zkázu mu přináší především jeho vlastní lehkovážná a chamtivá manželka Pavlína (dcera plukovníka) a její marnotratná matka; svými intrikami, bezcitností a bezhlavým rozhazováním peněz na večírky slabého a poddajného kupce ekonomicky vysají, až je krám zlikvidován a on končí sebevraždou.", 
+                "Za krach může fanatický náboženský kazatel, který přesvědčí pražskou chudinu, že potraviny ze Žemlova krámu jsou prokleté, což vede k hromadnému bojkotu a Žemla končí v blázinci.", 
+                "Vinu nese Žemla sám, protože propadl nezvladatelnému gamblerství, začal hrát hazardní karty se zkorumpovanými rakouskými oficíry a celý svůj prosperující obchod v jedné temné noci hanebně a fatálně prohrál."
+            ], a: 1, exp: "U snědeného krámu líčí tragédii slabošského, osamělého kupce Martina Žemly. Vinu nese jeho žena Pavlína a její matka (Šustrová), které ho dohnaly k bankrotu svým parazitickým chováním, intrikami a rozhazováním zisků. Ožebračený Žemla spáchá sebevraždu." },
+
+            // Jan Neruda (Život a sbírky)
+            { q: "Jaký zásadní obsahový rozdíl je mezi Nerudovými básnickými sbírkami 'Knihy veršů' a 'Písně kosmické'?", options: [
+                "Knihy veršů se výhradně zabývají humornými zvířecími bajkami pro děti, zatímco Písně kosmické jsou tvrdou, nesmlouvavou politickou kritikou katolické církve a papeže.", 
+                "Knihy veršů jsou plné radostných a bujarých milostných vyznání k Anně Tiché, kdežto Písně kosmické líčí hlubokou depresi a marnost z blížící se smrti v tmavých kulisách starých hřbitovů.", 
+                "Knihy veršů (rozdělené na epickou, lyrickou a příležitostnou část) obsahují sociální tematiku (např. Dědova mísa), skepsi a osobní i rodinnou hořkost. Písně kosmické představují nečekaně optimistický náhled na svět; autor v nich vyjadřuje obdiv k vesmíru, vědě, technickému pokroku a vtěluje do nich hrdost a ideály svobody i demokracie.", 
+                "Písně kosmické byly vydány posmrtně jako soubor žalozpěvů za ztracenou svobodu národa, zatímco Knihy veršů představují sbírku přísných a přesných balad popisujících slavné bitvy Přemyslovců."
+            ], a: 2, exp: "Knihy veršů obsahují básně s hlubokou sociální empatií, lyrickou zpověď (o matce, lásce k Anně Holinové) a často i zklamání a hořkost. Naopak Písně kosmické vznikly jako nadšená reakce na dobový technický pokrok; zkoumají vztah člověka ke kosmu a dýchá z nich optimismus, hrdost na schopnosti lidstva a ideály svobody." },
+
+            // Malostranské povídky
+            { q: "Povídka 'Týden v tichém domě' otevírá celý cyklus Malostranských povídek. Děj se točí kolem obyvatel jednoho činžáku. Jaký osud a vlastnosti charakterizují mladého Václava Bavora?", options: [
+                "Václav je neobyčejně arogantní syn pana domácího Ebra; pyšní se svým velkým bohatstvím, opovrhuje chudinou, vyhodí doktora na dlažbu a na konci povídky se bez souhlasu rodičů tajně ožení s Klárkou Lakmusovou.", 
+                "Je to vysloužilý, bohatý nadporučík, který si chce vzít Ebrovu dceru Matyldu; když ale díky podlé lsti zjistí, že rodina domácího zchudla a dluží peníze židu Menkemu, zbaběle z domu navždy uprchne.", 
+                "Václav je mladý syn chudé hokynářky Bavorové; tajně píše básně a ač si uvědomuje svůj nízký původ, je odvážný. Je propuštěn z úřadu kvůli psaní satirických protirakouských dopisů, avšak nakonec nezištně pomáhá a nadále si zachovává svou vnitřní hrdost.", 
+                "Jedná se o přísného a nerudného starého starého doktora, který ačkoliv studoval, nikdy nikoho neléčí. Kvůli svým temným myšlenkám a touze po krásné Josefínce zfalšuje Václavův dopis a pošle ho policii."
+            ], a: 2, exp: "Václav Bavor je syn chudé a ustarané hokynářky Bavorové. Pracuje jako úředník, tajně studuje, tvoří básně a zamiluje se do Josefínky. Kvůli svým satirickým úřadům na poměry v Rakousku a úřadě (psal například o ustřiženém psím ocasu) je propuštěn z práce, ale zůstává charakterově čistý a odvážný." },
+            { q: "V příběhu 'Pan Ryšánek a pan Schlegl' dochází k letitému a absurdnímu napětí mezi dvěma starými pány, kteří navštěvují hostinec U Štajniců. Co bylo prvotní příčinou jejich sporu a co je po letech překvapivě usmíří?", options: [
+                "Příčinou sporu byla zpronevěra obrovského množství peněz při společném podnikání s látkami; k usmíření dojde ve chvíli, kdy oba pánové náhle a společně zkrachují a zjistí, že jediné, co jim zbylo, je dávné přátelství z lavic.", 
+                "Jedenáct let spolu nepromluvili jediné slovo proto, že v mládí oba osudově milovali stejnou ženu (tu nakonec získal pan Schlegl, ale brzy po porodu dcery zemřela). Zlom přichází, když starý Ryšánek onemocní a slábne. Schlegl mu jednoho dne soucitně nabídne svůj vlastní tabák, čímž mlčení navždy prolomí a dojde k úlevnému smíření.", 
+                "Rozhádali se kvůli ostrým politickým sporům; Ryšánek byl zarytý německý byrokrat, zatímco Schlegl horlivý český vlastenec. Usmíří je až společný silný odpor proti příchodu nového a arogantního komisaře Uhmuhla.", 
+                "Důvodem byla hádka o to, kdo z nich ukradl v mládí hostinskému zlaté hodinky. Usmíří je překvapivě až chvíle, kdy se hospodský přizná, že hodinky celou dobu ležely zapadlé za pípou a oni se tak celá desetiletí nenáviděli zbytečně."
+            ], a: 1, exp: "Tato povídka je mistrnou psychologickou miniaturou. Bývalí obchodníci (s kanafasem a železářstvím) milovali tutéž ženu a jedenáct let si u stejného stolu u Štajniců nevyměnili ani pohled. Až když starý Ryšánek onemocní a jednou přijde zesláblý bez svého tabáku do pěnovky, drsný a zavalitý Schlegl mu mlčky podá svůj měšec s tabákem. Tato drobná lidská solidarita rozbije ledy." },
+            { q: "Jaký smutný a krutý konec potká starého osmdesátiletého žebráka Vojtíška v povídce 'Přivedla žebráka na mizinu' a kdo tento tragický sled událostí svými lžemi přímo odstartoval?", options: [
+                "Vojtíšek získá nečekaně obrovské dědictví, avšak místní lakomý hostinský Herzl ho ze závisti tajně otráví jedem na krysy, aby získal jeho majetek pro sebe; zločin je ale vzápětí odhalen německým strážníkem Šimrem.", 
+                "Příčinou je žárlivá žebračka, takzvaná baba Milionová. Poté, co ji Vojtíšek zdvořile odmítne, když mu navrhne, aby spolu žebrali a žili, Milionová ze msty po Malé Straně rozšíří zákeřnou pomluvu, že Vojtíšek je ve skutečnosti bohatý, má vlastní dům a dvě zajištěné dcery. Kvůli těmto drbům mu lidé přestanou dávat almužnu, z chudoby je vyhnán a on nakonec bez pomoci umrzne v roztrhaném kabátu na Oujezdě.", 
+                "Zkázu mu přinese policejní komisař, který vydá přísný zákaz žebrání v ulicích Prahy; Vojtíšek, jenž byl zvyklý na pohostinnost Malostranských, je násilně odvezen do donucovací pracovny za městem, kde steskem po svobodě po několika měsících pomalu a odevzdaně umírá z podvýživy.", 
+                "Vojtíšek je sice chudý, ale oblíbený. Tragédie nastává ve chvíli, kdy zachrání dítě před utonutím v řece. Sám při tom však těžce onemocní zápalem plic. Ačkoliv se o něj bohatá paní Ruska snaží pečovat s 'měkkým srdcem', Vojtíšek svému věku a nemoci záhy podléhá a celé město mu pak vystrojí grandiózní pohřeb."
+            ], a: 1, exp: "Povídka ostře kritizuje maloměšťáctví a sílu drbů. Starý a oblíbený žebrák pan Vojtíšek je zničen lží zehrzené a závistivé báby 'Milionové'. Malostranští fámě bez ověření uvěří, začnou Vojtíška považovat za podvodníka, odhánějí ho a nedávají mu zbytky oběda. Vyvrhel Vojtíšek, bez pomoci, v kruté zimě nalezne smrt umrznutím." },
+            { q: "V čem se ukrývá ironický podtext názvu povídky 'O měkkém srdci paní Rusky'?", options: [
+                "Paní Ruska je ve skutečnosti sadistická vražedkyně, která s 'měkkým úsměvem' na rtech láká osamělé starce do svého bytu, kde je následně ožebračí a uškrtí, což autor cynicky a posměšně komentuje po celou dobu vyprávění.", 
+                "Ačkoliv je název lichotivý, paní Ruska žádné 'měkké srdce' nemá. Jako vdova žije izolovaně a jejím jediným a chorobným potěšením je navštěvovat cizí malostranské pohřby (zde např. kupce Velše), kde s předstíraným hlasitým pláčem nevybíravě, krutě a nahlas pomlouvá právě zesnulé a zveličuje jejich hříchy.", 
+                "Titulní postava je neobyčejně naivní, chudá a hloupá dívka, jejíž srdce je natolik 'měkké', že v dobré víře rozdá veškerý svůj zděděný malostranský dům cizím a falešným žebrákům, načež sama končí v chudobinci jako oběť vlastní dobrotivosti.", 
+                "Ironie tkví v tom, že paní Ruska není člověk, ale toulavá a hubená kočka, kterou si obyvatelé domu pojmenovali a o níž si naivně mysleli, že chytá myši ze soucitu; ve skutečnosti ale kradla drahocenné jídlo z komor místních uctívaných kupců."
+            ], a: 1, exp: "Ironický název 'O měkkém srdci...' odkazuje na vdovu, jejíž oblibou bylo 'chodit po funusech' a prolévat u rakví slzy. Tyto slzy a pláč ale nebyly projevem soucitu, nýbrž zástěrkou a kulisou k tomu, aby mohla nad rakví (kde se to nejméně hodí) vytahovat špinavosti a pomlouvat zesnulé a jejich rodiny. Po skandálu na pohřbu pana Velše dostane na policii oficiální zákaz na pohřby chodit. 'Vyřeší' to tak, že se přestěhuje do bytu k Oujezdské bráně, kudy musel projít každý pohřební vůz, a pomlouvá je dál z okna." },
+            { q: "Povídka 'Hastrman' je křehkým příběhem o lidské hodnotě a falešných iluzích. Co je ústředním motivem a zápletkou spojenou s postavou pana Rybáře (Hastrmana)?", options: [
+                "Pan Rybář, bývalý justiciár a tichý podivín nosící zelený frak, žije celý život v přesvědčení, že ve své truhlici skrývá drahokamy neocenitelné hodnoty. Když se však od profesora matematiky Muhlwenzla dozví, že jde o bezcenné minerály, zhroutí se a začne je házet z okna. Utěší ho až jeho zeť (příbuzný Šajvl), který mu vysvětlí, že pro rodinu má on sám hodnotu nesmírnou – 'jako to moře'.", 
+                "Pan Rybář (přezdívaný Hastrman kvůli tomu, že denně plave ve Vltavě) tajně loupí cennosti z říčních mělčin. Když je jednou přistižen při činu místními dětmi, snaží se je uplatit falešným zlatem; děti však podvod odhalí a Hastrmana ukamenují přímo na břehu Kampy.", 
+                "Starý vodník v zeleném obleku se zamiluje do chudé dívky z Malé Strany; aby si získal její srdce, vymění svou magickou moc s profesorem matematiky za truhlici falešných vltavínů, kvůli čemuž navždy ztratí schopnost žít pod vodou a uschne zármutkem.", 
+                "Rybář vlastní sbírku drahých a nesmírně cenných diamantů a jaspisů, které mu ale chamtivý a lstivý profesor Muhlwenzl podvodem ukradne pod záminkou jejich zkoumání. Zničený a chudý Rybář pak ve smutku páchá sebevraždu skokem do vln, přičemž zanechává rodině pouze dluhy a neštěstí."
+            ], a: 0, exp: "Povídka vypráví o panu Rybářovi (chodí v zeleném, proto 'Hastrman'). Miluje své 'drahokamy' (moldavity a jaspisy) a považuje se za boháče. Když mu racionální profesor Muhlwenzl s ledovým klidem sdělí, že kameny jsou jen kazové hračky a nemají vůbec žádnou cenu, Rybář ztratí smysl života a s pláčem je vyhazuje. Uklidní a zachrání ho až láska a útěcha zetě Šajvla, který mu připomene, že pro ně není podstatný majetek, ale on sám." },
+            { q: "V povídce 'Doktor Kazisvět' vystupuje nekonvenční doktor Heribert. Proč si tento muž vyslouží od okolí a malostranských občanů posměšnou přezdívku 'Kazisvět'?", options: [
+                "Protože je to zahořklý a agresivní alkoholik, který svými opileckými excesy a neustálým hlukem pravidelně a záměrně narušuje bohoslužby a tiché, pokojné malostranské nedělní odpoledne.", 
+                "Ačkoliv je vystudovaný lékař, zarytě se straní lidí, nikoho neléčí a nikomu neodpovídá na pozdrav. Zlom nastává, když se připlete k pohřebnímu průvodu pana rady Schepelera; Heribert si všimne, že domnělý 'mrtvý' v rakvi není mrtvý, ale jen ve stavu strnulosti (katalepsie), a úspěšně ho vzkřísí. Tím však pokazí radost licoměrným dědicům (a řemenáři), a ti ho ve vzteku, že přišli o honoráře a majetek, obviní, že je 'Kazisvět'.", 
+                "Získá ji proto, že se jakožto městský architekt a stavitel rozhodne nekompromisně a bez souhlasu památkářů zbourat staré a krásné historické domy na Kampě, aby na jejich místě vybudoval moderní cihlovou továrnu narušující vzhled celého města.", 
+                "Protože ve své laboratoři provádí zakázané a temné alchymistické pokusy se syfilisem a morem, a jednoho dne nešťastnou náhodou rozšíří nakažlivou chorobu do malostranských ulic, čímž nakazí velkou část počestných řemeslníků a kazí tak životy nevinných."
+            ], a: 1, exp: "Doktor Heribert je plachý a asociální člověk, který i přes svůj titul neléčí. Během pohřbu rady Schepelera, pro jehož rakev se strhne rozruch s převrhnutím, doktor odborným okem odhalí, že Schepeler není mrtev. Když ho vzkřísí a Schepeler obživne, rozčarovaný příbuzný (řemenář), který se už těšil z velké dědické provize za truhlu, na Heriberta s nenávistí a ze zlosti zařve: 'Kazisvěte!' Heribert totiž dědicům 'zkazil' jejich ziskuchtivý 'svět'." },
+            { q: "Jaký osud potkal krupaře v povídce 'Jak si nakouřil pan Vorel pěnovku' a na co se v ní autor primárně a kriticky zaměřuje?", options: [
+                "Příběh je humornou oslavou podnikavosti; pan Vorel si pořídí luxusní dýmku-pěnovku, díky které začne do svého obchodu lákat aristokracii, velmi rychle a bez práce zbohatne a stane se váženým a respektovaným starostou Malé Strany.", 
+                "Zaměřuje se na nesmyslnost tehdejších protipožárních policejních předpisů. Pan Vorel je pokutován a zruinován úředníkem Uhmuhlem za to, že kouří dýmku uvnitř dřevěného krámu, což vede k uzavření obchodu a nucenému odchodu krupaře z města zpět na chudý venkov.", 
+                "Dílo je zdrcující kritikou a ukázkou drtivé síly maloměšťácké nevraživosti a xenofobie vůči cizorodému prvku. Nově přistěhovalý pan Vorel sedává ve svém osamělém krámě s pěnovkou a kouří. Sousedky (v čele s vlivnou paní setníkovou a slečnou Poldýnkou) to odsoudí a rozšíří lež, že je kvůli kouři všechen jeho tovar, včetně mouky, nechutně načichlý a zkažený. Kvůli bezdůvodnému maloměšťáckému bojkotu Vorel zcela zkrachuje a ze zoufalství se ve svém obchodě oběsí.", 
+                "Příběh vypráví o panu Vorlovi, tajném zloději, který pod záminkou nákupu tabáku do své nové dýmky postupně vykrádá krámy svých sousedů; nakonec je ale dopaden komisařem Uhmuhlem a povídka končí jako varovné podobenství proti lidské chamtivosti a nenasytnosti."
+            ], a: 2, exp: "Povídka ukazuje obrovskou a vražednou sílu uzavřeného maloměšťáckého prostředí. Přistěhovalý krupař Vorel je slušný, ale nikdo k němu nechodí. Ze samoty bafá pěnovku (dýmku). Paní setníková a dcerka Poldýnka, vlivné sousedky, štítivě prohlásí, že se u něj nedá dýchat a mouka je 'zasmrádlá' kouřem. Zákazníci krám zcela a beze stopy bojkotují. Zlomený a zruinovaný Vorel spáchá sebevraždu oběšením. Pointou mrazivého cynismu je, že policejní komisař Uhmuhl u visící mrtvoly jen s obdivem zkonstatuje: 'Tak krásně nakouřenou pěnovku jsem ještě neviděl'." },
+            { q: "Nerudova povídka 'U tří lilií' se od ostatních příběhů sbírky výrazně liší. Jakou atmosférou a ústředním dějovým momentem je tento krátký text charakteristický?", options: [
+                "Je to velmi veselý, idylický a prosluněný text, odehrávající se v proslulé cukrárně; sleduje rozpustilé hovory tří mladých dam nad kávou a zakončuje se šťastným oznámením hromadné, bohaté svatby, aniž by jakkoliv řešil hlubší konflikty.", 
+                "Povídka má ponurou, magickou a silně mrazivou, bouřlivou atmosféru prosycenou pachem hřbitova a lijáku. V nočním hostinci u Tří lilií tancuje mladá dívka. Uprostřed tance k ní přistoupí sestra se zprávou, že jim právě umřela matka; dívka jen krátce odejde, omyje si tvář a poté s absolutní, živelnou a cynickou netečností pokračuje v bláznivém tanci a divokém hýření.", 
+                "Zobrazuje detailní, zdlouhavou a nudnou chronologickou zprávu z celodenního vojenského cvičení na pražském Petříně, které je přerušeno bouřkou, načež se znudění vojáci jdou opít a prát k nedalekému pochybnému hostinci a rozbít v něm zařízení.", 
+                "Představuje politicky velmi angažovaný a didaktický text; tři mladé dívky (lilie) symbolizují víru, naději a lásku, a společně s Nerudou bojují v uličkách za vzkříšení a obrodu tehdejšího českého národa z okovů zhoubného německého vlivu a útlaku."
+            ], a: 1, exp: "U tří lilií je povídka s hutnou, až démonickou baladickou atmosférou tvořenou bouřkou, deštěm a blízkostí strašidelného hřbitovního zdiva. Neruda v temném hostinci pozoruje tancující osmnáctiletou dívku se světlýma, uhrančivýma očima. Během tance se dívka dozvídá, že jí doma skonala matka. K Nerudovu úžasu a mrazení sice dívka na chvíli odejde, ale pak se z temnoty blesků vrátí do tanečního sálu a zcela netečně a vášnivě tancuje a koketuje dál. Povídka zdůrazňuje drsný kontrast smrti a bezohledné zvířecí, živelné síly mládí." },
+
+            // Doplňkové literární jevy a historický kontext
+            { q: "Rozsáhlé románové cykly a snaha postihnout dějiny jako celistvý proces jsou typické pro Aloise Jiráska. Které z jeho zásadních děl se zabývá obdobím hlubokého pobělohorského protireformačního útlaku a působením jezuitů (v čele s pátrem Koniášem)?", options: [
+                "Mezi proudy", 
+                "Temno", 
+                "Bratrstvo", 
+                "Skaláci"
+            ], a: 1, exp: "Román Temno (zachycuje dobu 18. století) je klasickým a stěžejním Jiráskovým dílem. Pojednává o dusivé atmosféře doby útlaku po Bílé hoře, pronásledování tajných českých evangelíků (nekatolíků) a inkvizičním a systematickém ničení starých českých knih nekompromisními jezuity, z nichž nejznámější byl strůjce rekatolizace, otec Antonín Koniáš." },
+            { q: "Významný historik a pedagog Zikmund Winter byl autorem detailně propracovaných knih zasazených převážně do období renesance, rudolfinské Prahy či do doby kolem bitvy na Bílé hoře. Jaký osud postihl rektora univerzity Jana Kampanuse Vodňanského ve Winterově nejznámějším románu 'Mistr Campanus'?", options: [
+                "Ačkoliv zpočátku bránil univerzitu, zradí nakonec své přátele z řad českých stavů, tajně a s radostí přistoupí ke katolicismu a stane se váženým rádcem samotného císaře Ferdinanda, čímž si do konce života zajistí nesmírné majetky.", 
+                "Zoufalý Campanus se po brutální a krvavé popravě dvaceti sedmi českých pánů na Staroměstském náměstí (čemuž marně a s hrůzou zblízka přihlížel) pokusí Karlovu univerzitu před útočnými a radikálními jezuity uchránit tím, že potupně sám přestoupí ke katolické víře. Když ale s těžkým srdcem posléze zjistí, že jeho oběť, zrada svědomí i nesmírné ponížení byly zcela zbytečné a jezuité se univerzity přesto agresivně zmocnili, ukončí ve své vnitřní beznaději a hanbě svůj život tragickou sebevraždou.", 
+                "Díky svým skvělým zahraničním diplomatickým kontaktům úspěšně vyjedná přesun a bezpečné stěhování kompletně celé univerzity se všemi studenty i cennými starými svazky knih do svobodného Švédska, kde obklopen úctou dožije v bezpečí a klidu.", 
+                "Zorganizuje neohroženou, obrovskou vzpouru stovek vyzbrojených studentů s meči; na nádvoří barikád v Klementinu společně svádějí slavnou, tvrdou několikadenní hrdinskou a nakonec vítěznou bojovou bitvu proti španělským cizím žoldákům, načež jsou oslavováni jako vojevůdci."
+            ], a: 1, exp: "Mistr Campanus je román ze 17. století. Ústřední postavou je Mistr Jan Campanus Vodňanský, rektor univerzity. Po popravě stavů na Staroměstském náměstí cítí obrovskou zodpovědnost za záchranu univerzity před předáním do rukou katolických jezuitů. Sám potupně přejde na katolickou víru v domnění, že to školu zachrání. Když ho přesto jezuité z úřadu vyhodí a on vidí zkázu českého národa a marnost svého nesmírného ponížení, spáchá ve svém bytě ze zoufalství a studu v tichosti zničující sebevraždu." },
+            { q: "Jaký společenský konflikt a literární téma dominovalo rozsáhlé tvůrčí práci autora Ignáta Herrmanna?", options: [
+                "Byl zarytým stoupencem a tvůrcem klasických a hrubých přírodních venkovských eposů opěvujících úmornou práci s pluhy a dřinu rolníků na šumavských polích a nekonečných lesích, odříznutých od světa.", 
+                "Ve svých knihách a četných fejetonech (např. U snědeného krámu, Otec Kondelík) vynikajícím, přesným a často drobnokresebným a humorným i psychologickým až trpkým způsobem literárně pitval myšlení, stereotypy, neduhy, přetvářku i každodenní skryté dramatické či směšné pinožení a neřesti malých, zdánlivě poctivých pražských měšťáků, drobných živnostníků, mistrů a šosáků z rodin ve městě.", 
+                "Jeho tvorba se zcela výlučně omezovala pouze na hluboce a čistě intimní spirituální poezii; byl naprosto zahleděn do duchovních tajemství a ve svých verších se jen uzavíral do ticha pražských sakrálních barokních katedrál a krypt, oprostěn od všeho obyčejného.", 
+                "Ignát Herrmann se stal autorem prvních českých drsných a krvavých kriminálních policejních románů ze spodních, zablácených dvorů, jimiž pouze s brutalitou dráždil cenzuru k popisu temného pražského krvavého a vrahova podsvětí a lůzy žijící na skládkách."
+            ], a: 1, exp: "Ignát Herrmann (zakladatel humoristického časopisu Švanda dudák a fejetonista) je bytostně a naprosto mistrně spjat s klasickým drobnokresebným pražským měšťanským a šosáckým prostředím. Kniha U snědeného krámu ukazuje i jeho sžíravou psychologickou a tragickou polohu při pitvě pražské zkaženosti a pokryteckých, lživých maloměšťáckých a rodinných vztahů a zkázy drobného kupce, Otec Kondelík pak nabízí zase lehčí a úsměvnější humorný a laskavý pohled na stereotypy měšťáckého života na Kampě a ve městě." },
+            { q: "Karel Klostermann zanechal v české literatuře velmi výraznou stopu svými unikátními díly. Kam a do jaké oblasti byla jeho prozaická vyprávění (např. Ze světa lesních samot či V ráji šumavském) velmi úzce a faktograficky zasazována?", options: [
+                "Do oblasti vyprahlých stepí a vinic prosluněné a horké jižní Moravy plné veselého folkloru, vína, hlučných a rozjařených bujarých opileckých písní u muziky s primášem a bujarého tance v bohatých, úrodných a barevných slováckých nížinách.", 
+                "Zabýval se drsnou a uhelnou hornickou aglomerací hluboko v podzemí na černé a chladné severní Moravě (okolo Ostravy a dolů); sledoval nekonečnou vykořisťovanou dřinu chudých zkažených havířů dusících se uhelným dehtem u těžních věží.", 
+                "Exkluzivně se pohyboval pouze ve vyšších salonech a uzavřených intelektuálních kruzích snobské smetánky vídeňských bohatých kaváren; tvořil zdlouhavé romány plné intrik bohatých rakouských dvorních dcer za zvuků tichého a dlouhého klavíru.", 
+                "Jeho příběhy jsou neoddělitelně spjaty s divokým, drsným, chladným a mnohdy nesmírně krutým a osamělým přírodním prostředím hlubokých a neprostupných šumavských hvozdů, v němž realisticky líčil velice těžké živobytí chudých i zkoušených německých a českých rázovitých horalů, svérázných silných a uzavřených dřevorubců a prostých osamělých pytláků v tichých opuštěných samotách."
+            ], a: 3, exp: "Karel Klostermann je neodmyslitelně spjat se Šumavou. Z jeho děl (V ráji šumavském, Ze světa lesních samot) silně dýchá mrazivý, temný, ohromný a nádherný duch hlubokých, majestátních a osamělých přírodních šumavských pralesů a hor. Reálně v nich bez jakýchkoliv iluzí popisuje tíživý, ale morálně pevný a sepjatý vztah k matce přírodě a drsný mrazivý celoživotní boj těžce a vyčerpávajícím způsobem fyzicky pracujících sklářů, pytláků, povozníků a chudých dřevorubců, odříznutých v mrazu na horských pláních uprostřed osamělých dřevěných samot." },
+            { q: "Rozsáhlá venkovská rodová kronika nazvaná 'Naši' představuje jakýsi ucelený vrchol popisu staročeských tradic jedné oblasti. Kdo je autorem tohoto majestátního deseti-dílného románového eposu?", options: [
+                "Antal Stašek", 
+                "Jan Herben", 
+                "Jindřich Šimon Baar", 
+                "Josef Holeček"
+            ], a: 3, exp: "Tento monumentální deseti-dílný prozaický kronikářský epos a cyklus 'Naši', zevrubně, plošně a s ohromnou epickou, popisnou a faktografickou důkladností zaznamenávající rodový, osobní, selský i rodinný vesnický způsob života a venkovské společenské změny v okolí a vesnici Stožice na jihu Čech v 19. století, napsal významný obrozenec a národopisec Josef Holeček." }
+        ,
+        // Neruda - Malostranské povídky (pokračování)
+        { q: "V Nerudově povídce 'Večerní šplechty' se setkávají studenti Hovora, Kupka a Novomlýnský na střeše domu. O čem primárně debatují a jaká je pointa tohoto příběhu?", options: [
+            "Studenti vášnivě diskutují o blížící se revoluci proti rakouskému útlaku a plánují útok na policii. Na konci však zjistí, že Novomlýnský je ve skutečnosti konfident, který jejich plány předal úřadům, čímž zpečetil jejich osud.", 
+            "Debata se točí kolem strašidelných pověstí ze starých hřbitovů. Studenti se vsázejí, kdo vydrží noc v márnici; Kupka sice sázku vyhraje, ale ráno je nalezen s šedivými vlasy a naprostou ztrátou paměti kvůli prožitému děsu.", 
+            "Po vyprávění vtipných klukovských příhod Hovora prozradí, že miluje Lízinku Perálkovou. Pointou je odhalení, že Lízinka před lety porodila dítě jinému studentovi v době, kdy v přestrojení vystupovala jako chlapec a oni ji obdivovali.", 
+            "Studenti s hořkostí bilancují své neúspěšné životy a špatné školní výsledky. Závěr povídky přináší smutné odhalení, že ani jeden z nich univerzitu nedokončil a všichni se potupně stali bezvýznamnými úředníky v zaprášených archivech."
+        ], a: 2, exp: "Povídka Večerní šplechty líčí poklidnou debatu studentů na vyhřáté střeše. Pointa spočívá v odhalení, že Lízinka Perálková, kterou Hovora miluje, kdysi chodila v chlapeckém přestrojení a v té době už tajně porodila dítě jinému mladíkovi." },
+        { q: "Povídka Jana Nerudy 'Svatováclavská mše' zachycuje dětský pohled na svět. Co je ústředním motivem a dějem tohoto autobiograficky laděného textu?", options: [
+            "Chlapec se snaží v noci tajně ukrást cennou knihu z kostela, aby ji mohl prodat a pomoci nemocné matce. Je však přistižen přísným farářem, který ho místo trestu vezme pod svou ochranu a naučí ho číst latinsky.", 
+            "Devítiletý, zvídavý chlapec se nechá úmyslně zamknout přes noc v chrámu sv. Víta, protože chce o půlnoci spatřit svatého Václava. Únavou však usne a ráno ho s pláčem a úlevou najde jeho matka a teta, jež ho zoufale hledaly.", 
+            "Příběh vypráví o velkolepém procesí na Václavském náměstí, kde se malý chlapec ztratí v davu. Celou noc bloudí nebezpečnými uličkami plnými zlodějů, než ho ráno bezpečně dovede domů hodný a starý malostranský ponocný.", 
+            "Děj se točí kolem dětského pěveckého sboru, který se připravuje na vystoupení před císařem. Chlapec trémou v rozhodující chvíli ztratí hlas a je potupně vyhnán, což v něm probudí celoživotní odpor k vážné hudbě."
+        ], a: 1, exp: "Svatováclavská mše líčí osud devítiletého Nerudy, který se nechá v noci zamknout v chrámu sv. Víta v očekávání, že uvidí ožít legendu o sv. Václavovi. Uprostřed tmy však usne a ráno je s ostudou nalezen plačící matkou." },
+        { q: "Jaký kuriózní děj tvoří základ povídky 'Jak to přišlo, že dne 20. srpna 1849, o půl jedné s poledne, Rakousko nebylo rozbořeno'?", options: [
+            "Skupina radikálních univerzitních profesorů sestrojí v tajném sklepení na Kampě výbušný stroj. Vše ale selže kvůli nečekané povodni, která stroj zaplaví, a tím je rakouské císařství před plánovaným zničením nechtěně zachráněno.", 
+            "Děj je melancholickou vzpomínkou starého vojenského veterána na události revolučního roku 1848. Ten čtenáři vysvětluje, že impérium přežilo zkázu jen díky tomu, že se pražští povstalci v rozhodující chvíli rozutekli před silným deštěm.", 
+            "Spolek malých chlapců si naplánuje ozbrojené obsazení citadely a pád císařství. Plán ztroskotá, když starší hokynář Pohorák, který jim měl obstarat střelný prach, vybrané peníze propije, je zatčen policií a prach nedodá.", 
+            "Povídka je satirickým popisem paniky vysokých rakouských vojenských důstojníků, kteří tváří v tvář falešné zprávě o selské vzpouře málem ze strachu odpálí pražské hradby; vše zachrání jen včasný dopis od vídeňského dvora."
+        ], a: 2, exp: "Povídka popisuje naivní dětský spolek hrající si na husity. Plánují obsadit citadelu a vyhlásit revoluci. Hokynář Pohorák, který jim měl koupit střelný prach, se však na trhu opije, je zatčen a prach nepřinese, čímž revoluce končí." },
+        { q: "Jaká bolestná životní zkušenost se skrývá za postavou slečny Máry v povídce 'Psáno o letošních Dušičkách'?", options: [
+            "Máry v mládí opustila svou těžce nemocnou dceru a snažila se vinu odčinit návštěvami hřbitova; když zjistí, že dcera přežila a je bohatou hraběnkou, nemá odvahu se k ní přihlásit a raději umírá v chudobinci.", 
+            "Vdova Nocarová jí kdysi na hřbitově vyvěštila brzkou smrt. Zděšená Máry proto odmítla všechny nápadníky, uzavřela se před světem a ve svém bytě si tajně a posedle začala budovat vlastní rakev.", 
+            "Kdysi ji požádali o ruku dva muži, ale záhy jí oba napsali, že ustupují tomu druhému, čímž si z ní jen krutě vystřelili. Máry zůstala sama; po letech, když oba zemřeli, zakoupila si nečekaně místo přesně mezi jejich hroby.", 
+            "Zamilovala se do chudého rytce, kterého však její bohatá rodina ze msty odmítla a nechala uvěznit. Máry na něj oddaně čekala desítky let, ale propuštěný rytec ji kvůli vysokému věku nepoznal a potupně ji odmítl."
+        ], a: 2, exp: "Slečna Máry je mohutná, nepřístupná žena. Kdysi jí vyznali lásku dva muži (Cibulka a Rechner). Oba si z ní vystřelili a vzápětí jí oba napsali, že se jí vzdávají ve prospěch druhého. Když oba zemřou, Máry na jejich hroby chodí a dokonce si zakoupí hrobové místo mezi nimi." },
+        { q: "V povídce 'Týden v tichém domě' sledujeme osudy několika malostranských obyvatel. Jakou roli zde hraje slečna Josefínka a starý doktor?", options: [
+            "Josefínka je chudá služebná, do které se zamiluje starý, mrzutý doktor. Ten si ji chce vzít, ale Josefínka ve skutečnosti miluje nadporučíka Kořínka, s nímž nakonec tajně uteče z Prahy do Vídně.", 
+            "Doktor je akurátní starý mládenec, který si tajně myslí na mladou a půvabnou Josefínku. Ta je však zasnoubena s mladým Karlem. Zklamaný doktor navíc čelí tlaku paní Lakmusové, která se ho snaží vnutit své dceři Klárce.", 
+            "Josefínka je bohatá dědička celého tichého domu, kterou se starý zkorumpovaný doktor snaží připravit o majetek pomocí falešných lékařských diagnóz. Její čest nakonec zachrání odvážný úředník Bavor.", 
+            "Doktor je Josefínčin tajný otec, který se ji po letech snaží najít a odčinit staré hříchy. Josefínka ho však ze studu odmítá přijmout a raději odchází pracovat jako ošetřovatelka do vojenského lazaretu."
+        ], a: 1, exp: "Josefínka je půvabná dívka, kterou tajně obdivuje starší, akurátní doktor. Ten dokonce píše Josefínce dopis s nabídkou k sňatku, ale Josefínka miluje svého snoubence Karla. Do doktora se naopak snaží zamilovat paní Lakmusová svou dceru Klárku." },
+
+        // Májovci - Karolina Světlá a další
+        { q: "Karolina Světlá, významná spisovatelka generace Májovců, často zpracovávala téma mravní oběti. Jaký je ústřední motiv jejího známého 'Vesnického románu'?", options: [
+            "Příběh vypráví o tragickém, nenaplněném manželství Antoše Jírovce s bohatou, ale panovačnou rychtářkou. Antoš se zamiluje do chudé děvečky Sylvy, avšak pro obě ženy je manželský svazek posvátný, a proto se Sylva po smrti rychtářky s Antošem z mravních důvodů rozchází.", 
+            "Děj sleduje osudy mladé venkovanky, která se rozhodne vzepřít dohodnutému sňatku a uteče z vesnice do Prahy, kde se stane slavnou a nezávislou spisovatelkou bojující za práva utlačovaných žen v továrnách.", 
+            "Román je humornou kritikou venkovských pověr a klepů. Antoš předstírá, že je posedlý ďáblem, aby se vyhnul vojenské službě, což vede k řadě komických nedorozumění s místním pověrčivým farářem a rychtářem.", 
+            "Hlavním motivem je krevní msta mezi dvěma bohatými selskými rody. Antoš zabije v hádce o pozemky bratra své milované Sylvy, čímž mezi rodinami rozpoutá generační nenávist, jež končí vypálením celé vesnice."
+        ], a: 0, exp: "Vesnický román vypráví o nenaplněné lásce. Antoš Jírovec prožívá nešťastné manželství s bohatou rychtářkou. Zamiluje se do děvečky Sylvy, ale svazek manželský je pro ně posvátný. I po úmrtí rychtářky se Sylva s Antošem z hlubokých morálních a mravních důvodů rozchází." },
+        { q: "V románu 'Kříž u potoka' od Karoliny Světlé hraje stěžejní roli osobní oběť hlavní hrdinky. K čemu se hrdinka Eva z mravních pohnutek rozhodne?", options: [
+            "Eva se zříká veškerého svého rodového majetku a vstupuje dobrovolně do kláštera, aby odčinila hříchy svého otce, který v mládí zastřelil obecního drába.", 
+            "Zříká se své hluboké, opravdové lásky ke švagrovi ve prospěch udržení rodinného krbu a záchrany rozpadajícího se manželství se svým mužem, čímž prokazuje obrovskou mravní sílu a sebeobětování.", 
+            "Rozhodne se prodat své dítě bezdětným šlechticům, aby získala peníze na operaci svého těžce zraněného manžela, čímž uvalí na celý svůj rod strašlivou kletbu Kříže u potoka.", 
+            "Eva zradí svou křesťanskou víru, uteče s tlupou pohanských lapků do lesů a stane se jejich obávanou vůdkyní, aby se pomstila pokrytecké venkovské společnosti, která ji zavrhla."
+        ], a: 1, exp: "V románu Kříž u potoka se objevuje silný motiv mravního obětování lásky pro prospěch manžela. Hrdinka Eva se zříká čisté lásky ke svému švagrovi, aby udržela svátost manželství a pomohla svému manželovi." },
+        { q: "Co je hlavním dějovým zvratem a překvapením v románu 'Frantina' od Karoliny Světlé?", options: [
+            "Hlavní hrdinka Frantina po dlouhém pátrání zjistí, že její údajně zesnulý bratr žije a stal se vysoce postaveným úředníkem na vídeňském dvoře, avšak ze strachu před skandálem se k ní odmítá přihlásit.", 
+            "Frantina se vášnivě zamiluje do chudého potulného malíře; v den jejich svatby se ale ukáže, že malíř je ve skutečnosti přestrojený šlechtic, který celou dobu zkoušel její upřímnost a nezištnost.", 
+            "Příběh vypráví o silné a respektované rychtářce Frantině, která se hluboce zamiluje do svého vysněného muže. Brzy po zjištění, že je její milý ve skutečnosti hledaný a brutální loupežník, ho z pocitu spravedlnosti a mravní povinnosti sama zabije.", 
+            "Frantina zdědí obrovský statek, ale sousedé ji obviní z čarodějnictví. Aby unikla upálení na hranici, musí během jediné noci sestrojit funkční mlýn, což se jí s pomocí místního faráře zázračně podaří."
+        ], a: 2, exp: "Frantina je příběhem o lásce a drsné mravní povinnosti. Rychtářka Frantina miluje svého muže, avšak když nečekaně a s hrůzou zjistí, že je to obávaný vůdce loupežníků, smysl pro povinnost a spravedlnost u ní převáží nad láskou a ona ho sama zabije." },
+        
+        // Ruchovci a Lumírovci
+        { q: "Který historický epos Svatopluka Čecha z prostředí radikálních husitských válek musel kvůli své ostře kritické povaze čelit rakouské cenzuře?", options: [
+            "Báseň 'Hanuman', která skrze zvířecí postavy napadala císařský dvůr a přirovnávala husity k opicím.", 
+            "Epos 'Husita na Baltu', ve kterém autor detailně popisuje válečné výboje Prokopa Holého a oslavuje vypalování německých klášterů na severu Evropy.", 
+            "Epos 'Adamité', jenž se zabýval osudem zfanatizované a radikální husitské sekty a jejím nevyhnutelným krutým zničením rukama samotného Jana Žižky.", 
+            "Báseň 'Ve stínu lípy', která varovala před ztrátou náboženské víry a nabádala Čechy k návratu ke klidnému rolnickému životu na vsích."
+        ], a: 2, exp: "Epos Adamité se zabýval radikální husitskou sektou adamitů a jejím zničením. (Pozn.: Cenzuře a zákazu musel čelit především jeho sociální epos Lešetínský kovář, nicméně z uvedených možností týkajících se husitství jsou Adamité jeho stěžejním historickým dílem)." },
+        { q: "Kdo z následujících autorů tvořil vrchol generace Lumírovců (Školy kosmopolitní), experimentoval s formami a snažil se povznést českou poezii na evropskou úroveň?", options: [
+            "Svatopluk Čech a Eliška Krásnohorská", 
+            "Karel Havlíček Borovský a Jan Neruda", 
+            "Alois Jirásek a Zikmund Winter", 
+            "Jaroslav Vrchlický a Julius Zeyer"
+        ], a: 3, exp: "Lumírovci (Škola kosmopolitní) se snažili povznést českou literaturu na světovou úroveň a objevovali nové formy (sonety). K hlavním představitelům patřili Jaroslav Vrchlický, Julius Zeyer a Josef Václav Sládek." },
+
+        // Historická próza
+        { q: "Který dvoudílný, avšak nedokončený historický román Aloise Jiráska se zabývá vládou Jiřího z Poděbrad a jeho vleklými konflikty s Matyášem Korvínem?", options: [
+            "Mezi proudy", 
+            "Proti všem", 
+            "Bratrstvo", 
+            "Husitský král"
+        ], a: 3, exp: "Husitský král je dvoudílný a bohužel nedokončený historický román Aloise Jiráska, který se detailně věnuje osobnosti Jiřího z Poděbrad a jeho politickému a vojenskému sporu s uherským panovníkem Matyášem Korvínem." },
+        { q: "Co je hlavním tématem a historickým pozadím oblíbeného Jiráskova románu 'Proti všem'?", options: [
+            "Dílo mapuje proces českého národního obrození v 18. století a sleduje osudy mladých buditelů bojujících za zachování českého divadla a jazyka proti silnému vlivu poněmčování v Praze.", 
+            "Pojednává o rozmachu husitského živlu po vítězné bitvě na Vítkově; příběh vykresluje budování města Tábora, nadšení prostého lidu a obsahuje také nekompromisní likvidaci fanatické sekty adamitů.", 
+            "Zachycuje úpadek husitství po drtivé porážce v bitvě u Lipan; hlavní hrdinové opouštějí vlast a stávají se potulnými žoldnéři ve službách polského krále, čímž ztrácejí své původní ideály.", 
+            "Líčí rozsáhlé selské selské povstání Chodů proti panství a zlovůli arogantního německého šlechtice Lammingera, jež vrcholí tragickou popravou Jana Sladkého Koziny v Plzni."
+        ], a: 1, exp: "Román Proti všem tvoří vrcholný díl husitské trilogie. Líčí rozmach husitství po vítězství na Vítkově, budování mocného Tábora a na pozadí milostného příběhu (Zdeny a kněze) popisuje i temnější stránky, jako byla Žižkova likvidace extrémistické sekty adamitů." },
+        { q: "Která významná osobnost zanechala nesmazatelnou stopu v české historické próze svými precizními a detailními díly z období rudolfinské a pobělohorské Prahy (např. 'Pražské obrázky', 'Rakovnické obrázky' či novela 'Rozina sebranec')?", options: [
+            "Alois Jirásek", 
+            "Zikmund Winter", 
+            "Václav Beneš Třebízský", 
+            "Karel Václav Rais"
+        ], a: 1, exp: "Zikmund Winter byl vynikající historik a spisovatel, který se specializoval na dobu pohusitskou, rudolfinskou a pobělohorskou. Ve svých dílech (Pražské a Rakovnické obrázky, Rozina sebranec, Mistr Campanus) využíval obrovské znalosti archivů pro věrné vykreslení detailů tehdejšího městského života a řemesel." },
+
+        // Venkovská próza
+        { q: "Román 'Děti čistého nebe' napsala spisovatelka Teréza Nováková. Jaký tragický náboženský motiv toto dílo zpracovává?", options: [
+            "Děj sleduje osudy mladých katolických noviců, kteří jsou vysláni na krutou a nebezpečnou misii do Jižní Ameriky, kde většina z nich zbytečně umírá na tropické nemoci bez možnosti návratu domů.", 
+            "Zachycuje tragický osud stoupenců tajné náboženské sekty abrahamitů na východočeském venkově, kteří pro svou pevnou víru a odmítání oficiální církve čelí tvrdému státnímu i společenskému pronásledování.", 
+            "Příběh pojednává o skupině opuštěných sirotků v Praze, kteří si vytvoří vlastní nevinné náboženství, avšak místní úřady je za to tvrdě potrestají a rozešlou do nápravných pracovních ústavů.", 
+            "Kniha líčí krvavé střety mezi husitskými vojsky a křižáky, přičemž se zaměřuje na osudy nevinných vesnických dětí, které se staly obětí bezohledného drancování obou znesvářených stran."
+        ], a: 1, exp: "Teréza Nováková se ve svém díle často věnovala východočeskému venkovu a náboženským hnutím. V románu Děti čistého nebe zachycuje právě pohnutý a tragický osud stoupenců tajné, heretické náboženské sekty takzvaných abrahamitů." },
+        { q: "Antal Stašek byl významným prozaikem a právníkem (a otcem Ivana Olbrachta). Jakou výraznou společenskou a třídní proměnu zachycuje ve svém románu 'O Matoušovi a jeho přátelích'?", options: [
+            "Sleduje proměnu a kariérní vzestup chudého zkrachovalého venkovského krejčího, který se díky sňatku s dcerou starosty stane váženým a bezcitným městským lichvářem.", 
+            "Zachycuje pomalý úpadek a zkázu staré české aristokratické rodiny, která tváří v tvář nástupu moderního průmyslu ztrácí veškerý svůj vliv a končí v naprosté izolaci a bídě na venkovském statku.", 
+            "Dílo vypráví o partě mladých venkovských učitelů, kteří z nadšení zakládají první českou divadelní scénu, ale po mnoha neshodách s cenzurou se z nich stávají radikální a nebezpeční anarchisti.", 
+            "V románu, který je silně ovlivněn myšlenkami socialismu, autor popisuje složitý psychologický i sociální přerod hlavního hrdiny – z původního divokého a nespoutaného lesního pytláka se stává uvědomělý dělník a proletář."
+        ], a: 3, exp: "Antal Stašek byl ovlivněn socialismem a dělnickým hnutím. V románu O Matoušovi a jeho přátelích detailně a s porozuměním líčí sociální a myšlenkový přerod prostého, divokého pytláka v uvědomělého a organizovaného zástupce dělnické třídy (proletáře)." },
+        { q: "Který autor čerpal své náměty z hlubokých lesů a rašelinišť, vnesl do literatury téma drsného života dřevorubců, sklářů a pytláků a je autorem knih jako 'Ze světa lesních samot' či 'V ráji šumavském'?", options: [
+            "Jindřich Šimon Baar", 
+            "Jan Herben", 
+            "Karel Klostermann", 
+            "Ignát Herrmann"
+        ], a: 2, exp: "Karel Klostermann je neodmyslitelně a bytostně spjat se Šumavou. Jeho díla autenticky a bez romantických příkras líčí velice tvrdý a nemilosrdný život obyvatel šumavských lesů, pytláků, dřevorubců a samotářů uprostřed majestátní, ale nebezpečné přírody." },
+        { q: "Katolický kněz a spisovatel Jindřich Šimon Baar vynikal svými románovými kronikami a trilogiemi, v nichž láskyplně i kriticky zachycoval folklór a tradice. Do jakého rázovitého regionu je zasazena jeho románová trilogie 'Paní komisarka, Osmačtyřicátníci a Lůsy'?", options: [
+            "Na jižní Moravu do oblasti úrodného Slovácka.", 
+            "Do drsného hornického prostředí slezského Ostravska.", 
+            "Na západ Čech, do oblasti hrdého Chodska.", 
+            "Do středních Čech, konkrétně do bohatého a zprůmyslněného Polabí."
+        ], a: 2, exp: "J. Š. Baar působil jako kněz a byl rodákem z Chodska. Jeho nejznámější románová trilogie (Paní komisarka, Osmačtyřicátníci, Lůsy) mistrně a s velkou znalostí místních zvyků a jazyka zachycuje právě život, hrdost a tradice obyvatel na Chodsku v 19. století." },
+        { q: "Jaký literární směr a region reprezentuje Jan Herben a co je obsahem jeho rozsáhlé kroniky 'Do třetího a čtvrtého pokolení'?", options: [
+            "Herben byl zástupcem pražské dekadence a jeho kronika je temným hororovým vyprávěním o prokletí bohatého velkoměstského rodu, jež končí hromadnou vraždou a šílenstvím všech členů rodiny.", 
+            "Zastupoval kritický realismus (byl zakladatelem časopisu Čas). Jeho kronika je detailním a realistickým obrazem proměn života, zvyků a generací na moravském Slovácku od dob předbělohorských až po moderní dobu.", 
+            "Patřil mezi Májovce a jeho dílo je veršovaným eposem oslavujícím krásy Krkonošských hor a těžkou, leč idylickou práci poctivých a nezkažených krkonošských tkalců.", 
+            "Byl předním autorem utopických románů; kronika 'Do třetího a čtvrtého pokolení' představuje varovnou sci-fi vizi o tom, jak technický pokrok dovede v budoucnu lidstvo k naprostému morálnímu úpadku a zničení přírody."
+        ], a: 1, exp: "Jan Herben (zakladatel realistického časopisu Čas) byl významným představitelem moravského křídla kritického realismu. Jeho obsáhlá kronika Do třetího a čtvrtého pokolení podává velmi cenný a reálný obraz života, zvyků a společenských proměn na moravském Slovácku." },
+
+        // Didaktika - Závěr (Metody práce s textem)
+        { q: "Jaký je hlavní rozdíl mezi takzvanou 'fabulí' a 'syžetem' v literárním uměleckém díle?", options: [
+            "Fabule označuje hlavní morální ponaučení nebo filozofickou myšlenku díla, zatímco syžet je termín používaný výhradně pro charakteristiku vedlejších, dějově nepodstatných postav.", 
+            "Oba termíny znamenají totéž a slouží pouze k odlišení toho, zda je příběh napsán ve verších (syžet) nebo klasickou prozaickou formou (fabule) s přímou řečí.", 
+            "Fabule je abstraktní dějová linka uspořádaná v přirozené, chronologické a logické časové posloupnosti. Syžet představuje ten konkrétní způsob, jakým autor tyto tematické složky do díla skutečně kompozičně poskládal a ztvárnil (např. pomocí časových inverzí a retrospektivy).", 
+            "Syžet představuje historicky doložená a pravdivá fakta, o která se autor opírá, kdežto fabule zahrnuje všechny zcela smyšlené, fantaskní a autorem dodané romantické dějové odbočky a zápletky."
+        ], a: 2, exp: "V literární teorii i didaktice je fabule děj v jeho přirozené logické a časové následnosti. Syžet je kompoziční ztvárnění – způsob, jakým autor s informacemi z fabule naloží, jak je uspořádá v textu (často narušením chronologie, inverzemi či vkládáním retrospektiv)." },
+        { q: "Při didaktické interpretaci textu v hodinách literatury zdůrazňuje vyučující (např. u metody vnitřní fotografie) nutnost odůvodňování volby. Proč nesmí aktivity zaměřené na zvukovou či grafickou představivost trvat příliš dlouho bez následné reflexe?", options: [
+            "Úkoly by se zvrhly do samoúčelné hry (např. pouhé hádání barev bez souvislosti). Dlouhým trváním by žák ztratil přímý kontakt se smyslem textu; je nezbytné, aby žák své představy vždy logicky a s ohledem na text zdůvodnil.", 
+            "Dlouhá vizualizace a představivost vedou u žáků k únavě očí a ztrátě soustředění, což vyžaduje okamžité zařazení dlouhých, relaxačních přestávek, během nichž se narušuje plynulost výuky a zdržují se plány osnov.", 
+            "Pokud by žáci příliš dlouho přemýšleli nad zvukovou stránkou básně, začali by zpochybňovat historickou hodnotu díla a požadovali by po učiteli pouštění moderních hudebních videoklipů.", 
+            "Didaktika přísně zakazuje propojování literatury s výtvarnými nebo hudebními prvky; podobné hry proto nesmějí trvat dlouho, aby výuka nesklouzla do neobjektivního, subjektivního diletantismu, který nemá s vědou nic společného."
+        ], a: 0, exp: "Metodika práce se zvukovým či vizuálním komplexem básně (výběr hudby, barev, vnitřní fotografie) má sloužit k uchopení nálady a významu textu. Úkoly však nesmějí být zdlouhavé, aby z nich nestala samoúčelná, prázdná hra a aby žák neztratil kontakt s původním slovem. Klíčovým prvkem je vždy následné logické zdůvodnění žákovy volby s odkazem na text." }
+    ];
+        ];
+
+        let score = 0;
+        let answeredQuestions = 0;
+
+        const container = document.getElementById('quiz-container');
+
+        // Generování HTML a okamžité vyhodnocení
+        otazky.forEach((otazka, index) => {
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.id = `q-card-${index}`;
+            
+            const title = document.createElement('div');
+            title.className = 'question-title';
+            title.textContent = `${index + 1}. ${otazka.q}`;
+            card.appendChild(title);
+
+            const optionsDiv = document.createElement('div');
+            optionsDiv.className = 'options';
+
+            otazka.options.forEach((opt, optIndex) => {
+                const label = document.createElement('label');
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = `q${index}`;
+                radio.value = optIndex;
+                
+                radio.addEventListener('change', function() {
+                    const currentCard = document.getElementById(`q-card-${index}`);
+                    const allRadios = currentCard.querySelectorAll('input[type="radio"]');
+                    const labels = currentCard.querySelectorAll('label');
+                    const expDiv = document.getElementById(`exp${index}`);
+                    
+                    // Uzamknutí otázky
+                    allRadios.forEach(r => r.disabled = true);
+                    currentCard.classList.add('locked');
+
+                    const selectedVal = parseInt(this.value);
+                    const correctVal = otazky[index].a;
+
+                    labels[correctVal].classList.add('correct');
+
+                    if (selectedVal === correctVal) {
+                        score++;
+                        expDiv.className = 'explanation success';
+                        expDiv.innerHTML = `<strong>Správně!</strong><br><strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
+                    } else {
+                        labels[selectedVal].classList.add('incorrect');
+                        expDiv.className = 'explanation error';
+                        expDiv.innerHTML = `<strong>Špatně.</strong><br>
+                                            <strong>Správná odpověď:</strong> <em>${otazky[index].options[correctVal]}</em><br>
+                                            <strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
+                    }
+                    expDiv.style.display = 'block';
+                    answeredQuestions++;
+                });
+
+                label.appendChild(radio);
+                label.appendChild(document.createTextNode(opt));
+                optionsDiv.appendChild(label);
+            });
+
+            card.appendChild(optionsDiv);
+
+            const explanationDiv = document.createElement('div');
+            explanationDiv.className = 'explanation';
+            explanationDiv.id = `exp${index}`;
+            card.appendChild(explanationDiv);
+
+            container.appendChild(card);
+        });
+
+        // Finální shrnutí na konci
+        function zobrazitKonecneSkore() {
+            const resultDiv = document.getElementById('result');
+            
+            if (answeredQuestions < otazky.length) {
+                resultDiv.style.color = '#e67e22';
+                resultDiv.innerHTML = `Zatím jste odpověděl/a na ${answeredQuestions} z ${otazky.length} otázek. <br> Průběžné skóre: ${score} správně.`;
+                return;
+            }
+
+            const percent = Math.round((score / otazky.length) * 100);
+            resultDiv.innerHTML = `Váš konečný výsledek: ${score} z ${otazky.length} bodů (${percent} %).`;
+            
+            if(percent >= 80) {
+                resultDiv.style.color = '#27ae60';
+                resultDiv.innerHTML += "<br>Vynikající výkon! I u chytáků jste se zorientoval skvěle.";
+            } else if (percent >= 50) {
+                resultDiv.style.color = '#f39c12';
+                resultDiv.innerHTML += "<br>Slušný výsledek. Otázky byly těžké a podrobné – projděte si u chyb zdůvodnění v rámečcích.";
+            } else {
+                resultDiv.style.color = '#c0392b';
+                resultDiv.innerHTML += "<br>Tohle bylo hodně těžké. Neruda a realismus 19. století mají obrovské množství detailů. Pečlivé čtení rámečků vám ale pomůže!";
+            }
+        }
+    </script>
+</body>
+</html>
