@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Státnicový test ČJ - Otázka 9 (Vysoká obtížnost)</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 0.9em;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+        .question-card {
+            background: #fff;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            border-left: 5px solid #3498db;
+        }
+        .question-title {
+            font-weight: bold;
+            font-size: 1.15em;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        .options label {
+            display: block;
+            background: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid #e0e0e0;
+            line-height: 1.5;
+        }
+        .options label:hover {
+            background: #eef2f5;
+        }
+        .locked label {
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        input[type="radio"] {
+            margin-right: 15px;
+            margin-top: 4px;
+            float: left;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            font-size: 1.2em;
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 40px;
+            margin-bottom: 50px;
+        }
+        button:hover {
+            background-color: #1a252f;
+        }
+        .correct {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+            color: #155724;
+            font-weight: bold;
+        }
+        .incorrect {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+            color: #721c24;
+        }
+        .explanation {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            font-size: 0.95em;
+            display: none;
+            line-height: 1.6;
+        }
+        .explanation.success {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            color: #155724;
+        }
+        .explanation.error {
+            background-color: #fff3cd;
+            border-left: 5px solid #dc3545;
+            color: #856404;
+        }
+        #result {
+            font-size: 1.6em;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Státnicový test z ČJ (Otázka 9)</h1>
+    <div class="subtitle">Didaktika žánrů, Starší česká literatura, Kroniky a Legendy (vč. detailů Kristiánovy legendy)<br><strong>Vyberte odpověď – výsledek a zdůvodnění se zobrazí okamžitě.</strong></div>
+    
+    <div id="quiz-container"></div>
+    
+    <button onclick="zobrazitKonecneSkore()">Zobrazit celkové skóre</button>
+    <div id="result"></div>
+
+    <script>
+        const otazky = [
+            // Didaktika
+            { q: "Jaký je primární rozdíl mezi tzv. tradičním a kreativním didaktickým postupem při práci s literárním žánrem (např. s bajkou)?", options: [
+                "Zatímco kreativní postup vyžaduje, aby učitel na začátku hodiny nadiktoval přesnou literárněvědnou definici, kterou žáci musí obhájit, tradiční postup nechává žáky, aby si celou bajku vymysleli a napsali sami od nuly bez jakýchkoliv pravidel.", 
+                "Tradiční postup žákovi rovnou ozřejmí znaky žánru a následně je v úryvku jen mechanicky hledá (což nezaručuje komunikativnost), zatímco při kreativním postupu učitel žánr záměrně zatají a nechá žáky, aby formou vlastního logického objevování znaky žánru sami vyvodili.", 
+                "Při tradičním postupu učitel využívá výhradně audiovizuální pomůcky a historické kontexty k určení žánru, naproti tomu kreativní přístup spočívá v tom, že žáci text vůbec nečtou, ale pouze hádají děj na základě divadelní improvizace před třídou.", 
+                "Tradiční pojetí klade důraz na to, aby žák bezchybně zařadil autora do příslušného literárního slohu a století, kdežto kreativní pojetí se soustředí pouze na recitaci a intonaci, přičemž jakékoliv zkoumání samotných rysů bajky je zcela opomíjeno."
+            ], a: 1, exp: "Tradiční postup (ozřejmení znaků -> hledání v textu) je neozvláštňující a nekreativní. Při kreativním postupu učitel ponechá v tajnosti, o jaký žánr se jedná, a nechá děti, aby na základě práce s textem kreativní formou samy získaly povědomí o znacích daného žánru." },
+            { q: "V čem spočívá didaktická 'metoda čtení s předvídáním' (ilustrovaná na bajce Spící had) a jaká je role žáka v tomto procesu?", options: [
+                "Žák je veden k tomu, aby na základě dostupných informací v textu logicky usuzoval a formuloval předpoklady o dalším vývoji děje, přičemž svá tvrzení musí umět odůvodnit a v průběhu četby své původní významy neustále opravuje a zpřesňuje.", 
+                "Učitel před samotným čtením prozradí žákům kompletní pointu a závěr příběhu, aby se studenti zbavili napětí z neznámého a mohli se během následné četby plně a nerušeně soustředit výhradně na detailní gramatický a syntaktický rozbor složitých souvětí.", 
+                "Tato metoda spočívá v tom, že žáci text vůbec nečtou od začátku, ale začnou číst rovnou od poslední kapitoly směrem k první, čímž se rozvíjí jejich schopnost dedukce a zpětného hledání kauzálních vazeb, i když je tím narušen emocionální prožitek.", 
+                "Jde o klasický frontální postup, kdy učitel žákům nadiktuje přesnou literárněhistorickou definici daného žánru a žáci následně v textu pouze mechanicky a pasivně vyhledávají konkrétní příklady, které tuto předem stanovenou pevnou teoretickou definici potvrzují."
+            ], a: 0, exp: "Metoda čtení s předvídáním není pouhé hádání, ale logické usuzování na další pokračování textu podložené čtenářskými zkušenostmi. Žák odůvodňuje svá tvrzení, čte aktivně po částech, ptá se, zda bylo jeho očekávání splněno, a případně opravuje původní významy." },
+            { q: "Co je hlavním charakteristickým znakem tzv. 'chronologického uspořádání učiva' v literární výchově a pro jakou cílovou skupinu se primárně uplatňuje?", options: [
+                "Jeho největším přínosem je absolutní dodržování didaktického principu od jednoduchého ke složitému, protože starověké a středověké texty jsou pro dnešní mladší žáky jazykově mnohem srozumitelnější než moderní literatura, a proto se využívá převážně na prvním stupni ZŠ.", 
+                "Vyznačuje se tím, že učitel v hodinách zcela záměrně a nahodile přeskakuje mezi různými literárními epochami a kulturami, aby žáky neustále udržoval v napětí a podněcoval jejich vizuální paměť; je určeno primárně pro žáky se speciálními vzdělávacími potřebami.", 
+                "Mezi jeho klady patří lehkost utřídění a pochopení logické umělecké i historické návaznosti, avšak hrozí u něj automatizace výuky a neodpovídá vždy přirozeným čtenářským potřebám vzhledem k věku; upřednostňuje se převážně ve vyšších ročnících.", 
+                "Toto uspořádání zcela opomíjí dějinné souvislosti a dějiny národů, jelikož primárně dělí literaturu do tematických bloků (např. láska, válka, příroda), a je proto naprosto ideální pro výuku na středních odborných školách technického zaměření."
+            ], a: 2, exp: "Chronologické uspořádání učiva se upřednostňuje ve vyšších ročnících. Kladem je lehkost utřídění, logická a historická návaznost a uvedení do národní tradice. Záporem je narušení principu 'od jednoduchého ke složitému' (staré texty jsou pro žáky těžké), neadekvátnost k věku a hrozba automatizace výuky." },
+            { q: "Jak se v didaktické praxi projevuje metoda 'žánrové transformace'?", options: [
+                "Žáci jsou nuceni přepisovat všechny staré veršované texty výhradně do podoby moderního volného verše, aby se tak uměle a radikálně smazaly veškeré historické jazykové rozdíly a přiblížila se klasická poezie současným hovorovým standardům mládeže.", 
+                "Učitel seznámí žáky s tím, jak se vyvíjí a proměňuje určitá látka či konkrétní literární žánr v čase; například jak se ze středověké hagiografické legendy postupně stává moderní biografický román (např. o Františku Hrubínovi) sledující osudy významných osobností.", 
+                "Je to výhradně divadelní technika, kdy se původně prozaický text dramatizuje pro školní představení, přičemž se však úzkostlivě a přísně dbá na to, aby ani jedno jediné slovo z původní historické předlohy nebylo za žádných okolností změněno nebo vynecháno.", 
+                "Označuje se tak specifická situace, kdy spisovatel zcela omylem a nevědomky napíše dílo v jiném žánru, než původně zamýšlel, a úkolem bystrých žáků je tento autorský omyl analyticky odhalit a text červenou propiskou opravit do čisté a teoreticky správné žánrové podoby."
+            ], a: 1, exp: "Metoda žánrové transformace seznamuje žáky s vývojem a transformací jednotlivých žánrů v čase. Příkladem je přeměna středověké legendy na biografický román (Hrabal) nebo vývoj pohádek od neintencionálních k intencionálním." },
+
+            // Forma legendy
+            { q: "Středověká legenda má svou ustálenou literární a kompoziční formu. Které čtyři základní části v přesném pořadí tvoří klasickou hagiografickou strukturu legendy?", options: [
+                "1. nativitas (narození a proroctví), 2. peregrinatio (cesta na svatá místa), 3. confessio (vyznání víry před soudem), 4. martyrium (bolestivá smrt na kříži).", 
+                "1. vita (život světce), 2. passio (utrpení světce a jeho smrt), 3. translatio (přenesení ostatků světce a zajímavosti o něm), 4. miracula (zázraky spojené se světcem).", 
+                "1. prologus (poděkování mecenáši), 2. doctrina (teologické poučení lidu), 3. bellum (obrana křesťanství mečem), 4. apotheosis (nanebevstoupení za doprovodu andělů).", 
+                "1. origo (původ a vznešený rod), 2. tentatio (pokušení od ďábla na poušti), 3. miracula (zázraky vykonané za života), 4. damnatio (proklínání a vyhnání nepřátel církve)."
+            ], a: 1, exp: "Zápisky jasně definují ustálenou formu legendy v těchto čtyřech bodech: 1. vita (život světce), 2. passio (utrpení světce, smrt), 3. translatio (přenesení ostatků), 4. miracula (zázrak)." },
+
+            // Velká Morava a Cyril s Metodějem
+            { q: "Za jakým účelem a z jakého důvodu vyslal velkomoravský panovník Rastislav v roce 862 poselstvo k byzantskému císaři Michalu III.?", options: [
+                "Chtěl uzavřít vojenskou a strategickou alianci proti rozpínající se Franské říši a zároveň požádal o dodání byzantských zbraní a obléhacích strojů pro zabezpečení nově postavených moravských hradišť.", 
+                "Žádal o vyslání vzdělaných biskupů a kněží, kteří by na Moravě zavedli výhradně latinskou liturgii, čímž chtěl politicky izolovat a oslabit vliv nedalekého německého pasovského a řezenského biskupství.", 
+                "Byl zděšen z rozvrácených poměrů na Moravě a prosil o vyslání křesťanských věrozvěstů, kteří by kázali a šířili víru ve srozumitelné slovanské řeči, čímž by se Morava vymanila z vlivu franských kněží.", 
+                "Snažil se domluvit dynastický sňatek svého syna Svatopluka s byzantskou princeznou, aby tímto krokem pozvedl prestiž Velké Moravy na úroveň tehdejších nejmocnějších středověkých evropských říší."
+            ], a: 2, exp: "Rastislav vyslal poselstvo (862), protože byl zděšen z poměrů na Moravě, a prosil o osobu, která by kázala ve slovanské řeči. Chtěl tím omezit vliv franských (německých) kněží, kteří kázali latinsky." },
+            { q: "Jaký osud potkal Metoděje během jeho snahy o vybudování nezávislé panonsko-moravské církevní provincie a jaký byl jeho vztah k franckým kněžím?", options: [
+                "Byl franckými biskupy s nadšením přijat a okamžitě jmenován hlavním papežským poradcem pro východní Evropu; se svým nejbližším přítelem, nitranským biskupem Wichingem, pak úspěšně potlačil veškeré pohanské vzpoury.", 
+                "Po smrti Konstantina byl jmenován moravským arcibiskupem, avšak během cesty z Říma byl ze msty zajat nenávistnými Franky a vězněn. Po propuštění čelil obvinění z kacířství a musel neustále bojovat s intrikami nitranského biskupa Wichinga.", 
+                "Metoděj po bratrově smrti rezignoval na šíření slovanštiny, dobrovolně se podrobil bavorským biskupům, opustil Moravu a zbytek života strávil v tichém ústraní v tichém a opuštěném klášteře na hoře Athos.", 
+                "Stal se vůdcem mohutného ozbrojeného povstání proti francké okupaci, vedl spojená moravská vojska do vítězné bitvy u Velehradu, avšak nedlouho poté ho Svatopluk ze žárlivosti nechal tajně otrávit jedem."
+            ], a: 1, exp: "Metoděj byl v roce 869 jmenován moravským arcibiskupem. Během cesty z Říma byl zajat Franky, vězněn a sesazen (propuštěn až na zásah papeže Jana VIII.). Čelil obviněním z kacířství a trvalým intrikám nitranského biskupa Wichinga." },
+            { q: "Co je to 'Proglas' a jaký je jeho stěžejní literární a kulturní význam pro staroslověnskou vzdělanost?", options: [
+                "Jedná se o podrobnou sbírku středověkých církevních a civilních právních předpisů a zákonů, kterou sepsal Metoděj pro knížete Svatopluka, aby na Velké Moravě nastolil pevný politický a právní řád nezávislý na Římě.", 
+                "Je to vůbec první staroslověnská veršovaná předmluva k evangeliu, jejímž autorem je s největší pravděpodobností Konstantin. Dílo plamenně a s hlubokým přesvědčením obhajuje základní právo každého národa i člověka na bohoslužby v mateřském, srozumitelném jazyce.", 
+                "Jde o krátký, latinsky psaný hagiografický záznam o životě a umučení svaté Ludmily, který byl z taktických důvodů uměle přeložen do staroslověnštiny, aby se zalíbil konzervativně smýšlejícímu lidovému obyvatelstvu přemyslovských Čech.", 
+                "Představuje soubor veselých i vážných vyprávění o osamělých mniších a poustevnících, kteří žili v drsných podmínkách egyptské pouště, a jehož úkolem bylo poskytnout nově pokřtěným Moravanům poutavé a morální čtení na dlouhé zimní večery."
+            ], a: 1, exp: "Proglas je veršovaná předmluva k evangeliu, jejímž autorem je Konstantin. Významně a silně hájí právo člověka na bohoslužby a poslech slova Božího v mateřském jazyce." },
+            { q: "Jaké literární specifikum činí z tzv. 'Kyjevských listů' naprosto výjimečnou a nenahraditelnou staroslověnskou literární památku?", options: [
+                "Jedná se o vůbec nejdelší dochovaný epický básnický text o rozsahu čtyř tisíc veršů, který detailně, a hlavně v češtině popisuje hrdinské bitvy moravských knížat s mocnými franckými vojsky u řeky Dunaje.", 
+                "Je to jediný staroslověnský rukopis, který se fyzicky dochoval přímo z původního staroslověnského období velkomoravské říše; tvoří jej zlomek 7 pergamenových listů mešní knihy a je napsán původním písmem – hlaholicí.", 
+                "Tento text je naprosto unikátní tím, že jako jediný dokument z 9. století otevřeně kritizuje a zpochybňuje samotného papeže, vyzývá k ozbrojené rebelii rolníků a obsahuje první dochované kletby v lidovém jazyce.", 
+                "Představují soubor tajných diplomatických zpráv a šifrovaných kódů, které si mezi sebou vyměňovali Konstantin s byzantským císařem; jsou psány speciální zjednodušenou latinkou, aby je franská rozvědka nedokázala na hranicích rozluštit."
+            ], a: 1, exp: "Kyjevské listy jsou jediným dochovaným rukopisem z období staroslověnského (psány hlaholicí, zlomek 7 pergamenových listů mešní knihy). Všechny ostatní památky se dochovaly až v pozdějších opisech z 10. nebo 11. století." },
+
+            // Legendy 10.-11. století (sv. Václav)
+            { q: "Čím se vyznačuje tzv. '1. staroslověnská legenda o sv. Václavovi' a jakým specifickým způsobem přistupuje k samotné historické osobnosti tohoto zavražděného knížete?", options: [
+                "Vyznačuje se nesmírně složitým a květnatým rétorickým stylem plným latinských příměrů; knížete Václava zobrazuje jako dokonalou, od narození zcela bezhříšnou a svatou božskou bytost obklopenou neustálými nadpřirozenými úkazy a množstvím ohromujících zázraků.", 
+                "Byla sepsána na popud německého císaře a účelově zatajuje jakékoliv konflikty s Boleslavem; Václava naopak líčí jako fanatického a agresivního vojevůdce, který nutil pohanské kmeny ke křtu ohněm a mečem a zavedl na našem území obávanou inkvizici.", 
+                "Jedná se o velmi prostou a věcnou zprávu, pravděpodobně sepsanou přímým očitým svědkem vraždy (snad knězem slovanského obřadu). Záměrně postrádá typické hagiografické zázračné prvky a Václava ukazuje především jako obyčejného, chybujícího člověka, kterému se stalo strašlivé neštěstí.", 
+                "Jde o rozsáhlý veršovaný a rýmovaný epos z 12. století, ve kterém je osobnost svatého Václava stylizována do role bájného a neporazitelného antického hrdiny Herkula, bojujícího s bájnými stvůrami a draky bránícími přístup na Pražský hrad."
+            ], a: 2, exp: "1. staroslověnská legenda je prostá, hagiografické prvky v ní scházejí a jedná se spíše o analistický dokument o převratné politické situaci. Václav je v ní podán jako obyčejný člověk, kterému se stalo neštěstí, nikoliv jako ikona opředená záplavou zázraků." },
+            { q: "Proč vznikla latinsky psaná 'Gumpoldova legenda' a kdo dal přímý popud k jejímu sepsání ve třetině 10. století?", options: [
+                "Byla sepsána na žádost samotného bratrovraha Boleslava I., který si najal italského biskupa, aby po Evropě rozšířil lživou zprávu o tom, že Václav spáchal sebevraždu a Boleslav je tak právoplatným a naprosto nevinným vládcem české země.", 
+                "Sepsal ji mantovský biskup Gumpold na přímý popud tehdejšího císaře Oty II., přičemž samotná objednávka na zhotovení přepychového iluminovaného rukopisu (uloženého dnes ve Wolfenbüttelu) přišla od Emmy, manželky knížete Boleslava II.", 
+                "Tato legenda vznikla spontánně a tajně mezi prostým venkovským českým lidem jako reakce na brutální vyvražďování Slavníkovců, přičemž Gumpold pouze sesbíral a přeložil do latiny lidové písně zpívané pražskými chudinami u vltavských brodů.", 
+                "Vytvořil ji pražský arcibiskup Vojtěch během svého dlouhého a frustrujícího pobytu v italském vyhnanství v Římě, aby před papežem ospravedlnil svůj odchod z Čech tím, že dramaticky vykreslil dřívější krvavé pohanské praktiky českých knížat."
+            ], a: 1, exp: "Gumpoldova legenda vznikla na popud císaře Oty II. a sepsal ji mantovský biskup Gumpold. Nádherně iluminovaný rukopis (Wolfenbüttelský kodex) si následně objednala Emma (manželka Boleslava II.)." },
+            { q: "Jaký zásadní posun a rozdíl v charakteristice klíčových historických postav přináší latinská legenda 'Crescente fide' (Když se šířila křesťanská víra) oproti starším, jednodušším literárním památkám?", options: [
+                "Na rozdíl od starších děl tato legenda zcela a záměrně zamlčuje samotný akt Václavovy brutální vraždy a soustředí se pouze na jeho mladá léta, studium gramatiky v Budči a zakládání prvních kamenných špitálů a školních zařízení v Praze.", 
+                "Legenda se vyznačuje tím, že jako vůbec první text velmi ostře a nevybíravě napadá a kritizuje svatou Ludmilu za její údajnou tajnou slabost pro pohanské pověry a líčí ji jako hašteřivou, intrikující stařenu bojující o moc nad knížecím dvorcem.", 
+                "V této mnohem delší a obsáhlejší legendě je již jasně patrná silná ideologická schematizace: Drahomíra je zde jednoznačně a černobíle zobrazena jako zuřivá, krvelačná a zlá pohanka, zatímco Václav už vystupuje jako absolutní, bezchybný světec obklopený množstvím zázraků.", 
+                "Autor v textu poprvé omlouvá a hluboce obhajuje čin Boleslava I. s tím, že vražda byla ve skutečnosti nevyhnutelnou sebeobranou před Václavovým plánem vydat celé české knížectví do područí polského krále a odevzdat veškeré stříbrné doly cizincům."
+            ], a: 2, exp: "V legendě Crescente fide nastupuje hagiografický standard: postavy jsou vyhnány do extrémů. Drahomíra je líčena jako zuřivá a nenávistná pohanka, zatímco Václav už není jen obyčejný zavražděný člověk, ale dokonalý světec a jeho životopis je obohacen o zázraky." },
+
+            // Kristiánova legenda - Spory a Autorství
+            { q: "Dílo 'Život a umučení svatého Václava a jeho babičky Ludmily' (tzv. Kristiánova legenda) prošlo v novověku složitým vývojem plným dramatických sporů o jeho skutečné stáří a pravost. Jak se k této památce postavili významní učenci Josef Dobrovský a Josef Pekař?", options: [
+                "Dobrovský legendu s nadšením a bez váhání přijal jako nejstarší a zcela autentický dochovaný český text, avšak Pekař později na základě lingvistické a sémantické analýzy kategoricky dokázal, že text ve skutečnosti sepsal barokní jezuita Bohuslav Balbín jako zbožný podvrh.", 
+                "Dobrovský označil Kristiánovu legendu za velmi pozdní a nedůvěryhodný falzifikát pocházející až ze 14. století, jelikož se domníval, že čerpala z Gumpoldovy legendy. Teprve až mnohem později významný historik Josef Pekař její pravost a dataci do konce 10. století přesvědčivě a trvale zrehabilitoval.", 
+                "Oba tito učenci se naprosto jednohlasně shodli na tom, že dílo je průkazným falzem z doby tvrdých husitských válek, jehož hlavním a jediným cílem bylo v té době podpořit silné protiněmecké nálady a zpochybnit staletý vliv mocného řezenského biskupství na české území.", 
+                "Dobrovský považoval text za bezcennou, špatně přeloženou zkomoleninu z němčiny bez jakékoliv historické hodnoty, zatímco Pekař ji prohlašoval za svatý text sepsaný samotným Cyrilem na hoře Athos, a zakazoval proto její jakékoliv další sekulární a světské akademické zkoumání."
+            ], a: 1, exp: "Josef Dobrovský (a s ním J. Emler) považovali Gumpoldovu legendu za nejstarší a tvrdili, že Kristiánova legenda vznikla zkompilováním až ve 14. století. Zásadní obrat přinesl Josef Pekař (1902), který legendu zrehabilitoval a dokázal, že pochází z konce 10. století a že Gumpold naopak čerpal z Kristiána a Crescente fide." },
+            { q: "Kým byl podle moderních historických bádání (zejména podle úvah Josefa Pekaře a Dušana Třeštíka) s největší pravděpodobností samotný autor, který se v textu označuje jako 'Kristián'?", options: [
+                "Byl to vysloužilý, zahořklý francký vojevůdce, který se po drtivé válečné porážce usadil na pražském dvoře a sepsáním této oslavné knihy se snažil marně vetřít do přízně vládnoucí kněžny Drahomíry a zajistit si bohatý důchod.", 
+                "Většina historiků se domnívá, že se jednalo o Kosmova nadaného učně Přibíka Pulkavu z Radenína, který chtěl tímto fiktivním jménem utajit svou totožnost před rozhněvanou a mocnou vyšehradskou církevní kapitulou, se kterou vedl kruté majetkové spory.", 
+                "Mnozí historici se ztotožňují s domněnkou, že Kristián ('křesťan') je pseudonym Strachkvase, což byl vzdělaný syn Boleslava I. (bratrovraha). Pravděpodobně byl přímým účastníkem poselstva, jež mělo za cíl přimět znechuceného biskupa Vojtěcha k návratu zpět do Čech.", 
+                "S jistotou víme, že to byl pokřtěný chazarský kupec, který cestoval po Evropě s cyrilometodějskou misií, na Moravě se stal vášnivým kronikářem, přičemž jeho skutečné pohanské jméno bylo navždy pečlivě vymazáno ze všech dochovaných vatikánských a moravských archivů."
+            ], a: 2, exp: "Jméno Kristián znamená obecně 'křesťan'. Historici (Kosmas, později Pekař) jej ztotožnili se Strachkvasem (synem Boleslava I.), o němž Kosmas psal jako o nadaném žákovi. Třeštík se přikláněl k jeho přemyslovskému (nebo slavníkovskému) původu a účasti v poselstvu k Vojtěchovi." },
+            { q: "Čím se vyznačuje vysoce vytříbený jazyk a styl, jakým je Kristiánova legenda napsána?", options: [
+                "Je psána velmi hrubou, nespisovnou a hovorovou staročeštinou plnou vulgarismů a germanismů, což mělo vzbudit dojem, že autorem je zcela prostý, nevzdělaný pražský řemeslník a nikoliv elitní mnich.", 
+                "Autor zcela systematicky odmítá používat jakákoliv interpunkční znaménka a člení text pouze pomocí prázdných řádků, čímž vytvořil první středověký vizuální experimentální text na našem území.", 
+                "Vyznačuje se jednotným slovníkem čerpajícím z latinské Vulgáty a častým uplatňováním tzv. 'hyperbatonu' (narušení a odchylka od pravidelného slovosledu, kdy se slova nebo jejich skupiny od sebe oddělují za účelem zvýraznění důrazu a dodržení rytmu vět).", 
+                "Jazyk legendy je výhradně veršovaný (hexametr), přičemž každá kapitola striktně končí rýmovaným pětiverším oslavujícím moudrost a štědrost císaře Oty I., což značí silnou podřízenost Německu."
+            ], a: 2, exp: "Kristiánův jazyk je charakteristický, jednotný a čerpá slovník a citáty z Vulgáty. Zásadním znakem jeho stylu je tzv. hyperbaton, což je odchylka od pravidelného slovosledu (slova patřící k sobě jsou oddělena) kvůli důrazu a zachování pravidelnosti rytmu vět." },
+
+            // Kristiánova legenda - Detailní Děj (Předmluva a první kapitoly)
+            { q: "Jaký osobní a obdivný vztah vyjadřuje autor Kristián ve své proslulé 'Předmluvě' k tehdejšímu pražskému biskupu Vojtěchovi?", options: [
+                "Ostře a nevybíravě ho kárá za zbabělý a potupný útěk z pražského biskupství a vyhrožuje mu, že pokud se okamžitě nevrátí, nechá celé jeho slavníkovské příbuzenstvo zapsat do papežské klatby a exkomunikovat.", 
+                "S hlubokou úctou ho oslovuje jako váženého biskupa a svého synovce. Uvádí, že ho Vojtěch sám k tomuto náročnému sepisování přiměl; Kristián se sice pokorně obává své literární nevědomosti a nedostatků, ale doufá ve Vojtěchovu čtenářskou shovívavost.", 
+                "Zcela ho ve svém textu ignoruje a předmluvu věnuje výhradně německému císaři, aby tím Vojtěchovi uštědřil tvrdou politickou lekci a naznačil mu, že jeho pražská moc je již dávno a nenávratně zlomena a ztracena.", 
+                "Vynáší ho do nebes jako bezchybného božského vládce, jemuž nabízí celou českou zemi jako osobní dědičný majetek pod podmínkou, že Vojtěch poskytne klášteru v Řezně obrovské a každoroční finanční stříbrné desátky."
+            ], a: 1, exp: "V předmluvě Kristián oslovuje Vojtěcha (biskupa a svého synovce). Uvádí, že k sepsání díla byl jím přímo vyzván, byť ne pod velkým tlakem. Vyjadřuje skromné obavy ze svých nedostatků a nevědomosti, ale doufá v shovívavost při čtení." },
+            { q: "Podle vyprávění v prvních kapitolách Kristiánovy legendy došlo k významnému a určujícímu incidentu, když český kníže Bořivoj navštívil moravského vládce Svatopluka. Co přesně se při této události na moravském dvoře odehrálo?", options: [
+                "Bořivoj byl na Moravě uvítán s nebývalými poctami, zasypán dary a Svatopluk mu okamžitě, před zraky všech velmožů, slavnostně předal korunu a celou nadvládu nad velkomoravskou říší jako svému právoplatnému a oblíbenému nástupci.", 
+                "Při slavnostní hostině byl Bořivoj jakožto nečistý pohan vykázán od hlavního hodovního stolu a donucen sedět potupně na zemi na podlaze; Metoděj mu následně vysvětlil křesťanskou víru a po Bořivojově souhlasu ho společně s jeho doprovodem pokřtil.", 
+                "Svatopluk nechal Bořivoje v záchvatu hněvu ihned zrádně zatknout, uvrhnout do temné kobky a oslepit, protože se mylně domníval, že Bořivoj tajně a pod rouškou noci plánuje spiknutí a ozbrojený atentát s franskými žoldáky.", 
+                "Bořivoj na Svatoplukově dvoře veřejně a hlasitě křesťanství vysmál, znesvětil oltář a vyhlásil moravským kněžím krutou vyhlazovací válku, načež urychleně odjel zpět do Čech shromažďovat početná pohanská vojska."
+            ], a: 1, exp: "Kristián popisuje, jak byl Bořivoj pohoštěn moravským knížetem Svatoplukem, ale jako pohan se musel potupně posadit na podlahu. Biskup Metoděj mu následně promluvil do duše, vysvětlil výhody křesťanství, podrobil si ho duchovně a pokřtil ho (včetně kněze Kaicha pro Čechy)." },
+            { q: "Jaký tvrdý politický následek mělo Bořivojovo přijetí křesťanství a snaha stavět kostely bezprostředně po jeho návratu domů do Čech?", options: [
+                "Všichni Čechové křesťanství s obrovským jásotem přijali, dobrovolně rozbili své prastaré modly, zničili posvátné háje a z Bořivoje se okamžitě přes noc stal nejuctívanější a nejmocnější panovník celé tehdejší střední Evropy.", 
+                "Češi se ze strachu před novým, neznámým Bohem raději hromadně sebrali a mírumilovně, bez boje opustili české kotliny a natrvalo emigrovali dál na mrazivý, prázdný a opuštěný sever Evropy k Baltu.", 
+                "V Čechách proti Bořivojovi vypuklo silné pohanské povstání vedené Strojmírem (vyhnancem přivedeným z Německa). Bořivoj musel před vzbouřenci narychlo prchnout zpět na Moravu pod křídla a mocenskou ochranu Svatopluka a Metoděje.", 
+                "Německý císař obvinil Bořivoje z nepovoleného a drzého spolčování s Východem a nechal na Prahu okamžitě vojensky zaútočit svými drtivými a obrněnými saskými legiemi, čímž nastolil stoletou okupaci českých území."
+            ], a: 2, exp: "Po návratu Bořivoje do Čech a stavbě kostelů (např. sv. Klimenta na Hradci) proti němu vypuklo pohanské povstání, do jehož čela byl dosazen Strojmír (vyhnanec z Německa). Bořivoj musel utéct a vydat se o pomoc zpět na Velkou Moravu k Svatoplukovi a Metodějovi." },
+            { q: "V Kristiánově vyprávění se po smrti knížete Vratislava (otce Václava a Boleslava) ujala moci jeho velmi rázná vdova Drahomíra. K jakému krutému činu a kvůli čemu se brzy ze strachu odhodlala?", options: [
+                "Pojala obrovské a šílené podezření, že její zbožná tchyně Ludmila, která se starala o výchovu mladého Václava, usiluje o uchvácení absolutní moci nad knížectvím. Proto k ní na hradiště Tetín tajně vyslala dva nájemné vrahy (velmože Tunnu a Gommona), aby Ludmilu nemilosrdně usmrtili.", 
+                "Z obavy před rostoucím vojenským vlivem Saska tajně, v noci a bez vědomí rady starších vpustila do Prahy maďarské nájezdníky, aby nečekaně povraždili všechny německé kněze a kupce a zpustošili křesťanské kostely až do základů.", 
+                "Kvůli svému silnému fanatickému přesvědčení nařídila veřejně a rituálně na hranici upálit svého vlastního mladšího syna Boleslava, protože u něj v komnatě sloužící náhodou nalezli skryté drobné dřevěné symboly staroslovanských pohanských bohů.", 
+                "Rozhodla se trvale a mocensky upevnit svůj rodový vliv tím, že násilně a za použití zbraní přinutila starou kněžnu Ludmilu vstoupit do odlehlého a přísného ženského kláštera v cizině a odříznout ji tak navždy od rodiny a politického dění."
+            ], a: 0, exp: "Drahomíra po smrti manžela Vratislava začala vládnout za nezletilého Václava. Pojala podezření, že Ludmila (vychovávající Václava a žijící zbožně) usiluje o moc. Rozhodla se ji odstranit a vyslala na hradiště Tetín velmože Tunnu a Gommona, kteří Ludmilu zavraždili (uškrtili provazem)." },
+            { q: "Když dorazili vrahové Tunna a Gommon v noci do komnat na hradišti Tetín, o co je podle legendy bezprostředně před smrtí svatá Ludmila naléhavě, leč marně žádala?", options: [
+                "Prosila je na kolenou, aby ji ušetřili a raději s ní uprchli do Bavorska, kde jim oběma z vděčnosti slibovala vyplatit poloviční podíl z obrovského ukrytého státního zlatého a stříbrného pokladu.", 
+                "Žádala je, aby její smrt proběhla přísně rituálně ukamenováním podle starých a hrdých pohanských zvyků jejího rodu, čímž by oklamala a zesměšnila samotnou kněžnu Drahomíru u dvora.", 
+                "Prosila, aby k usmrcení použili dýku nebo meč a prolili její krev. Doufala totiž, že by tak na základě církevních tradic mohla být oficiálně prohlášena za svatou mučednici. Vrazi ji však zlomyslně udusili jejím vlastním závojem (provazem).", 
+                "S pláčem a křikem je zoufale zapřísahala, aby před smrtí mohla ještě naposledy na malou chvíli obejmout svého milovaného vnuka Václava a odkázat mu prsten s relikvií po svatém Metodějovi."
+            ], a: 2, exp: "Ludmila vrahy prosila, aby ji sťali mečem (prolití krve bylo vnímáno jako předpoklad pro uznání svatého mučednictví). Vrazi jí však nevyhověli a z obavy před jejím svatořečením ji zardousili (uškrtili provazem nebo jejím vlastním závojem), aby se neprolila krev." },
+
+            // Kristiánova legenda - Detailní Děj (Václav, Vražda, Zázraky)
+            { q: "Jak se po převzetí plné moci choval a spravoval svou zemi kníže Václav podle dochovaného oslavného vyprávění v Kristiánově legendě?", options: [
+                "Jeho vláda byla drasticky krutá a nespravedlivá; drancoval okolní vesnice, bezdůvodně trestal své poddané za nejmenší prohřešky, miloval bujaré pitky, nařizoval nesmyslně obrovské daně a naprosto opomíjel jakoukoliv péči o kostely a chudé.", 
+                "Trpěl silnými celoživotními depresemi a neustálými panickými stavy, v důsledku čehož zanedbával politiku, přenechal správu země zcela v rukou podplacených bavorských rádců a veškeré státní úspory rozdával potulným kejklířům.", 
+                "Panoval mimořádně spravedlivě, poctivě a pravdomluvně. Ze skromnosti a pokory prý chodil často bosý, tajně v noci sázel vinnou révu a pekl hostie z vlastnoručně umleté mouky. Pokud se opil, ráno se ihned běžel do kostela kát a odprosit Boha za svůj hřích.", 
+                "Rozhodl se rezignovat na panovnický titul, navlékl si chudou žebravou mnišskou kutnu a pěšky vyrazil na dlouhou a osamělou nebezpečnou poutní křížovou výpravu do Jeruzaléma, odkud do Čech posílal pouze zmatené dopisy v řečtině."
+            ], a: 2, exp: "Václav je v legendě idealizován jako vzorný světec. Panoval pravdomluvně a spravedlivě, pod knížecím šatem nosil kajícné roucho a často chodil bosý v mrazu. V noci tajně mlel obilí a pekl hostie, připravoval víno. A pokud se v noci na hostině opil, druhého dne to u Boha v slzách a modlitbách v kostele odprošoval." },
+            { q: "K tragické bratrovraždě svatého Václava došlo podle legendy ve Staré Boleslavi. Co bezprostředně předcházelo onomu děsivému a osudnému ránu 28. září 929 (resp. 935)?", options: [
+                "Václav nečekaně a bez pozvání vtrhl s armádou do Boleslavova sídla a s křikem požadoval vydání všech skrytých pohanských model; Boleslav však v noci uplatil Václavovy vojáky a ti ho ráno na nádvoří ubodali vlastními dýkami.", 
+                "Boleslav pozval Václava k sobě do Boleslavi na oslavu svátku Kosmy a Damiána a na hostinu. Ačkoliv byl Václav svými přáteli opakovaně varován před hrozícím nebezpečím a zradou, přesto do Boleslavi odjel. Po probuzení ráno pak směřoval do kostela k modlitbě.", 
+                "Bratři se dohodli na přátelském rytířském a sportovním souboji o nástupnictví. Ráno v den turnaje však Boleslav porušil všechna daná pravidla, zákeřně a nečestně otrávil Václavův slavnostní štít a probodl ho skrytým otráveným šípem.", 
+                "Václav se pod pláštíkem noci potají plížil k Boleslavově ložnici s úmyslem ho preventivně zavraždit v touze po absolutní moci. Ráno byl ale odhalen ostražitými boleslavskými strážnými, chycen při činu a bez soudu okamžitě zaživa upálen na nádvoří."
+            ], a: 1, exp: "Legenda uvádí, že bratr Boleslav Václava zdánlivě přátelsky pozval na svátek Kosmy a Damiána a hostinu do Boleslavi. Přestože Václav tušil nebezpečí a byl varován přáteli, do Boleslavi odjel. Ráno vstal a šel do kostela se pomodlit, načež na něj Boleslav s mečem v ruce zaútočil." },
+            { q: "Jak konkrétně byl podle drastického popisu v Kristiánově legendě svatý Václav onoho osudného rána před kostelem usmrcen?", options: [
+                "Boleslav na něj tiše namířil a zákeřně vystřelil otrávený šíp z okna nedaleké věže. Václav zasažen na místě zemřel a jeho tělo bylo poté potají svrženo do hluboké a bahnité vyschlé studny na okraji lesa.", 
+                "Když šel Václav k modlitbě, kněz podle příkazu zavřel dveře kostela. Boleslav poté vytasil meč a udeřil bratra do hlavy. Následně vyběhl připravený zástup ozbrojených zlosynů s meči a kopími a před zavřenými dveřmi kostela zraněného knížete surově ubili.", 
+                "Václav na Boleslavův útok rychle odpověděl a v sebeobraně svého bratra smrtelně zranil; do kostela se však následně na příkaz matky Drahomíry vlámala najatá vojska německých žoldáků, která Václava z posledních sil rozsekala válečnými sekerami.", 
+                "Boleslav nabídl u chrámových dveří Václavovi pohár rituálního mírového smíření naplněný otráveným vínem. Poté, co Václav v hrozných křečích a bolestech upadl na zem, Boleslav ho bez slitování zaživa nechal před zraky dvořanů upálit na velké hranici."
+            ], a: 1, exp: "Při cestě do kostela (kněz dveře úmyslně zavřel) Boleslav udeřil Václava mečem do hlavy. Na to vyběhl připravený zástup Boleslavových zlosynů s kopími a meči a bezbranného a zraněného Václava před zavřenými dveřmi chrámu brutálně ubili a usmrtili." },
+            { q: "Co mimořádného a zázračného se podle legendy stalo se svatou krví Václavovou, jež zůstala na zdech kostela těsně po jeho bestiálním zavraždění?", options: [
+                "Z krvavých skvrn na stěně údajně do tří dnů samovolně, zčistajasna a nečekaně vyrostly voňavé květy rudých růží, čímž Bůh jasně a veřejně demonstroval nevinnost a dokonalou čistotu zavražděného knížete před veškerým udiveným lidem a vojskem.", 
+                "Ačkoliv byla svatá a čistá krev ze stěn pečlivě omyta obyčejnou vodou, hned následujícího dne se nepochopitelně a zázračně objevila krvavá stopa na stěnách zčistajasna úplně znovu, jako by nikdy smyta nebyla a volala k nebi po nápravě.", 
+                "Krev neuvěřitelně rychle uschla a ztvrdla do takové naprosté a pevné tvrdosti připomínající skálu, že žádné myslitelné kovářské dláto, plamen ohně ani těžké kladivo nedokázalo tuto jedinou tmavou skvrnu z masivního zdiva nikdy vyrubat ani odsekat pryč.", 
+                "Okolo vší prolitých kapek krve mrtvého na zdech začalo okamžitě po brutálním činu nepochopitelně a nadpozemsky žhnout sálavé jasné a horké, spalující ohnivé nebeské modré světlo, které navždy strašilo a oslepilo každého provinilce z Boleslavovy zrádné krvavé družiny."
+            ], a: 1, exp: "Legenda vypráví, že se krev Václava stala ústředním zázrakem – i když ji ze stěn pečlivě omyli vodou, dalšího dne se ta samá krev na stěnách kostela zázračně objevila zcela znovu, což svědčilo o božím zásahu a velikosti Václavova mučednictví." },
+            { q: "Jak krutě a nekompromisně naložil po letech s jedním z hlavních zrádců a organizátorů Václavovy vraždy oddaný a mstitelský Václavův sluha jménem Podiven?", options: [
+                "Dohnal hrůzného zrádce k zoufalství neustálým štvaním po nocích, po čemž se vrah ze šílenství, temných běsů a hrůzy podřízl vlastním loveckým mečem na posvátné mýtině ve stínu stromů za hradbami města.", 
+                "Podiven tajně pod rouškou mlhy propašoval do nepřátelské pevnosti obrovský sud plný výbušného řeckého ohně a v nestřežené chvíli pod zlosynovým oknem odpálil nálož, čímž celý dvorec se zrádci srovnal se zemí.", 
+                "Po návratu z krutého dlouhého vyhnanství vzal plný hněvu svůj nabroušený meč, neústupně vtrhl přímo do domu a v rozpálené parní lázni (potírně) zosnovatele hrůzné vraždy svého dobrého pána Václava bez milosti proklál a na místě nemilosrdně usmrtil.", 
+                "V přestrojení za cizího a slepého mnicha z Pasy vnikl do kaple a otrávil posvátnou mešní vínovou konvičku, čímž zrádného kata pomalu a nepozorovaně zbavil života přímo u posvátného mramorového oltáře při odříkávání večerní nedělní liturgie."
+            ], a: 2, exp: "Když se Podiven (oddaný a statečný služebník Václavův) vrátil z dlouhého vynuceného vyhnanství, vzal si na obranu těžký meč, vpadl nekompromisně do domu jednoho z hlavních iniciátorů vraždy a přímo v parní lázni ho tím mečem popravil. Za to ho Boleslavovi vojáci posléze štvali lesy a nakonec na stromě potupně oběsili (jeho tělo přesto neshnilo)." },
+
+            // Kosmova kronika a pokračovatelé
+            { q: "Kosmova kronika (Chronica Boemorum) je bezesporu jedním z nejzásadnějších a nejdůležitějších textů našeho středověku. Do jakých tří ucelených knih neboli chronologických a dějinných bloků je toto stěžejní dílo Kosmou pečlivě rozděleno a strukturováno?", options: [
+                "První kniha se detailně zabývá dlouhými křížovými výpravami do Palestiny a cizími kraji. Druhá kniha oslavuje výhradně vládu císaře Karla IV. a třetí doplňuje text o cizí latinskou poezii a překlady bible z francouzštiny.", 
+                "První kniha (od stavby bájné babylonské věže po autorovu současnost s bájnými počátky). Druhá kniha (od r. 1038 - Břetislavovo tažení a mocenské spory - po r. 1092 smrt Vratislava II.). Třetí kniha oslavuje jako panovnický ideál Břetislava II. a končí rokem 1125 a smrtí Vladislava I.", 
+                "První kniha barvitě líčí obávané tatarské a turecké nájezdy z Východu. Druhá kniha se zaměřuje čistě na vznik a stavbu Karlovy univerzity a třetí shrnuje husitské revoluční a radikální války a slavnou bitvu u Domažlic.", 
+                "První kniha plně a s úctou oslavuje slovanskou misii Konstantina a Metoděje, zdůrazňuje cyrilici. Druhá část zkoumá vznik Kyjevské Rusi a spřízněné kmeny a třetí kniha končí popisem vzniku zcela nezávislé bulharské autonomní církve na severu."
+            ], a: 1, exp: "Kosmova kronika je skutečně rozdělena do 3 logických historických knih. 1. kniha obsahuje bájné počátky (od stavby babylonské věže po Krokův soud). 2. kniha vrcholí Břetislavovým tažením do Hnězdna a smrtí Vratislava II. (1092). 3. kniha představuje panovnický ideál v podobě knížete Břetislava II. a samotná kronika končí úmrtím knížete Vladislava I. roku 1125." },
+            { q: "Kosmas byl jako vzdělaný autor i člověk formován prostředím, ve kterém žil, a to se velmi silně odrazilo v politickém a společenském postoji celé jeho kroniky. Které ideologické a názorové prvky jsou pro jeho dílo charakteristické a zcela prokazatelné?", options: [
+                "Byl naprosto nekompromisním bojovníkem a zastáncem slovanské pravoslavné liturgie, z celého srdce nesnášel a zpochybňoval vliv vatikánského latinského duchovenstva a ve svém textu do detailů a s láskou popisuje působení Konstantina s Metodějem na Moravě a šíření hlaholice.", 
+                "Byl zarytým a nesmiřitelným stoupencem a propagátorem výhradně západní orientace a latinské církve s odmítavým a chladným stanoviskem ke slovanské liturgii (kterou v textech zcela ignoruje a zamlčuje); v kronice je dále zjevně a výrazně obsažen protiněmecký a protipolský osten v rámci ochrany českého trůnu a suverenity.", 
+                "Ve své kronice prosazoval radikální myšlenky německé kolonizace a připojení celého Česka pod přímou moc saských a římských markrabat; považoval Poláky za největší přátele Čechů a snažil se doložit, že všechny slovanské jazyky jsou zcela zbytečné, barbarské a bezcenné.", 
+                "Byl ve skrytu duše hluboce tajným stoupencem pohanství a prastarých keltských bájí; ve své knize neustále, skrytě i okatě útočí na katolickou církev i latinské kněze, jelikož sní o opětovném, romantickém a definitivním návratu českého kmene k uctívání Peruna, Radegasta a dalších starých bohů v hájích."
+            ], a: 1, exp: "Kosmas byl přesvědčený děkan svatovítské latinské kapituly. Byl absolutním stoupencem a protektorem západní latinské církve. Zaujal proto striktně odmítavé stanovisko ke slovanské liturgii (zcela zamlčel staroslověnskou tradici). Dalším rysem jeho textu je silná obrana české suverenity, spojená s jasnými protiněmeckými a protipolskými názory." },
+            { q: "Mezi takzvané přímé pokračovatele Kosmovy práce v psaní dějin patřili mj. 'Kanovník vyšehradský' a 'Mnich sázavský'. V čem se přístup anonymního Mnicha sázavského k historii a jazyku oproti Kosmovi (a dalším) významně odlišuje?", options: [
+                "Rozhodl se veškeré Kosmovy události z období dřívějších válek od základu úplně přepsat do němčiny, aby zajistil českým dějinám ohromný obdiv na dvorech německých a říšských markrabat a ochránil tak vyšehradský klášter před daněmi.", 
+                "Ačkoliv psal nadále latinsky, byl silným a oddaným stoupencem staroslověnské tradice v sázavském klášteře a na rozdíl od zaujatého Kosmy se o slovanštině s úctou, zájmem a sympatií otevřeně zmiňoval a neváhal do latinského textu přidávat obhajoby tohoto starého, utlačovaného slovanského obřadu a odkazu.", 
+                "Psaní kronik okamžitě zavrhl jako zastaralé, nespolehlivé a pro vědu nudné a začal místo nich skládat epické, žertovné divadelní frašky o morálce a úplatných mniších ve verších, jimiž po večerech rozesmával obyčejné pražské prosté a chudé rolníky na trzích.", 
+                "Soustředil se s naprostou exaktností pouze a výhradně na detailní vyčíslení majetku bohatých klášterů, popis a kresby půdorysů rozlehlých a chladných románských kostelních architektur a jakékoliv historické popisy válek nebo politiky králů považoval za hříšné, světské a nevhodné pro posvátný pergamen."
+            ], a: 1, exp: "Anonymní Mnich sázavský (autor spisu z 12. století) byl na rozdíl od Kosmase nakloněn utlačované sázavské slovanské liturgii. Navazoval sice na Kosmovu kroniku a doplňoval ji latinsky, ale naprosto zjevně sympatizoval a zastával se staroslověnského obřadu (ze sázavského kláštera) a na rozdíl od Kosmase se o slovanštině otevřeně zmiňoval a neopomíjel ji." },
+
+            // Zbraslavská kronika a Alexandreida
+            { q: "Zbraslavská kronika z počátku 14. století vyniká nejen svou historickou hodnotou pro zmapování doby, ale i vysoce kultivovanou formou. Kteří autoři za jejím sepsáním stojí a jaký politický postoj primárně a obratně obhajovali?", options: [
+                "Byli to dva nespokojení zemani, Křišťan a Strachkvas. Zcela odmítali tehdejší feudální systém církve, brojili s nenávistí proti majetku a korupci klášterů a prosazovali revoluční utopistické, bratrské a sociální rovnostářské komunistické blouznivé myšlenky mezi poddanými.", 
+                "Autorem byl jediný německý rytíř Wolf, který oslavoval bezohledné a tvrdé dobyvačné výboje braniborských kořistnických vojsk a markrabat v Čechách, popsal naprostý zmar a zkázu staré slovanské Prahy a s despektem se smál úpadku Přemyslovců.", 
+                "Jejími autory byli postupně vysoce vzdělaní cisterciáčtí opati Ota a posléze Petr Žitavský. Oba byli velkými a loajálními stoupenci a obdivovateli posledních Přemyslovců (zvláště Václava II.) a po jejich vymření se Petr Žitavský s nadějí odklonil od nevděčného Jana Lucemburského a silně se upnul s politickou podporou k nadějné Elišce Přemyslovně a malému kralevici Karlovi.", 
+                "Zpracovali ji společně pražští studenti práv z Karlovy univerzity. Byli tvrdými obhájci zkorumpované papežské cizí moci a odmítali přijmout rod Lucemburků, proti nimž pořádali tajné noční spiklenecké mše spojené s přípravou královy úkladné vraždy a převratu."
+            ], a: 2, exp: "Kronika zbraslavského kláštera (Chronicon Aulae Regiae) vznikla v 1. pol. 14. stol. a autory jsou cisterciáčtí opati Ota (psal k oslavě Václava II.) a posléze výtečný a vzdělaný stylista Petr Žitavský. Byli stoupenci Přemyslovců, avšak Petr Žitavský posléze prosazoval mladé Lucemburky, přičemž se v kronice po zklamání spíše odklonil od 'cizího' Jana Lucemburského a podporoval raději královnu Elišku a syna Karla (IV.)." },
+            { q: "O čem pojednává anonymní staročeská literární skladba nazvaná 'Alexandreida' a komu byla svým vznešeným stylem v tehdejší složité společnosti primárně adresována a komu skrytě pochlebovala?", options: [
+                "Je to velmi posměšná a sprostá satirická básnička složená prostými, nevzdělanými řemeslníky a nespokojenými rolníky na trzích. Hlavním cílem tohoto pamfletu bylo co nejvíce zostudit nabubřelost a bohatství vyšší vládnoucí třídy a králů pomocí vyobrazení ubohého, zchudlého a zbabělého krále Alexandra krčícího se před husitským cepem.", 
+                "Jde o stěžejní veršované dílo české světské epiky s vysokou uměleckou i básnickou úrovní. Její bezejmenný a vzdělaný autor, ač neznámý, v ní prostřednictvím hrdinských bojů mocného a udatného krále Alexandra Makedonského zcela zjevně a obdivně ztotožňuje tuto bájnou legendu s velikostí slavného českého panovníka Přemysla Otakara II.; dílo bylo určeno výhradně jako rytířské čtení pro elitu a vyšší dvorskou šlechtu.", 
+                "Jedná se o podrobný teologický staroslověnský překlad tajemných mnišských apokryfních listů z daleké severní Alexandrie v chladném Egyptě. Dílo obhajuje přísné a nudné asketické mnišství, naprosté odříkání od jídla, spánku i majetku, přičemž ostře a moralisticky útočí na bohatý, rozmařilý a dekadentní život rytířských hradů na jihu Itálie a Španělska.", 
+                "Představuje sbírku hrubých selských a zemitých komediálních povídek a frašek a oplzlých žákovských anekdot oslavujících vymyšleného, hloupého a ošklivého ruského cara Alexandra, který prý vynalezl pití silné medoviny a stvořil první slovanský kočovný cirkus se cvičenými medvědy a akrobaty bavící chudinu a sirotky po ulicích starého Kyjeva."
+            ], a: 1, exp: "Alexandreida představuje vrcholné a klíčové dílo staročeské světské epiky. Ač anonymní, oplývá na tu dobu nebývale vysokou uměleckou rýmovanou úrovní a s obdivem ztotožňuje slavného bájného vládce Alexandra Velikého s obdivovaným českým mocným králem železným a zlatým – Přemyslem Otakarem II. Tímto svým laděním, opovrhováním nečistými sedláky a akcentem na bitvy byla jasně a jednoznačně určena k poslechu a čtení pro elitu a vysokou hrdou válečnickou šlechtu." },
+
+            // Dalimilova kronika a 14. století
+            { q: "Jaké literární, politické a ideologické znaky jsou nejvíce signifikantní a typické pro autorství proslulé a nesmírně oblíbené česky psané veršované 'Dalimilovy kroniky' pocházející z první čtvrtiny bouřlivého 14. století?", options: [
+                "Je absolutně apolitická, nezaujatá a tichá. Přináší striktně objektivní a velmi nudný a pomalý historický přepis dřívějších latinských a moravských archivních suchých pramenů, a zcela spravedlivě, neutrálně a bez emocí hodnotí spory, činy i prohřešky vládnoucích cizích Němců i místních utlačovaných Čechů, a to bez jediného zjevného projevu jakéhokoliv národního cítění nebo nadšení pro vlastence.", 
+                "Jedná se sice o dílo anonymní (tradiční označení za děkana Dalimila bylo Dobrovským vyvráceno), ale nade vší pochybnost jde o dílo naprosto jasně, útočně a subjektivně zaměřené a politicky silně zabarvené. Autor je s největší pravděpodobností hrdý příslušník nižší šlechty, který ve verších vystupuje naprosto bezvýhradně vlastenecky (až nacionálně), neustále radí králi chránit českou složku, brojí proti cizotě a velmi tvrdě a opakovaně kritizuje zhoubnou a rozmáhající se cizí německou kolonizaci, módu i mravy a úpadkové chování měst.", 
+                "Ačkoliv kroniku vydal zřejmě německy mluvící potulný vzdělaný kněz či minnesänger, který si Čechy v době křížových válek velmi zamiloval, jde v podstatě o nekritickou a obdivnou oslavu nezastavitelné a skvělé německé a francké západní kultury, dravé a mocné civilizace, bohatých řádových rytířů a snahu ukázat místnímu chudému zaostalému domácímu středoevropskému podhradí krásu a velikost bohatého římského katolického západu a císařů v Itálii a na Rýnu.", 
+                "Celá kronika je napsána jako tajný a nebezpečný podvratný blouznivý text volající po vyvraždění kněží; je určena výhradně potulným potrestaným kacířům. Obsahuje stovky návodů na vybudování barikád, vzpouru s cepy a výrobu zbraní proti rytířům a knížatům; její autor se zašifrovaně, leč jednoznačně skrývá pod postavou chudého venkovského pobudy Dalimila vyzývajícího ke kompletní defenestraci všech katolických konšelů z hradeb do vod široké a kalné Vltavy."
+            ], a: 1, exp: "Tzv. Dalimilova kronika je skutečně nejstarší rýmovanou česky psanou kronikou. Autorství děkana Dalimila je dnes zpochybněno (omyl dřívějších historiků odhalen už J. Dobrovským). Autorem byl na svou dobu vzdělaný příslušník (nebo silný stoupenec) menší/nižší vlastenecké šlechty. Dílo se vyznačuje útočnou politickou a naprosto bezvýhradně a horlivě vlasteneckou (nacionální) linkou. Má jasný politický záměr s ostrou podporou Čechů a silně, vytrvale a otevřeně kritizuje nechtěnou cizotu, cizí (hlavně německou a braniborskou) rozpínavou kolonizaci, cizí módu a varuje i samotného krále Jana Lucemburského před cizími rádci, zvyky a mravy ze západu." },
+            { q: "Skladba z druhé poloviny 14. století nazvaná 'Legenda o sv. Kateřině' přestavuje zajímavý kontrast a skvostný doklad doby. V čem konkrétně spočívá stěžejní umělecký posun a literární význam tohoto vysoce stylizovaného díla?", options: [
+                "Posun spočívá ve výrazném uplatnění a posílení syrových dokumentárních, až žurnalistických suchých faktů. Hagiografická oslava víry světice je zcela zanedbána a potlačena, ustupuje do pozadí ve prospěch hrubých anatomických detailů u mučení, čímž dílo paradoxně ztratilo na své básnické a estetické oduševnělé křehkosti a poezii, stalo se pouhým brutálním středověkým krvavým záznamem exekucí v bahně žalářů pod rukama ohavného císaře Maxencia.", 
+                "Dílo zcela přepisuje postavu křesťanské mučednice tak, že svatá, čistá panna Kateřina z Kypru v příběhu ani na okamžik nestrpí ponižování od hrůzného vládce Maxencia a namísto tichého odříkání, pokory a odevzdání před trestem odhodlaně povstane z prachu žaláře, vyzbrojí ohromným počtem zbraní zbrojnici křesťanských vzbouřených vojsk na nádvořích Alexandrie a v divoké bratrovražedné apokalyptické bitvě o vládu nad Římem nakonec po těžkých ztrátách krvelačného císaře a jeho setniny osobně a z pomsty vlastníma rukama brutálně mečem stíná.", 
+                "Ačkoliv děj obsahuje tradiční i krvavé mučení zbožné kyperské princezny Kateřiny, která se mysticky zasnoubila se samotným Kristem a odmítla Maxencia, z historického hlediska jde o klenot; autor používá vysoce náročný styl s důmyslným a mistrným uplatněním složitých zvukových vrstev, vnitřních anafor, aliterací a básnických přesahů, čímž do velké míry upozadnil prostou dokumentární hagiografickou hodnotu a text povýšil na nevídanou čistou, vytříbenou poetickou uměleckou a zvukovou krásu, pro kterou dílo obdivovali i dvorští šlechtici tehdejších vladařů.", 
+                "Vydání legendy překvapivě způsobilo zákaz textu od samotného konzervativního a naštvaného tehdejšího papeže v Římě i biskupa a inkvizice, protože neznámý český básník úmyslně, s vtipem, potupně a kacířsky ironizoval dřívější staré a nudné katolické církevní mravy a přepsal posvátný starobylý latinský kánon tak, že namísto k mučení se svatá, ubohá Kateřina bezhlavě, sobecky a plna bláznivé tělesné hříšné světské vášně v tajnosti pod příkrovem noční hvězdnaté tmy romanticky zamiluje a nečekaně, šťastně v přestrojení potají vdává rovnou za pohanského mladíka, vojáka ze vzdálené hrůzné Maxenciovy nepřátelské neúprosné římské posádky, prchajíc od posvátného zaslíbení Bohu."
+            ], a: 2, exp: "Legenda o sv. Kateřině je výjimečná obrovským estetickým posunem k poezii a umění a vysoce kultivovanou formou veršů. Spojuje hluboce oddaný a truchlivý obsah (mučednictví čisté dcery kyperského krále Kateřiny, mystické svázání a sňatek s Kristem, kruté potupné mrskání a umučení od odmítnutého vládce Maxencia) s neuvěřitelně bravurním a na tu dobu výjimečným a vysokým veršovaným uměleckým řemeslem; s dokonalým básnickým rytmem, složitými promyšlenými a zvukomalebnými anaforami, aliteracemi (např. 'Zvěstujiť zlatý zázrak...') a častými přesahy ve verši. To vše jasně způsobilo, že historická a hrubá hodnota u ní zřetelně a značně ustupuje do pozadí právě na úkor oslavy dokonalé formy a vysoké vytříbené a dokonalé umělecké libozvučné básnické zvukové hodnoty slov pro čtenáře vysoké společnosti." },
+            { q: "Česká středověká divadelní hra, veršovaná absurdní i zemitá fraška známá pod stručným názvem 'Mastičkář', patří k neobyčejným klenotům. Jaká oblíbená divadelní, komediální a lehce oplzlá i humorná stěžejní scéna tvoří překvapivý komediální zvrat u krámku se zázračnými mastmi na jarmarku plném kupců?", options: [
+                "Podvodný židovský obchodník a pomocník Pustula za zády vznešeného a přísného středověkého lékárníka a ranhojiče, lékaře mistra Severina, s velkou drzostí smíchá posvátnou mešní krev s kočičím jedem a touto nebezpečnou, horkou a zakázanou tekutinou vzkřísí a zvedne mrtvou princeznu z márnice tím, že z hrnce a nádoby horký omamný jed prudce vychrstne zblízka dívce se smíchem do chladné tváře, načež jsou ale všichni ihned pochytáni inkvizicí za kacířství.", 
+                "Mistr léčitel, bohatý a arogantní Mastičkář Severin se svou povedenou čeládkou z tržiště (poté co opěvují lektvary) pro pobavení drsně a velmi vulgárně potírají vonnou a údajně drahou kvasnicovou léčivou sprostou mastí oholenou část – konkrétně chlupatý a oteklý zadek odřený po jízdě i rány na končetinách jedné nebohé mrtvé paní (často v hrubé interpretaci hercem). Obyčejný pomocník s prořízlou pusou, Pustula neboli prostořeký zrzavý sprostý drsný a hubatý sluha Rubín mu s ironií vysmívá marnost a předstíranou poctivost.", 
+                "Rozjařený mladík a přidrzlý sprostý a hlučný uličník u stánků, pomocník Pustula zvaný Rubín nejprve drze a nahlas vychvaluje neuvěřitelné a draho zaplacené mistrovy úžasné dovozové a kvalitní zázračné masti z ciziny; současně se ale k jeho vzteku a zlobě neustále potají mistrovi za zády svému drahému ctiteli cynicky, posměšně a drsně chechtá za zády a vysmívá chudobě a hlouposti; nakonec s pompou přichází vrchol groteskní parodie po rvačce na život, kdy sám mistr s kloboukem Severin k všeobecnému bouřlivému pobavení a úžasu chudiny zázračně resuscituje a probouzí z lehu zcela strnulého židovského nebožtíka syna Izáka tím absurdním úkonem, že mrtvole s nánosem vtipů obřadně a velmi komicky s vulgární poznámkou důkladně pomaže obě mrtvé půlky na zádech neboli chladný zadek pěnivými domácími a levnými hnědými kvasnicemi.", 
+                "Vážný a hluboce náboženský dramatický ponurý liturgický napjatý posvátný děj se nečekaně zvrtne v hroznou vřavu a tragédii krve za jarmarku, když k mastičkářskému bohatému stánku u brány přijdou ve svém truchlení biblické svaté utrápené a tiché milující plačící vdovy a ctnostné tiché a čisté biblické Marie se svatými lahvičkami z chrámu a žádají od přítomných šokovaných kacířů nejlepší myrhu, poctivé byliny a drahé masti pro pomazání těla usmrceného a ubitého trpícího Spasitele z Nazaretu; šarlatánský bezcitný i ohavný posměvačný tržní felčar drsný starý Severin z lakoty a chamtivosti s nimi drsně smluví obchod a s křikem rovnou odmítne v nouzi chudým matkám s posměšky lék i úlevu vydat vůbec nebo zdarma."
+            ], a: 2, exp: "Drama Mastičkář je světská, zemitá, prostořeká fraška vzniklá vsunutím mezi vážné pašijové výjevy (na motivy událostí s Kristovým pomazáním s Třemi Mariemi atp.). Hlavní zápletka na stánku ukazuje sprostého a posměvačného pomocníka Rubína (Pustulu), který sice hlasitě na trhu vychvaluje předměty a skvělé účinné drahé cizí a léčivé zázračné lektvary svého naivního pána mistra, lékárníka a potulného felčara ranhojiče jménem Severin, avšak současně mu s úšklebkem klidně i zjevně za rohem oponuje, drze odmlouvá s drzými posměšky a s drzým úsměvem se cynicky, hlučně, a pro čtenáře komicky mu posmívá za blbost. Velké absurdní divadelní oživení přináší až vzkříšení a parodické zmrtvýchvstání nešťastného malého nebožtíka Izáka z máry ze záhrobí od smrti zpátky díky naprosté bizarní záchranné operaci, kdy mistr z komedie a hamižný podvodník lékárník a Mastičkář Severin se svou hrubou vulgární poznámkou i pomocí sprostého drzého čeledína napatlá velkou ostudnou pěnivou uleželou směs s kvasnicemi zblízka za potlesku s křikem mrtvole v klidu na půlky, tedy rovnou vulgárně se smíchem odzadu na odhalený holý oteklý vychladlý nahý zadek z mrtvoly před diváky pro parodování samotného aktu pomazání." }
+        ];
+
+        let score = 0;
+        let answeredQuestions = 0;
+
+        const container = document.getElementById('quiz-container');
+
+        // Generování HTML a okamžité vyhodnocení
+        otazky.forEach((otazka, index) => {
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.id = `q-card-${index}`;
+            
+            const title = document.createElement('div');
+            title.className = 'question-title';
+            title.textContent = `${index + 1}. ${otazka.q}`;
+            card.appendChild(title);
+
+            const optionsDiv = document.createElement('div');
+            optionsDiv.className = 'options';
+
+            otazka.options.forEach((opt, optIndex) => {
+                const label = document.createElement('label');
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = `q${index}`;
+                radio.value = optIndex;
+                
+                radio.addEventListener('change', function() {
+                    const currentCard = document.getElementById(`q-card-${index}`);
+                    const allRadios = currentCard.querySelectorAll('input[type="radio"]');
+                    const labels = currentCard.querySelectorAll('label');
+                    const expDiv = document.getElementById(`exp${index}`);
+                    
+                    // Uzamknutí otázky
+                    allRadios.forEach(r => r.disabled = true);
+                    currentCard.classList.add('locked');
+
+                    const selectedVal = parseInt(this.value);
+                    const correctVal = otazky[index].a;
+
+                    labels[correctVal].classList.add('correct');
+
+                    if (selectedVal === correctVal) {
+                        score++;
+                        expDiv.className = 'explanation success';
+                        expDiv.innerHTML = `<strong>Správně!</strong><br><strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
+                    } else {
+                        labels[selectedVal].classList.add('incorrect');
+                        expDiv.className = 'explanation error';
+                        expDiv.innerHTML = `<strong>Špatně.</strong><br>
+                                            <strong>Správná odpověď:</strong> <em>${otazky[index].options[correctVal]}</em><br>
+                                            <strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
+                    }
+                    expDiv.style.display = 'block';
+                    answeredQuestions++;
+                });
+
+                label.appendChild(radio);
+                label.appendChild(document.createTextNode(opt));
+                optionsDiv.appendChild(label);
+            });
+
+            card.appendChild(optionsDiv);
+
+            const explanationDiv = document.createElement('div');
+            explanationDiv.className = 'explanation';
+            explanationDiv.id = `exp${index}`;
+            card.appendChild(explanationDiv);
+
+            container.appendChild(card);
+        });
+
+        // Finální shrnutí na konci
+        function zobrazitKonecneSkore() {
+            const resultDiv = document.getElementById('result');
+            
+            if (answeredQuestions < otazky.length) {
+                resultDiv.style.color = '#e67e22';
+                resultDiv.innerHTML = `Zatím jste odpověděl/a na ${answeredQuestions} z ${otazky.length} otázek. <br> Průběžné skóre: ${score} správně.`;
+                return;
+            }
+
+            const percent = Math.round((score / otazky.length) * 100);
+            resultDiv.innerHTML = `Váš konečný výsledek: ${score} z ${otazky.length} bodů (${percent} %).`;
+            
+            if(percent >= 80) {
+                resultDiv.style.color = '#27ae60';
+                resultDiv.innerHTML += "<br>Úctyhodný výkon! I přes náročné chytáky se ve starší české literatuře dokonale orientujete.";
+            } else if (percent >= 50) {
+                resultDiv.style.color = '#f39c12';
+                resultDiv.innerHTML += "<br>Velmi slušné. Otázky byly těžké a obsahovaly mnoho matoucích detailů, rámečky vám ale jistě napoví.";
+            } else {
+                resultDiv.style.color = '#c0392b';
+                resultDiv.innerHTML += "<br>Látka byla zjevně velmi náročná. Je tu hodně letopočtů a jmen – pozorně si pročtěte zdůvodnění špatných odpovědí.";
+            }
+        }
+    </script>
+</body>
+</html>
