@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Státnicový test ČJ - Otázka 10 (Vysoká obtížnost)</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 0.9em;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+        .question-card {
+            background: #fff;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            border-left: 5px solid #3498db;
+        }
+        .question-title {
+            font-weight: bold;
+            font-size: 1.15em;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        .options label {
+            display: block;
+            background: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid #e0e0e0;
+            line-height: 1.5;
+        }
+        .options label:hover {
+            background: #eef2f5;
+        }
+        .locked label {
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        input[type="radio"] {
+            margin-right: 15px;
+            margin-top: 4px;
+            float: left;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            font-size: 1.2em;
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 40px;
+            margin-bottom: 50px;
+        }
+        button:hover {
+            background-color: #1a252f;
+        }
+        .correct {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+            color: #155724;
+            font-weight: bold;
+        }
+        .incorrect {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+            color: #721c24;
+        }
+        .explanation {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            font-size: 0.95em;
+            display: none;
+            line-height: 1.6;
+        }
+        .explanation.success {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            color: #155724;
+        }
+        .explanation.error {
+            background-color: #fff3cd;
+            border-left: 5px solid #dc3545;
+            color: #856404;
+        }
+        #result {
+            font-size: 1.6em;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Státnicový test z ČJ (Otázka 10)</h1>
+    <div class="subtitle">Didaktická interpretace lyrické básně, Poezie 60. – 80. let, Oldřich Mikulášek a další básníci<br><strong>Vyberte odpověď – výsledek a zdůvodnění se zobrazí okamžitě.</strong></div>
+    
+    <div id="quiz-container"></div>
+    
+    <button onclick="zobrazitKonecneSkore()">Zobrazit celkové skóre</button>
+    <div id="result"></div>
+
+    <script>
+        const otazky = [
+            // Didaktika lyriky
+            { q: "Jaký je hlavní rozdíl mezi tzv. lyrikou bezprostřední (autoreprezentační) a lyrikou předmětnou (objektovou) z hlediska čtenářské recepce a role lyrického mluvčího?", options: [
+                "V bezprostřední lyrice vystupuje lyrický mluvčí vždy výhradně jako neutrální pozorovatel popisující historické děje v třetí osobě, kdežto v lyrice předmětné se mluvčí vždy identifikuje s autorem a popisuje výhradně své vlastní traumatické vzpomínky z dětství bez vnějšího vlivu.", 
+                "Bezprostřední lyrika je založena na osobní výpovědi lyrického subjektu o vlastním vnitřním prožitku, pocitu a stavu (čtenář pátrá po životním naladění subjektu), zatímco předmětná lyrika je orientovaná na konkrétní objekt či úsek vnější skutečnosti (čtenář hledá atmosféru a perspektivu nazíraného světa).", 
+                "Předmětná lyrika nevyžaduje od čtenáře žádnou představivost, neboť se jedná pouze o faktografický výčet dat a místopisných údajů, kdežto bezprostřední lyrika je natolik abstraktní a snová, že se v ní lyrický mluvčí zcela rozpouští a text přestává dávat jakýkoliv syntaktický smysl.", 
+                "V bezprostřední lyrice se autor snaží prostřednictvím dlouhých refrénů apelovat na kolektivní svědomí čtenářů k politické akci, zatímco předmětná lyrika je výlučně intimní formou zpovědi určenou k předčítání pouze v soukromí, bez jakékoliv snahy zachytit atmosféru okolí."
+            ], a: 1, exp: "Poznámky jasně definují tyto dva typy: Bezprostřední lyrika je osobní výpovědí lyrického subjektu (pocity, stavy, čtenář uvažuje o naladění subjektu). Předmětná (objektová) lyrika je orientovaná na konkrétní objekt či úsek vnější skutečnosti (čtenář vnímá perspektivu, atmosféru a potřebuje vnímavost pro imaginární svět a úhel pohledu mluvčího)." },
+            { q: "Proč představuje práce s lyrickou poezií pro starší žáky (zejména pubescenty) tak významnou čtenářskou bariéru a jaký mají tito žáci přirozený tendenční přístup k jazyku?", options: [
+                "Pubescenti totiž vnímají jazyk a slovo převážně jako ryze estetický nástroj, což vede k tomu, že v lyrice hledají výhradně složité rýmy a metafory a zcela ignorují jakýkoli skrytý psychický obsah nebo emocionální pocity, které báseň zprostředkovává.", 
+                "U pubescentů se plně vytrácí schopnost plynule číst nahlas, a proto lyrickou poezii odmítají; jejich prekoncepty jsou stavěny pouze na vizuálních vjemech z moderních komiksů a filmů, což znemožňuje jakýkoli verbální prožitek z textu.", 
+                "Tito žáci mají z vývojového hlediska silnou tendenci vnímat text a slovo převážně jako 'věc' (nástroj k předání věcné informace), kdežto v lyrice je nutné chápat slovo jako 'znak', v němž jsou zakódovány psychické obsahy a emotivní prožitky.", 
+                "Problém spočívá v tom, že pubescentní žáci vyžadují od literatury pouze přísně chronologické vyprávění s historickou přesností; jelikož lyrika často uplatňuje přísně lineární děj bez emocí, připadá jim příliš nudná a popisná."
+            ], a: 2, exp: "Bariéra spočívá v tom, že pubescent má tendenci sledovat spíše věcné informace a jazyk chápe jako nástroj k předání informací (slovo jako 'věc'). Lyrika však vyžaduje emocionální komunikaci a uplatňování znakového modelu (slovo jako 'znak', v němž jsou zakódovány emotivní prožitky a psychické obsahy)." },
+            { q: "Z jakého důvodu je didakticky tolik podstatný a důležitý hlasitý umělecký přednes lyrické básně hned na počátku práce s tímto literárním textem?", options: [
+                "Hlasitý přednes slouží primárně k tomu, aby učitel okamžitě zjistil, zda žáci umí bezchybně recitovat dlouhé pasáže zpaměti, a mohl je tak hned v úvodu hodiny známkovat za správné dýchání a artikulaci.", 
+                "V mnoha básních hraje zásadní a významotvornou roli zvuková kvalita poetického jazyka. Teprve hlasitý umělecký přednes dokáže u posluchačů (recipientů) navodit správné auditivní představy a plně podnítit jejich smyslové prožívání zakódovaných emocí.", 
+                "Tichá četba by u žáků vedla k okamžité ztrátě motivace, protože by báseň přečetli příliš rychle a následně by zbytek hodiny vyrušovali; hlasitý přednes tak slouží převážně jako prostředek k udržení disciplíny a pozornosti ve třídě.", 
+                "Přednes je důležitý pouze u básní napsaných ve staročeštině, kde hlasitá artikulace pomáhá učiteli odhalit a vysvětlit žákům správný význam zastaralých a neznámých pojmů, aniž by se museli zabývat celkovou náladou díla."
+            ], a: 1, exp: "Zvuková kvalita poetického jazyka hraje v lyrice ohromnou roli. Teprve hlasitý a přednes (ideálně učitelův) dokáže v recipientovi navodit potřebné auditivní představy a podnítit ho k plnému smyslovému prožívání básně. U tiché četby hrozí, že se interakce zredukuje pouze na vizuální recepci a promarní se příležitost motivace." },
+            { q: "V didaktice lyriky se uplatňuje tzv. 'metoda substituce'. V čem přesně tato tvořivá metoda spočívá a v jaké fázi práce s textem se obvykle využívá?", options: [
+                "Metoda se uplatňuje až v samotném závěru vyučovací hodiny a spočívá v tom, že učitel substitučně nahradí vybranou těžkou báseň jiným, mnohem lehčím textem od stejného autora, pokud vidí, že žáci původní dílo vůbec nepochopili.", 
+                "Tato metoda se využívá v percepční a apercepční fázi (při vnímání a utváření vnitřních představ) a nabízí se v situaci, kdy žáci nedokáží slovně vyjádřit svůj pocit z četby; učitel jim pomáhá tím, že se ptá, jakou by báseň měla barvu, vůni či tvar, kdyby ji bylo možné takto substituovat.", 
+                "Jde o přísně lingvistický postup z fáze konkretizace, kdy studenti musí v textu systematicky vyhledat a nahradit (substituovat) všechna slovesa a podstatná jména jejich přesnými historickými synonymy, čímž vznikne zcela nová báseň v archaickém stylu.", 
+                "Využívá se především ve fázi interpretace a spočívá v tom, že žáci musí zcela ignorovat původní obsah básně a místo toho mají za úkol vymyslet k úryvku naprosto odlišnou, fantaskní epickou zápletku."
+            ], a: 1, exp: "Metoda substituce se využívá v percepční a apercepční fázi. Pomáhá žákům, kteří nedokáží vyjádřit své pocity přímo z textu. Učitel jim proto nabízí substituční otázky typu: 'Jakou má báseň barvu?', 'Kdybyste báseň zhudebnili, jakým nástrojem?', 'Jaký by měla tvar?', čímž rozvíjí jejich estetickou citlivost a imaginaci." },
+            { q: "Co obnáší didaktická činnost zvaná 'rekonstrukce' při práci s lyrickou básní?", options: [
+                "Je to technika, při které se žáci učí nazpaměť celou báseň a následně ji musí doslova a do písmene zrekonstruovat na papír bez jediné gramatické chyby, čímž se procvičuje jejich vizuální a sémantická paměť.", 
+                "Spočívá ve vytváření obrazného záznamu dojmů (např. formou kresby nebo abstraktní malby), který má vyjádřit celkovou atmosféru textu, aniž by žáci k vyjádření použili jediné slovo.", 
+                "Znamená záměrné vynechání určitých částí básně (např. závěru, určitého rýmu nebo paralelního výčtu motivů) s určitým didaktickým záměrem; úkolem žáků je tyto chybějící části tvořivě dotvořit a následně své návrhy porovnat s originálem.", 
+                "Představuje historickou rekonstrukci dobového pozadí, kdy učitel žákům pustí dokumentární film o životě básníka a žáci z něj musí vypsat všechny klíčové události ovlivňující vznik básně."
+            ], a: 2, exp: "Rekonstrukce znamená dotváření určitých vynechaných částí básně (často závěru, konce básně apod.) žáky, kteří je chápou v kontextu předchozího textu, a jejich následné srovnání s autorovým originálem." },
+
+            // Poezie 60. let a mladší generace
+            { q: "Jaké zásadní a formální rysy charakterizují českou básnickou tvorbu v 60. letech 20. století (tzv. období uvolnění) ve srovnání s poezií z 50. let?", options: [
+                "Tato dekáda znamenala definitivní a striktní návrat k přísně pravidelnému rytmu a rýmu, autoři zcela odmítli experimenty a soustředili se výhradně na oslavu státních představitelů a radostné budovatelské verše opěvující rozvoj zemědělství.", 
+                "Byla to doba, kdy se poezie sjednotila do jednoho mohutného proudu tzv. existencialismu; zcela zanikly jakékoliv literární skupiny a všichni autoři publikovali pouze krátké, epigramatické básně zaměřené výhradně na kritiku studené války.", 
+                "Dochází k obrovskému rozšiřování tvarové škály, rozvolnění a rozbití pravidelného rýmování, k masivnímu přechodu k volnému verši, uplatňování autority a rozmanitosti přístupů. Zřetelně narůstá využívání konfliktnosti, dramatičnosti, meditativnosti a reflexe dobových událostí prostřednictvím složitých lyricko-epických skladeb.", 
+                "Poezie 60. let se naprosto oprostila od jakýchkoliv emocí a společenských témat a stala se ryze vizuálním uměním; básníci tvořili pouze tzv. kaligramy (básně-obrazy) určené pro výtvarné galerie, přičemž psané slovo zcela ztratilo svou sdělovací funkci."
+            ], a: 2, exp: "Pro 60. léta je charakteristické uvolnění politického klimatu, což se v poezii projevilo růstem náročnosti vnímatelů, rozvolňováním tvarové škály (rozbití pravidelného rýmu, přechod k volnému verši), využíváním dramatičnosti a konfliktnosti, uplatňováním autorské plurality a rozmanitosti a celkovým nárůstem meditativní a lyricko-epické tvorby." },
+            { q: "Který z následujících básníků patřil mezi výrazné představitele mladé básnické generace (narozené kolem r. 1930) a debutoval s verši reflektujícími často syrové poznání světa, civilizační pokrok i skepsi z přechodu do dospělosti, přičemž se v 60. letech výrazně podílel na formování literárního časopisu Květen?", options: [
+                "Jaroslav Seifert", 
+                "Karel Šiktanc", 
+                "Jan Zahradníček", 
+                "Vladimír Holan"
+            ], a: 1, exp: "Karel Šiktanc (nar. 1928, debutoval po r. 1950, představitel 'generace Května') patřil k mladším básníkům, kteří vnášeli do literatury uvolnění od stalinistického schématu. Mezi mladé autory Května či širšího okruhu kolem něj patřili i Miroslav Florian, Miroslav Holub či Jiří Šotola." },
+            { q: "Jaký stěžejní námět zpracovává rozsáhlá a pochmurná poema 'Heinovské noci' od Karla Šiktance?", options: [
+                "Báseň s ironií a vtipem zprostředkovává bujaré studentské noční oslavy po pádu stalinismu v pražských hospodách, přičemž oslavuje nově nabytou svobodu a uvolněné literární mravy 60. let.", 
+                "Představuje meditativní dialog básníka s antickými filozofy, který se odehrává ve snové krajině starověkého Řecka a zkoumá základní otázky smyslu lidské existence a touhy po nesmrtelnosti.", 
+                "Jedná se o hluboký osobní prožitek dvou tichých, mrazivých nočních hodin, které v naprosté bezmoci prožívá chlapec ukrytý nedaleko Kladna, čímž básník zprostředkovává nepředstavitelný děs a krutost spojenou s osudnou nocí vyhlazení Lidic.", 
+                "Vypráví epický příběh o osudech politických vězňů v jáchymovských uranových dolech; formou dopisů matce zachycuje utrpení, beznaděj, ale i drobnou naději mladých bratrů odsouzených na doživotí."
+            ], a: 2, exp: "Poema Heinovské noci od K. Šiktance velice intimně a s mrazením zprostředkovává osudnou noc lidické tragédie prostřednictvím prožitků, děsů a bezmoci chlapce ukrytého nedaleko Kladna, který vnímá hrůznost tohoto vyhlazení." },
+            { q: "Miroslav Holub, jeden z velmi uznávaných básníků tzv. poezie všedního dne, byl původním a dlouholetým povoláním významný vědec. Jak se tato jeho exaktní profese odrazila v jeho poetice?", options: [
+                "Zcela se od vědy distancoval a své básně psal úmyslně ve formě složitých středověkých zaříkávadel a mystických modliteb, aby tak unikl nudnému, racionálnímu světu pražských výzkumných laboratoří.", 
+                "Ve své tvorbě uplatňoval velkou racionalitu, logiku a využívání přímočarého věcného pojmenování i odborných výrazů; jeho básně (např. ve sbírce Slabikář či Karni teče krev) představují precizní analýzu světa, nemoci a života a vyzařuje z nich dominance sebejistoty a důvěry v rozvoj člověka.", 
+                "Vědecké postupy aplikoval výhradně tak, že všechny své básně šifroval pomocí složitých matematických vzorců a chemických rovnic, čímž vytvořil tzv. nesrozumitelnou poezii určenou jen a pouze úzkému okruhu svých kolegů z Akademie věd.", 
+                "Byl zhnusen dopady moderní techniky na přírodu, a proto ve svých sbírkách (např. Ačkoli) plamenně a emocionálně obhajoval návrat ke keltskému způsobu života v souznění s přírodou a napadal jakýkoliv vědecký výzkum."
+            ], a: 1, exp: "Miroslav Holub byl špičkový imunolog a v jeho poezii se odráží velká racionalita, využívání přesného věcného pojmenování (i lékařského či vědeckého) a logika. Sbírky jako Slabikář či Karni teče krev vynikají dominancí důvěry v rozvoj člověka a přesným vnímáním světa a jeho neduhů (např. problematiky nemocných)." },
+
+            // František Hrubín, Vladimír Holan, Jaroslav Seifert (60.-80. léta)
+            { q: "V 60. letech napsal František Hrubín rozsáhlou a slavnou lyrickoepickou skladbu 'Romance pro křídlovku'. Jaká dvě hlavní témata a roviny se v tomto díle osudově a melancholicky prolínají?", options: [
+                "Báseň je krutým vyprávěním o životě zrazených bojovníků z pražského povstání; v epické rovině líčí stavbu strašidelných barikád a v lyrické části pak oslavuje příchod osvobozenecké Rudé armády do zničené Prahy v květnu 1945.", 
+                "Prolíná se zde vyprávění o prosluněném a šťastném dospívání na Mělnicku s drsným, deziluzivním popisem autorových útrap z nucených prací v německé zbrojovce, což doplňují verše vzývající pád hitlerovského Německa.", 
+                "Skladba spojuje vyprávění mystického příběhu o pouti do Santiaga de Compostela s drsným pohanským obětováním, přičemž se autor formou staročeštiny vrací až k pramenům národní, keltsko-slovanské dávné a temné minulosti.", 
+                "Dílo vypráví dojemný příběh dospívajícího chlapce Vojty, který o letní pouti prožívá svou první osudovou milostnou fascinaci (Krásná Terina) i první setkání se smrtí (umírání dědečka). Tento děj se neustále potlačuje a střídá s hlubokou lyrickou rovinou básníkova bolestného ohlédnutí, vyznání a marné reflexe o pomíjivosti času."
+            ], a: 3, exp: "Romance pro křídlovku je stěžejní Hrubínovo dílo z 60. let, postavené na silném kontrastu lásky (první probuzení citu k Terině z potulného kolotoče) a smrti (hlídání umírajícího dědečka). Dějová (epická) linie příběhu ustupuje neustálým reflexím a lyrickým vyznáním zestárlého autora o marnosti a míjení." },
+            { q: "Co je hlavním tématem a znakem nesmírně obtížné a hluboce reflexivní básnické skladby 'Noc s Hamletem', kterou v tomto období dokončil Vladimír Holan?", options: [
+                "Skladba je humornou divadelní adaptací Shakespearovy hry, kde Holan ironizuje komunistické politiky a zasazuje děj Hamleta přímo do prostředí dobového sjezdu Československého svazu spisovatelů.", 
+                "Je to podobenství zjevující tragický úděl člověka formou polemiky s konvencemi, iluzemi a nesvobodou. Básník (lyrický mluvčí) vede v noci složitou rozmluvu s princem Hamletem, v níž uplatňuje symboly, sny a ohromné množství složitých významových vrstev dotýkajících se samoty a tajemství bytí.", 
+                "Jedná se o sbírku velmi krátkých a rytmických lidových říkadel a popěvků pro děti, jež mají formou jednoduchých hádanek a říkanek oslavovat příchod jara a krásu probouzející se venkovské a čisté české přírody.", 
+                "Dílo bylo sepsáno jako obrovský optimistický oslavný epos na počest letů do vesmíru, kde princ Hamlet představuje prvního kosmonauta, který z vesmíru promlouvá k básníkovi o radostné a zářivé technologické budoucnosti celého lidstva."
+            ], a: 1, exp: "Noc s Hamletem je jednou z nejsložitějších Holanových skladeb. Lyrický mluvčí v ní v noci rozmlouvá s Hamletem, což slouží jako východisko k hlubokému, meditativnímu a tragickému ponoru do samoty člověka, polemice s konvencemi, iluzemi, nesvobodou a tajemstvím života i smrti, a to vše skrze mimořádně bohatý jazyk, snové obrazy a složité symboly." },
+            { q: "Jaký zásadní posun ve formě i obsahu je charakteristický pro pozdní, bilanční sbírky Jaroslava Seiferta ze 60. až 80. let (např. 'Koncert na ostrově', 'Morový sloup', 'Býti básníkem'), jimiž si upevnil pozici až k zisku Nobelovy ceny za literaturu?", options: [
+                "Seifert se v nich naprosto nečekaně a striktně vrací ke svým dávným začátkům proletářské, revoluční poezie z 20. let; jeho pozdní básně jsou opět plné bojovných hesel o světové revoluci, využívají rázné refrény a zcela postrádají jakoukoliv melancholii či osobní vzpomínky.", 
+                "Tyto sbírky představují jeho hluboké a smířlivé vzpomínkové, bilanční pásmo. Básník postupně zcela upouští od pravidelného rýmu, přechází do podoby strohého a volného verše a jeho díla (např. Morový sloup) jsou prodchnuta silným motivem bilancování s životem, konečností, bolestnou marností i mrazivým motivem blízké smrti.", 
+                "Autor se v tomto období zaměřil výhradně na tvorbu dlouhých, prozaických, napínavých detektivních příběhů plných vražd ze staré Prahy, protože veškerou svou básnickou tvorbu po sovětské invazi v roce 1968 s obrovským odporem navždy veřejně odsoudil a zavrhl.", 
+                "Jeho poslední sbírky jsou zcela anonymními, absurdními a úsečnými výkřiky poskládanými pouze ze změti sprostých slov a hovorových nadávek; Seifert tím chtěl cíleně vyjádřit naprosté a konečné opovržení nad lhostejností českého národa během dlouhých a nudných let komunistické normalizace."
+            ], a: 1, exp: "V pozdním období Seifert zcela opustil svou typickou zpěvnou, rýmovanou formu a přešel k volnému verši (tzv. verš písňové podoby ustoupil do pozadí). Jeho poezie (Koncert na ostrově, Odlévání zvonů, Morový sloup) se stala mnohem strožejší, bilancující a hluboce reflexivní, výrazně se v ní prosadily pocity stárnutí, melancholie, konečnosti, stín smrti i osobní občanská a lidská zodpovědnost a vzdor proti tlaku normalizační moci." },
+
+            // Skácel, Diviš a Wernisch
+            { q: "Jaké literární rysy, motivy a jaký typický verš charakterizují vynikající poezii brněnského básníka Jana Skácela (autora mj. sbírek 'Kolik příležitostí má růže' či 'Smuténka')?", options: [
+                "Jeho tvorba se vyznačuje úžasně dlouhými, mnohastránkovými veršovanými příběhy plnými napětí a akce, odehrávajícími se převážně na moři, přičemž k vyjádření užívá nejkomplikovanějších latinských a řeckých slovíček pro ohromení vzdělaného čtenáře.", 
+                "Skácel ve svých básních agresivně a nevybíravě analyzuje naprostou destrukci moderního západního průmyslu, odmítá jakékoliv tradice a jeho díla připomínají chaotickou změť drsných a sprostých industriálních hesel bez zjevného rytmu i rýmu.", 
+                "Pro jeho poetiku je typická obrovská lapidárnost (stručnost) a úspornost slovního vyjádření, směřující k absolutní, dekorativní a barvité harmonii a oslavě prvotních, přírodních i lidských hodnot (ticha, paměti, dětství na venkově); často užívá formy čtyřverší a mistrně pracuje s pauzami, eufonií a čistým rýmem.", 
+                "Psal výhradně temné, groteskní, hororové básně v podobě dlouhých rozhovorů mezi mrtvými, čímž zcela popřel svou brněnskou optimistickou náturu; jeho klíčovým dílem je depresivní a beznadějný sborník krvavých moravských pohádek o upírech."
+            ], a: 2, exp: "Pro Skácelovu poezii je signifikantní úspornost (lapidárnost slovního vyjádření), snaha o nalezení absolutní harmonie, čistoty a dekorativnosti s úctou ke slovu. Opěvuje prvotní jistoty člověka (ticho, přírodu, dětství), často využívá dokonale zvládnutých drobných forem (nádherná čtyřverší) s pevnou rytmickou i rýmovou strukturou, z níž čiší obrovská lidská a moravská moudrost a klid." },
+            { q: "Výrazným, výbušným a značně expresivním představitelem české poezie (v exilu i v samizdatu) byl Ivan Diviš (autor sbírek 'Eliášův oheň' či 'Chrlení krve'). Co je pro jeho osobnost a lyrický projev nejtypičtější?", options: [
+                "Byl to velmi střídmý a uzavřený autor, který se vyhýbal jakýmkoliv konfliktům; jeho poezie plyne klidně, bez vzruchů a emocí a věnuje se výhradně úřednické a dokumentární faktografii z historie katolických kostelů v Čechách.", 
+                "Jako bývalý nadšený svazák tvořil i v pozdějším věku zcela optimistické, prorežimní verše s veselým, popěvkovým rytmem, které měly za úkol rozesmát a pobavit publikum na estrádách; vyhýbal se všem hlubokým myšlenkám a bolestným existenciálním paradoxům.", 
+                "V 60. letech se stal jedním z nejvlivnějších redaktorů Mladé fronty, prožil drsnou zkušenost s vězením gestapa a později i osudovou, nesmírně obtížnou konverzi ke katolictví. Jeho básnický projev je strhující, často rozervaný, chrlený s nesmírnou a zuřivou intelektuální i emocionální silou; je plný myšlenkových a morálních protikladů, hlubokých paradoxů a hledání pravdy uprostřed světového zmaru.", 
+                "Byl známý tím, že publikoval své verše zásadně jen a pouze pod složitými ženskými pseudonymy, aby unikl pozornosti kritiky; jeho díla tvoří výhradně krátké, něžné a bezbolestné ukolébavky o zvířátkách, a jakékoliv hlubší existenciální hledání se v nich nikdy a vůbec neobjevuje."
+            ], a: 2, exp: "Ivan Diviš byl výjimečný svým naprosto strhujícím, výbušným a doslova 'chrleným' expresivním, zuřivým i plačícím proudem veršů (jak naznačuje i titul Chrlení krve). Prošel gestapáckým vězením, krizí i těžkou, velmi opravdovou konverzí ke katolictví. Jeho poezie drásá svými myšlenkovými protiklady, paradoxy, básníkovou nesmírnou rozervaností a zuřivým, ale pravdivým hledáním cesty a Boha ve zkaženém světě." },
+            { q: "Ivan Wernisch, patřící k mladší generaci vstupující do literatury v 60. letech, se vyznačuje zcela nezaměnitelnou poetikou (např. ve sbírce 'Zimohrádek'). Čím jsou jeho básně z této doby charakteristické?", options: [
+                "Jeho poezie funguje jako suchá politická a angažovaná reportáž z doby budování velkých přehrad a plnění pětiletek, postrádající jakoukoliv představivost, humor či literární nadsázku, neboť se snaží co nejvěrněji oslavovat těžkou a strastiplnou manuální práci dělníků v hutích.", 
+                "Ve své tvorbě mistrně a nezaměnitelně pracuje se snářskou, snovou a jemně absurdní hravostí; s naprostou lehkostí kombinuje a vyobrazuje roztodivné žánrové obrázky, neukotvená, volně plynoucí torza nejrůznějších bizarních příběhů, fantazijní hříčky plné podivuhodných jmen a situací, jež se pohybují na hraně jemné ironie, snu a úsměvné nostalgie.", 
+                "Wernischovy verše jsou typické svou naprostou a děsivou brutalitou, krvavými vizemi a úzkostlivým lpěním na dokumentární přesnosti při popisování temných zvyků starých Aztéků a Májů, přičemž zcela odmítá jakýkoliv náznak jemnosti, hravosti nebo české poetické a básnické tradice.", 
+                "Zabývá se výhradně překlady velmi těžkých německých filozofických a teologických traktátů do podoby pravidelných rýmovaných znělek; jeho vlastní volná poetická invence se v jeho strohých dílech vůbec nevyskytuje a o snovou imaginaci či hravost se ze zásady u svých děl nikdy vědomě nepokouší."
+            ], a: 1, exp: "Ivan Wernisch je mistrem literární imaginace a hravosti. Jeho básně (Zimohrádek, Loutky) pracují se sny, hravými a často jemně absurdními či potrhlými bájnými výjevy. Charakterizují ho volně vznášející se torza nedokončených a vtipných snových příběhů, žánrové obrázky a schopnost vytvářet zvláštní, nostalgický a bezpečný 'snářský' svět plný úsměvného třeštění, mystifikace a imaginace." },
+
+            // Oldřich Mikulášek a Svlékání hadů
+            { q: "Oldřich Mikulášek (narozený v Přerově) tvoří vedle Jana Skácela druhý vrchol slavné brněnské poezie 20. století. V čem se však jeho poetika a celkové naladění (zřejmé např. ve sbírce 'Ortely a milosti') od Skácelovy harmonie a klidu tak výrazně odlišuje?", options: [
+                "Mikulášek skládal výhradně a pouze nesmírně optimistické, radostné a veselé popěvky k táborákům a bujarým oslavám; zcela a úmyslně se vyhýbal všem hlubším filozofickým tématům, zádumčivosti a nikdy ve svých básních nenechal zaznít jediný pesimistický motiv či smutek z uplynulého mládí.", 
+                "Jeho poezie je ve své podstatě obrovsky tichá, jednoduchá a nekonfliktní, zaměřená pouze na detailní, malířské popisy jarní a slunné moravské přírody bez jakýchkoliv odkazů na těžkosti moderního světa, složité lidské úděly, samotu nebo hořkou bolest.", 
+                "Vyznačuje se nesmírně komplikovanou, dravou a drásavou poezií; je to básník prudkých gest, reflexe, bolesti a neustálé vnitřní konfrontace s lhostejností a všedností okolního světa. Jeho dílo ostře a bolestně zkoumá rozdíl mezi životem a smrtí, nekompromisně tepe do zmechanizovanosti lidí a často v něm mohutně převažují silné, hluboce pesimistické, osamělé a chmurné motivy (smrt, hrob, hořkost, tma a pád) nad motivy radostnými a lehkými.", 
+                "Mikulášek psal jen a pouze dětská říkadla a vtipné hříčky ve formě přísně organizovaných rýmovaných a krátkých sonetů, přičemž jakákoliv snaha o hlubší reflexi, konfrontaci s totalitním zřízením či filozofické uvažování nad ztrátou lidskosti mu byla naprosto a z podstaty umělecky zcela lhostejná a cizí."
+            ], a: 2, exp: "Mikuláškova poezie je zosobněním dramatické, komplikované, a často nesmírně prudké, drásavé vnitřní reflexe a křeče (básník bolestného gesta). Ve své tvorbě neustále a nekompromisně konfrontuje okolní svět, bojuje proti lhostejnosti, zmechanizovanosti a obyčejnosti, snaží se zachytit skutečnost v prudkém pohybu. Tento obrovský, dravý rozpor s sebou nese převahu těžkých a hluboce pesimistických motivů (jako je pád, hrob, samota, smutek, drásavé umírání, stesk) nad motivy prosvětlenými a optimistickými." },
+            { q: "Co v Mikuláškově klíčové, zlomové a temné básnické sbírce 'Svlékání hadů' (1963) primárně představuje ono bolestné ústřední heslo a symbolický motiv samotného 'svlékání'?", options: [
+                "Představuje veselou, humornou a bezstarostnou zvířecí metaforu probouzející se jarní přírody po dlouhé a kruté zimě, kdy autor velmi laskavě a rozverně popisuje krásy a biologické procesy obyčejných zvířat žijících v radosti někde pod brněnským hradem Špilberkem.", 
+                "Je to velmi silný a kritický mravní symbol ostře odsuzující jakoukoliv lidskou přetvářku, pokřivené charaktery mravů, zbabělé kompromisy a pokrytecké přizpůsobování se vládnoucí většině, což vede básníka k přesvědčení a naléhavému provolání, že pravý člověk by měl raději hrdě, nezlomen a s jasnou ctí navždy odejít, než aby se podvolil, ztratil charakter a svlékl ze sebe vlastní, lidskou tvář.", 
+                "Tento motiv se váže výhradně k doslovnému vzpomínání autora na dlouhé exotické cesty po Indii a Asii, kde s obdivem a posvátnou úctou sledoval činnost zaklínače hadů a fascinovaně pozoroval staré okultistické rituály domorodců spojené s uctíváním plazů jakožto prastarých uctívaných a tajemných božstev slunce.", 
+                "Slouží jako chladný a úmyslně odstrašující výstražný prostředek pro neposlušné žáky v brněnských školách; autor formou výhružné didaktické rýmovačky straší zlobivé a vzpurné děti tím, že pokud nebudou poctivě pilné a nebudou se učit historii KSČ, přijdou o půlnoci obrovití hadi a ve spánku je nemilosrdně, zaživa kousek po kousku svlečou z jejich jemné a bezbranné dětské kůže."
+            ], a: 1, exp: "Svlékání hadů je v tomto kontextu zničujícím a kritickým symbolem pro lidskou bezzásadovost, morální apatii, odpornou přetvářku a zbabělé převlékání kabátů. Znamená to 'svlékat' vlastní morálku a pokřiveně se za každou cenu přizpůsobovat okolnostem a totalitnímu mrazu doby, jen abych pohodlně přežil. Mikulášek ostře a nekompromisně odsuzuje tuto lidskou lhostejnost a v básních dospívá k nezvratnému přesvědčení, že pravý, morální člověk má povinnost být charakterní a raději zvolit hrdý odchod nebo smrt ze scény s neposkvrněnou a čistou ctí, než aby zradil a ohnul páteř." },
+            { q: "Sbírka 'Svlékání hadů' začíná drobným a pro Mikuláška velmi ojedinělým formálním, a dosti provokativním prvkem, kterým je báseň 'Divoký kačer'. O jaký žánrový a textový útvar se přesně jedná a komu je tento text primárně věnován a vzkázán?", options: [
+                "Jde o nesmírně rozsáhlý a obsáhlý historický, latinsky psaný epický mnišský traktát o mnoha stech verších, v němž autor se vší vážností obdivuje krále Jiřího z Poděbrad a zasílá ho k posouzení na katolický papežský stolec do vzdáleného Říma.", 
+                "Je to zcela krátký a klasický pravidelný rýmovaný osmiveršový sonet o slunečném moravském létě, který Mikulášek něžně věnoval pouze své milované a jediné manželce jako omluvu za svou celoživotní výbušnost, prudkou melancholii a nespolehlivost.", 
+                "Jedná se překvapivě o krátký a úderný úvodní prozaický text (což je u jinak čistě lyrické básnické sbírky naprostá výjimka); v této provokativní předmluvě autor velmi sebevědomě a hrdě hlásá, co všechno už ve svém literárním životě velkého i bolestného dokázal a napsal, přičemž celé toto úvodní upřímné přátelství a vyznání hluboce a s obdivem věnuje svému kolegovi, brněnskému básníkovi Janu Skácelovi.", 
+                "Představuje dlouhou a vtipnou divadelní absurdní komickou jednoaktovku psanou v ostravském nářečí, kterou autor uštěpačně adresoval a dedikoval Milanu Kunderovi, aby mu s jemným a kamarádským humorem a nadhledem naprosto a dokonale vyvrátil jeho složité dobové existenciální filozofické románové koncepce o věčném návratu a lehkosti lidského žití."
+            ], a: 2, exp: "Báseň (respektive text) 'Divoký kačer', kterou je celá sbírka uvedena, je skutečně zcela neobvyklým, silným a úderným prozaickým textem. V této drobné prozaické předehře Mikulášek hrdě a s jistou básnickou sebejistotou a odhodláním ukazuje a hlásá to, co už na své dlouhé literární cestě nekompromisně s bolestí dokázal, zažil, ztratil a kolik toho už vytvořil. Celé toto niterné poselství a přátelství věnoval svému blízkému druhovi z Brna, obdivovanému a čistému poetovi Janu Skácelovi." },
+            { q: "Dílo 'Svlékání hadů' je velmi pečlivě rozčleněno do několika zřetelně oddělených, tematických a náladových oddílů (segmentů). Který z následujících, kompletních chronologických výčtů zcela přesně a beze zbytku pojmenovává všechny tyto oddíly?", options: [
+                "Kameny, Propasti, Hroby, Svlékání hadů, Bolest, Temnota, Ticho", 
+                "Oheň, Voda, Země, Vzduch, Láska, Smrt", 
+                "Toužení, Poháry, Svlékání hadů, Rybky, Tráva, Slova", 
+                "Ráno, Poledne, Svlékání hadů, Večer, Půlnoc"
+            ], a: 2, exp: "Zápisky zcela jasně, přesně a chronologicky uvádějí rozčlenění díla Svlékání hadů do následujících jednotlivých tematických segmentů a poetických oddílů: 1. Toužení, 2. Poháry, 3. Svlékání hadů, 4. Rybky, 5. Tráva, 6. Slova." },
+
+            // Mikulášek - Analýza básně Rybky
+            { q: "V krátké, ale nesmírně úderné a významově nabité Mikuláškově básni 'Rybky' nacházíme silné verše: „nad hladinou vyskakují rybky...“. Co v oné hluboké a skryté psychologické rovině tyto odvážné a křehké rybky vyskakující prudce nad hladinu vody pro samotného melancholického lyrického mluvčího primárně a obdivně symbolizují?", options: [
+                "Znázorňují obrovské, chladné a cynické bohatství tehdejší moravské komunistické politické smetánky, která se s obrovskou pýchou a hrabivostí ukazuje po večerech na povrch a arogantně dává na odiv svou těžce vybojovanou, leč zcela nezaslouženou a brutální neotřesitelnou společenskou i finanční všemocnou moc a drahé luxusní obleky plné zlata.", 
+                "Představují naprosto čistý a chladný symbol děsivé nevyhnutelné a konečné smrti, poněvadž se tyto hloupé rybky podle autora zjevně a zoufale snaží spáchat zcela dobrovolnou, nesmyslnou a trýznivou zbytečnou masovou a ošklivou zoufalou sebevraždu udušením se ve spalujícím horkém suchém vzduchu daleko, daleko od záchranné chladivé vody a bahna.", 
+                "Symbolizují odvážné bytosti, které mají ohromnou vnitřní sílu a neuvěřitelnou nespoutanou odvahu opustit své přirozené, známé a bezpečné, ale zároveň velmi fádní a nudné životní vodní prostředí; s velkým, a možná i fatálním osobním rizikem, se hrdě, plny obrovské odhodlanosti vydávají byť jen na okamžik prudce nad hladinu, a proto je velmi těžké, ne-li nemožné, tyto nespoutané a svobodné bytosti pak natrvalo kýmkoliv a čímkoliv ulovit a plně si podrobit a usadit do prázdných řad a spoutaných nespravedlivých struktur.", 
+                "Jsou to pouze a jen vymyšlené legrační a vtipné pohádkové a nevinné snové jiskřivé rybičky určeny do říkanek, které v sobě nemají vůbec žádný velký významový, temný ani filozofický existenciální přesah; autor jimi jen líbivě a barevně dokresluje veselou, slunnou a naprosto bezstarostnou ranní jarní bezkonfliktní idylku odehrávající se s vůní květů a smíchem nad rybníkem a pod stromy s ptačím zpěvem, kdy ryby s křidélky z legrace soutěží s ranním sluncem o to, která z nich se více a s větším potěšením nadechne čerstvého a voňavého vzduchu."
+            ], a: 2, exp: "Rybky vyskakující z bezpečí své všední hladiny jsou v Mikuláškově básni ztělesněním svobody a nesmírné odvahy (musí být skutečně odvážné, aby naprosto záměrně a dobrovolně s riskem vydaly samy sebe nad chladnou a klidnou známou hladinu do neznámého vzduchu). Tím, že tento kratičký krok mimo známý komfort podniknou, riskují tak i svůj osud a smrt; stávají se pro diváky a pozorovatele sítěmi takřka naprosto a dokonale kluzké, nedosažitelné, svobodné a pro nepřítele naprosto, ba přímo dokonale a dráždivě jen stěží zcela polapitelné, jak rychle, elegantně a nepolapitelně dokážou lidem z prstů opět proklouznout a uniknout tak jakémukoliv svázání." },
+            { q: "„na řetízku z vodních krůpějí / A padají zas do záňadří / řeky, a mně je smutněji.“ - Co v tomto mistrném a křehkém poetickém obrazu lyrické básně 'Rybky' zastupuje ten velmi přesně formulovaný 'řetízek z vodních krůpějí' a co přesně vyvolává v pozorujícím lyrickém subjektu (básníkovi) onen hluboký a nečekaný pocit zvláštního melancholického těžkého smutku a skepse?", options: [
+                "Jedná se o popis ztraceného, ohromně drahého skutečného a třpytivého stříbrného náhrdelníku (zlatého řetízku) po autorově zesnulé milované matce, který nešťastnou a hloupou dětskou náhodou dávno tragicky nepozorně utopil kdesi v hlubinách a temných chladných a ledových spodních bahnitých proudech neprostupné špinavé vody řeky Svitavy, a tenhle nekonečný smutný pocit nyní pramení jen a jen z jeho zoufalé, marné a nekonečné touhy a nekonečných snah tento utopený ztracený poklad vylovit.", 
+                "Řetízek zde velmi nápaditě, přesně a poeticky zcela zřetelně symbolizuje ty padající chladivé kapky obyčejné krásné a čiré vody, které během rychlého elegantního a volného hrdého skoku odletují prudce od hřbetů letících statečných svobodných a nepolapitelných ryb. Vnímavý pozorovatel (osamělý básník) cítí ohromný smutek proto, že těmto odvážným, volným a v marném a krásném letu krásným a obdivuhodným tvorům nesmírně a hluboce vnitřně v tichu závidí jejich nespoutanost, velkou a zjevnou chvilkovou adrenalinovou nesmírnou odvahu, i vzácný a letmý ochutnaný kousek neskutečné svobody, po které on sám celoživotně touží a marně prahne, ale na jejíž uskutečnění se nedostává ve skličující svázané smutné době síla.", 
+                "Jde o kruté, silné a doslovně utažené masivní tlusté kovové lano plné bodců uvízlé drsně u okraje kamenitého a špinavého říčního břehu s mrtvými úhoři po bitvě na Vltavě; pocit drtivého zmaru a nekonečného depresivního smutku pramení z toho, že básník jako ochránce se z obrovského hněvu zcela marně a se zoufalstvím pokouší zachránit a oživit ulovené trpící ubohé sténající bezbranné dusící se pomalu hnijící ryby lapené do těsné smyčky, a to bez jediného špetky úspěchu, díky zkaženosti lovců a krutosti řádu lidí v chudém státě.", 
+                "Tento obraz slouží pouze a jen jako zcela prázdná a nesmyslná složitá formální a zbytečná hluchá literární a lingvistická vycpávka pro rytmus slok pro udržení klasického verše do jambu; u autora samotného to pak vyvolává obrovskou skepsi, depresi, obrovský vztek a znatelný plačící nekonečný tvůrčí frustrující smutek jednoduše a zkrátka jen proto, že celou tuto hloupou dlouhou a nesmyslnou sloku prostě nedokázal lépe, úderněji a chytřeji, zvučně ani jednoduše a vesele pro děti v dobré poetické rýmované říkance a veselé jarní náladě dokončit a zrýmovat s další slokou sluncem zalité krásné dlouhé prosluněné hřejivé idylické odpočinkové hravé a radostné bezesné básně."
+            ], a: 1, exp: "Tento proslulý, uhrančivý a dojemný vizuální stříbrný řetízek z krůpějí (kapky stékající z mokrého rybího těla v letu) podtrhuje a dokresluje křehkou, ale velmi odvážnou neskutečnou svobodu rybek v krátkém nadechnutí mimo řeku a normální proud v jejich vymezených chladných koridorech. Pro vnímavého melancholického pozorovatele (mluvčího) pak nastává nesmírně smutná tichá a teskná sžíravá mrzutá vnitřní nálada a pocity hlubokého osobního trpkého vnitřního prázdna či závisti právě a přesně z toho faktu, jak moc a toužebně těm rybkám hluboce v tichosti závidí jejich obdivuhodnou a nespoutanou, leč jen chvilkovou nesmírnou obdivuhodnou naprostou volnou adrenalinovou nádhernou nesvázanou svobodu a velkou obdivovanou statečnou vnitřní odhodlanost s velkou odvahou, i ten malý chvilkový pocit obrovského nespoutaného vnitřního životního osvobozujícího nadšeného velkého úžasného nespoutaného a zatajeného prudkého silného úchvatného nepolapitelného letu." },
+            { q: "„Uvidíš, jen své oči zavři. / Nad hladinou vyskakují rybky / a některá se chytí. / Je tichá jak vzduch jarní v habří, / nepláče, jen se třpytí.“ - Jakou neúprosnou a krutou existenciální hrozbu a z ní vyplývající postoj představují tyto verše ve svém hlubším rozboru?", options: [
+                "Báseň ukazuje, že příroda je dokonalá, bezbolestná a rybky chycené udičkou mají z ulovení ohromnou radost a veselí a zpívají si. Nepláčou, protože ví, že ulovení je smyslem jejich idylického života u slunného rybníka s voňavými květy, takže nebezpečí tu neexistuje.", 
+                "Verše zachycují moment překvapivé přátelské symbiózy lovce a oběti. Rybka a pytlák společně v klidu odpočívají na slunné jarní mýtině v habří a třpytí se štěstím, a žádná hrozba se v básni vůbec nenachází, protože zvířata a lidé žijí v míru.", 
+                "Ukazuje hrozbu fatálního a nesvobodného polapení nespoutaného jedince (rybky); jakmile k takové drastické a nenadálé hrozbě či nezvratnému uvěznění od nepřítele sítěmi po odvážném skoku opravdu jednou nečekaně se stane, oběť s tím nenadělá nic a v pláči a smutku odevzdaně a s hrdostí i úžasným tichým mlčením v osamění potichu hrdě jen vyhasíná. Ponechána odevzdána svému nemilosrdnému a neustálému tichému chmurnému temnému katovi zcela potichu bez nářku a marně i napospas tiše s mrazem hyne a odevzdává osamoceně prázdný svůj vzácný vyhasínající nešťastný ubitý osud tichý i bolestivý marný dech bez reptání lhostejným i tichým nemilosrdným katům.", 
+                "Je to pouhý vizuální popis přírodního letního večera, kde padají tiché hvězdy, rybky se třpytí v odlesku lampionů a hrozbou je maximálně to, že by na chvíli zhaslo světlo lamp, které jim v parku ozařuje hravou dětskou vodotryskovou a jiskřící fontánu v chladném parném veselém vlahém bezpečném slunečném letním večeru bez chmurných mraků."
+            ], a: 2, exp: "Tento krutý zlom v básni popisuje hrozbu polapení (některá se chytí). Tedy hrozbu toho, že odvážná nespoutaná svoboda může skončit lapením do sítě moci. Pokud už však k nevyhnutelnému fatálnímu polapení této rybky neúprosným neznámým nepřítelem skutečně mrazivě potichu na háček znenadání osudově dojde, nezmůže s tím ulovená rybka sice už zhola v boji vůbec s tou obrovskou sítí a přesilou naprosto a dokonale s mocí a tichou silou lhostejnou nic a navíc odevzdána chladnému lhostejnému svému i tichému bezcitnému nepříteli s klidem na smrt rovnou tiše napospas, dokáže umřít hrdě bez slz (nepláče), tiše jako mrazivý studený neviditelný duch hrdého tichého klidného ranního nepostřehnutelného lhostejného krásného tichého ranního vlahého mlhavého slunného a ranního chladného průzračného lhostejného neviditelného tiše plynoucího hřejivého jarního klidného tichého průzračného nočního vlhkého vánku s leskem v krásném mladém listí na stromě a křoví pod stromy v neproniknutelném zeleném křoví stromů s listy klidného voňavého ztichlého jarního habří." },
+            { q: "„Viděl jsem malou rybičku, / jak polykala vodičku. / Rybičko, ty němá tváři, / do marné skřely si mne zavři, / budu tvou vodu píti.“ - Co vyjadřují tyto bolestně melancholické, marné a empatické prosby a závěrečné verše lyrického mluvčího v posledním zoufalém loučení se s marně chycenou odvážnou obětí?", options: [
+                "Autor se posměšně raduje z bohatého úlovku, ulovenou a bezbrannou malou rybičku na břehu provokativně potupí a v opilosti se snaží napít co nejvíce chladné říční vody, aby utišil svou vlastní velkou hamižnou touhu po skvělé a chutné obrovské masité pečené rybí pochoutce se žloutkem bez špetky pochybností.", 
+                "Mluvčí s láskyplným, něžným a udiveným výrazem a veselostí upřímně obdivuje malou a veselou třpytící se hravou a legrační akvarijní rybku uvězněnou celkem spokojeně za nádherným průhledným bezpečným čirým prosluněným obrovským domáckým čistým zářivým zrcadlovým čirým sklem z čerstvé chladivé okysličené okrasné nádherné domácí bezpečné oblé zářivé luxusní mísy (akvária bez nebezpečí hlubokých dravých obřích a slaných propastí) na stole v dětském bezpečném pokoji, a přeje a sní s touhou s ní společně s veselostí polykat sladké sypané drobné křupavé granulované žluté hravé vločky dobrého drahého levného a výživného sladkého žlutého výživného a lahodného sušeného rybího krmiva z plastu a kelímku u topení s radiátorem.", 
+                "Rybka je beznadějně lovci a na zemi chycena do úmoru, mlčky krvácí a zoufale po kapkách pomalu za lhostejnosti a sucha potichu bezbranná, ubitá a samotná odevzdaně naprosto tiše chmurně s bezvýchodným osudem chladně i velmi fatálně i nevyhnutelně hrdě zcela a mrazivě plně v osamění tichou hrdou tichou tiše umírá. Lyrický upřímný plačící citlivý empatický zlomený tichý utrápený truchlivý osamělý a sklíčený zničený rozlítostněný tichý citlivý a upřímně deprimovaný vnímavý tichý smutný plačící smutný básník i dojatý zničený zlomený upřímně milující smutný a zdrcený rozervaný smutný a odevzdaný básník a mluvčí promlouvá ze tmy udiveně k této němé oběti v křeči z posledního dechu umírající v chladné tiché bolesti trýznivě opuštěné hrdé tiše pomalu chladné a krutě tiché chycené němé trýznivou utišující a hrdou umírající v krvi i osudu a chladně utýrané s hrdostí opuštěné osamělé krutě odvážné nešťastné milé odvážné hrdé oběti chycené odevzdané tiše beze slov umírající vyhasínající lapené utýrané samotné statečné malé rybě a pociťuje zjevnou ohromnou a hořkou bolestnou lhostejnost, mrazivou temnou neuhasitelnou bolestnou obří utrápenou skepsi se značnou hlubokou pálivou těžkou i nevýslovnou hořkou mrazivou sžíravou hořkou beznadějnou a plačící tíživou a zlou pohlcující silnou beznadějí i smutkem nad osudem z nezadržitelnosti hrůzy z konce života a nad marností, se samotnou s hlubokou lítostivou prosbou o zatajené tajné přání, aby si ho ryba schovala z osamocení k sobě pro milosrdný úkryt v zoufalství na tu samou krutou bolestivou i nespravedlivou marnou konečnou a nezadržitelnou chladnou a zoufale konečnou nesvobodnou odevzdanou temnou drastickou fatální temnou krutou cestu prázdnou bez úlevy s prázdnotou pro hlubokou touhu se sdílením utrpení se smrtí k zemi tichou krutou a drastickou cestu smrt.", 
+                "Verše popisují s bezbřehým optimismem úspěšné nasazení ochranných opatření moderní ekologie, kdy se uměle vychované ubohé dusící se rybičky nakonec dočkaly slastného milosrdného vpuštění po proudu přes mříže zpět do milované hluboké modré studené okysličené řeky; básník je plný nesmírného nadšení a lásky pro tu neuvěřitelnou hřejivou naději, přeje krásným drobným potěrům bez nebezpečí volný a dlouhý úspěšný radostný let s ploutvičkami a přeje jim do života úspěch plný zdravé výživy, bez konce v osamění v sítě i hrobu."
+            ], a: 2, exp: "Poslední sloka v básni graduje a ukazuje nesmírný sklíčený pocit uvíznutí. Rybička z marnosti v osamění skutečně a beznadějně pomalu a odevzdaně tiše na suchu potichu naprosto tiše hyne, tiše ztrácí dech. Básník jako osamělý citlivý a truchlivý mluvčí a pozorovatel (který dříve obdivoval a potají plně v hrdosti celou tu nespoutanou a toužebnou krátkou úžasnou hrdinskou obří chvilkovou nesmírnou záchvatovou bezbřehou neomezenou ohromnou fantastickou udatnou hrdinskou statečnou snovou mrazivou udivující vznešenou svobodu a velký odvážný jiskřící krásný skok za radostí) pociťuje o to větší obrovskou hořkou i krutou mrazivou bezvýchodnou bolestnou a pohlcující těžkou tíživou zlou hlubokou hořkou propastnou stravující palčivou marnou odevzdanou silnou beznadějí skepsi a obrovský a sžíravý těžký úpěnlivý vnitřní zoufalý beznadějný beznadějný silný a nesmírně krutý trýznivý ohromný tichý sžíravý plačící nekonečný i fatální s beznadějí i slzavý hluboký marný a bezbřehý utýraný pláč pro úzkost smutek. Jeho napjatá utěšující hořká prosebná odevzdaná poslední dojemná s prošením se svázaná toužebná tichá plná smutku milosrdná toužebná skleslá závěrečná chmurná lítostivá vroucná plná smutku konečná milostná odevzdaná zoufalá a truchlící zoufalá nesmírně truchlivá závěrečná dojemná odevzdaná prosebná věta či potichu šeptaná poslední tiše deklamovaná prosba marná chladná tichá i bolestná prosebná věta ukazuje tu utrápenou osudnou ochotu k naprosté identifikaci s obětí a zoufalou plnou marnou i hlubokou silnou trýznivou utrápenou truchlící tajnou plačící snahu sdílet bezmoci v odevzdání rovnou společnou i ošklivou se zemřelou odevzdání společný krutý i hrdý bez naděje konečný s bolestivým smutkem osamělý drastický prázdný a krutý ztichlý s úlevou odevzdaný marný mrazivý temný společný ztichlý beznadějný bolestivý bezejmenný a ošklivý trpký smrtelný potichu krutý beznadějný i beznadějný konečný neukojitelný truchlivý stejný zoufalý osud po smutném konci a tragickou odevzdanou bezvýchodnou hrdou neústupnou tiše trpnou hořkou smrt z bezmoci s mlčením po nešťastném hrdinském marném činu do země utýrané pro bezmoc smrt i utrpení." }
+        ];
+
+        let score = 0;
+        let answeredQuestions = 0;
+
+        const container = document.getElementById('quiz-container');
+
+        // Generování HTML a okamžité vyhodnocení
+        otazky.forEach((otazka, index) => {
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.id = `q-card-${index}`;
+            
+            const title = document.createElement('div');
+            title.className = 'question-title';
+            title.textContent = `${index + 1}. ${otazka.q}`;
+            card.appendChild(title);
+
+            const optionsDiv = document.createElement('div');
+            optionsDiv.className = 'options';
+
+            otazka.options.forEach((opt, optIndex) => {
+                const label = document.createElement('label');
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = `q${index}`;
+                radio.value = optIndex;
+                
+                radio.addEventListener('change', function() {
+                    const currentCard = document.getElementById(`q-card-${index}`);
+                    const allRadios = currentCard.querySelectorAll('input[type="radio"]');
+                    const labels = currentCard.querySelectorAll('label');
+                    const expDiv = document.getElementById(`exp${index}`);
+                    
+                    // Uzamknutí otázky
+                    allRadios.forEach(r => r.disabled = true);
+                    currentCard.classList.add('locked');
+
+                    const selectedVal = parseInt(this.value);
+                    const correctVal = otazky[index].a;
+
+                    labels[correctVal].classList.add('correct');
+
+                    if (selectedVal === correctVal) {
+                        score++;
+                        expDiv.className = 'explanation success';
+                        expDiv.innerHTML = `<strong>Správně!</strong><br><strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
+                    } else {
+                        labels[selectedVal].classList.add('incorrect');
+                        expDiv.className = 'explanation error';
+                        expDiv.innerHTML = `<strong>Špatně.</strong><br>
+                                            <strong>Správná odpověď:</strong> <em>${otazky[index].options[correctVal]}</em><br>
+                                            <strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
+                    }
+                    expDiv.style.display = 'block';
+                    answeredQuestions++;
+                });
+
+                label.appendChild(radio);
+                label.appendChild(document.createTextNode(opt));
+                optionsDiv.appendChild(label);
+            });
+
+            card.appendChild(optionsDiv);
+
+            const explanationDiv = document.createElement('div');
+            explanationDiv.className = 'explanation';
+            explanationDiv.id = `exp${index}`;
+            card.appendChild(explanationDiv);
+
+            container.appendChild(card);
+        });
+
+        // Finální shrnutí na konci
+        function zobrazitKonecneSkore() {
+            const resultDiv = document.getElementById('result');
+            
+            if (answeredQuestions < otazky.length) {
+                resultDiv.style.color = '#e67e22';
+                resultDiv.innerHTML = `Zatím jste odpověděl/a na ${answeredQuestions} z ${otazky.length} otázek. <br> Průběžné skóre: ${score} správně.`;
+                return;
+            }
+
+            const percent = Math.round((score / otazky.length) * 100);
+            resultDiv.innerHTML = `Váš konečný výsledek: ${score} z ${otazky.length} bodů (${percent} %).`;
+            
+            if(percent >= 80) {
+                resultDiv.style.color = '#27ae60';
+                resultDiv.innerHTML += "<br>Vynikající! Hrabal, Kundera, Páral i Fuks pro vás zjevně nejsou žádný problém.";
+            } else if (percent >= 50) {
+                resultDiv.style.color = '#f39c12';
+                resultDiv.innerHTML += "<br>Slušný výkon. Otázky byly těžké a podrobné – projděte si u chyb zdůvodnění a získáte pevnější půdu pod nohama.";
+            } else {
+                resultDiv.style.color = '#c0392b';
+                resultDiv.innerHTML += "<br>Tohle byla opravdu náročná a spletitá látka z literatury 60. let. Rámečky s vysvětlením vám určitě pomohou pochytat ty složitější nuance.";
+            }
+        }
+    </script>
+</body>
+</html>
