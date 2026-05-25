@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <title>Státnicový test ČJ - Otázka 15</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f4f7f6; padding: 20px; color: #333; line-height: 1.6; }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { text-align: center; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        .question-card { background: #fff; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-left: 5px solid #3498db; }
+        .question-title { font-weight: bold; margin-bottom: 15px; }
+        .options label { display: block; background: #f9f9f9; padding: 12px; margin: 5px 0; cursor: pointer; border: 1px solid #ddd; border-radius: 4px; transition: 0.2s; }
+        .options label:hover { background: #eef2f5; }
+        .correct { background-color: #d4edda !important; border-color: #c3e6cb !important; font-weight: bold; }
+        .incorrect { background-color: #f8d7da !important; border-color: #f5c6cb !important; }
+        .explanation { display: none; margin-top: 15px; padding: 10px; border-left: 4px solid #3498db; background: #eef; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Státnicový test ČJ (Otázka 15)</h1>
+        <div id="quiz-container"></div>
+        <button onclick="zobrazitKonecneSkore()" style="width:100%; padding:15px; font-size:1.2em; cursor:pointer; background:#2c3e50; color:#fff; border:none; border-radius:5px;">Zobrazit celkové skóre</button>
+        <div id="result" style="text-align:center; font-size:1.5em; margin:20px;"></div>
+    </div>
+
+    <script>
+        const otazky = [
+            // Didaktika
+            { q: "Jaký je hlavní cíl programu RWCT v českém školství?", options: ["Soustředit se na memorování faktů a historických souvislostí bez diskuse.", "Rozvíjet u žáků samostatné myšlení, schopnost spolupracovat a aktivně se podílet na výuce.", "Používat literaturu výhradně jako nástroj pro nácvik pravopisu a gramatiky.", "Vytvořit striktní hierarchii mezi učitelem a žákem pro lepší kázeň ve třídě."], a: 1, exp: "Program RWCT (Reading and Writing for Critical Thinking) se zaměřuje na rozvoj kritického myšlení, samostatnosti a kooperace." },
+            { q: "Fáze 'evokace' v modelu E-U-R slouží k:", options: ["Předání nových informací žákům formou učitelova výkladu.", "Uvědomění si žákovy původní představy a formulaci otázek k tématu.", "Písemnému testování znalostí z minulé hodiny.", "Závěrečnému hodnocení výsledků vzdělávacího procesu."], a: 1, exp: "Fáze evokace má za cíl aktivovat předchozí znalosti a vyvolat zájem žáků o nové téma." },
+            { q: "Metoda 'vnitřního monologu' v didaktice literatury vede žáka k tomu, aby:", options: ["Zpaměti recitoval dlouhé úryvky z literárního textu.", "Se vžil do role literární postavy a dotvářel její charakter i vnitřní prožívání.", "Mechanicky přepisoval děj knihy do školního sešitu.", "Sledoval průběh hodiny pouze jako pasivní pozorovatel."], a: 1, exp: "Metoda vnitřního monologu umožňuje žákovi hlubší ztotožnění s postavou a dotvoření její charakteristiky." },
+            { q: "Co je podstatou 'metody aleje' (uličky) v tvůrčí dramatice?", options: ["Žáci seřadí židle do řady a učitel přednáší.", "Žáci vytvoří uličku a hlavní postava jí prochází, přičemž naslouchá myšlenkám a vlivům, které ji oslovují.", "Žáci kreslí mapu uliček, kde se odehrává děj povídky.", "Jde o improvizační soutěž v recitaci na čas."], a: 1, exp: "Metoda aleje simuluje vnitřní boj postavy, která prochází řadou spolužáků představujících myšlenky či vlivy, které ji ovlivňují." },
+            { q: "Metoda 'podvojného deníku' vyžaduje:", options: ["Psaní dvou samostatných deníků každý den.", "Rozdělení papíru na části: jedna pro citát/obraz z textu, druhá pro úvahu či interpretaci.", "Psaní poznámek do dvou různých sešitů v závislosti na typu písma.", "Psaní deníku pro učitele a druhého pro rodiče."], a: 1, exp: "Podvojný deník spočívá v zápisu citátu/obrazu a následné úvaze o tom, proč žáka pasáž zaujala." },
+            
+            // Hrabal
+            { q: "Kde Bohumil Hrabal strávil významnou část svého dětství a mládí?", options: ["V Brně, kde vystudoval techniku.", "V Nymburce, v prostředí místního pivovaru.", "V Praze, kde se narodil a celý život žil.", "Na venkově, kde pracoval jako rolník."], a: 1, exp: "Bohumil Hrabal vyrůstal v Nymburce v pivovaru, což se silně odrazilo v jeho tvorbě." },
+            { q: "Bohumil Hrabal vystudoval:", options: ["Technickou univerzitu.", "Právnickou fakultu UK.", "Filozofickou fakultu.", "Akademii výtvarných umění."], a: 1, exp: "Hrabal pokračoval ve studiu na Právnické fakultě UK." },
+            { q: "Jedním z Hrabalových slavných děl je:", options: ["Slezské písně.", "Příliš hlučná samota.", "Král Lávra.", "Kytice."], a: 1, exp: "Novela Příliš hlučná samota patří k Hrabalovým klíčovým dílům." },
+            { q: "V Hrabalových povídkách (např. Perlička na dně) autor často čerpá z:", options: ["Dětských pohádek.", "Vlastních pestrých životních zkušeností (povolání).", "Historických kronik 15. století.", "Cizích překladů antických děl."], a: 1, exp: "Hrabal vystřídal mnohá povolání (balič papíru, výpravčí, kulisák), což mu umožnilo poznat lidi a nalézt v nich 'perličky'." },
+
+            // Generace buřičů a počátek 20. století
+            { q: "Co je typickým rysem generace buřičů?", options: ["Pravidelný rým a zbožnost.", "Bohémský život, anarchismus, vitalismus a opovržení konzervatismem.", "Striktní dodržování pravidelných forem.", "Úzká spolupráce s církví."], a: 1, exp: "Buřiči byli básníci života a vzdoru, bohémského založení, ovlivnění anarchismem a vitalismem." },
+            { q: "Autorem Slezských písní je:", options: ["Viktor Dyk.", "Petr Bezruč.", "Stanislav Kostka Neumann.", "Fráňa Šrámek."], a: 1, exp: "Slezské písně napsal Petr Bezruč." },
+            { q: "František Gellner se ve své tvorbě vyznačoval:", options: ["Složitými metaforami.", "Krátkými, údernými verši, využívajícími lidový tón.", "Oslavou rakouského císařství.", "Historickými eposy."], a: 1, exp: "Gellner psal krátké, kritické verše, spíše písně než básně, vyhýbal se složitým metaforám." },
+            { q: "Fráňa Šrámek byl ovlivněn:", options: ["Impresionismem a vitalismem.", "Husitskou tematikou.", "Barokní mystikou.", "Vědeckým realismem."], a: 0, exp: "Šrámkova tvorba byla ovlivněna impresionismem a vitalismem (např. sbírka Splav)." },
+            { q: "Viktor Dyk napsal novelu:", options: ["Krysař.", "Slezské písně.", "Máj.", "Bambino di Praga."], a: 0, exp: "Viktor Dyk je autorem novely Krysař." },
+            { q: "Co kritizuje Dyk v Krysaři?", options: ["Absenci železnice ve městě.", "Lhostejnost k neštěstí, sobectví a zneužívání moci.", "Nedostatek vzdělání u dětí.", "Cizí armády."], a: 1, exp: "Krysař kritizuje společenské problémy – lhostejnost k neštěstí, závist a zneužívání funkcí." },
+
+            // Normalizace a exil
+            { q: "Jaká byla politická situace po roce 1968?", options: ["Uvolnění cenzury.", "Nástup normalizace, obnovení cenzury a čistky v KSČ.", "Zrušení politických stran.", "Rozkvět svobodné kultury."], a: 1, exp: "Po srpnu 1968 nastalo období normalizace, konec uvolňování a obnova cenzury." },
+            { q: "Co představoval samizdat?", options: ["Oficiální edici knih.", "Komunikační kanál pro autory, kteří nemohli publikovat oficiálně.", "Časopis vydávaný vládou.", "Zahraniční vysílání."], a: 1, exp: "Samizdat byl nezávislý kanál pro šíření děl autorů vyřazených režimem." },
+            { q: "Arnošt Lustig se ve své tvorbě zaměřoval na:", options: ["Historii husitství.", "Tématiku holocaustu a 2. světové války.", "Budování socialismu.", "Venkovskou prózu."], a: 1, exp: "Lustigova tvorba je spjata s židovskou tematikou a hrůzami války." },
+            { q: "Ladislav Fuks je známý románem:", options: ["Spalovač mrtvol.", "Žert.", "Soukromá vichřice.", "Slezské písně."], a: 0, exp: "Spalovač mrtvol je jedním z nejznámějších Fuksových děl." },
+            { q: "Milan Kundera napsal:", options: ["Nesnesitelnou lehkost bytí.", "Krysaře.", "Příliš hlučnou samotu.", "Slezské písně."], a: 0, exp: "Kundera je autorem románu Nesnesitelná lehkost bytí." },
+            { q: "Co byla edice 'Petlice'?", options: ["Státní nakladatelství.", "Samizdatová edice založená Ludvíkem Vaculíkem.", "Skupina undergroundových hudebníků.", "Název novin."], a: 1, exp: "Edici Petlice založil Ludvík Vaculík pro vydávání neoficiální literatury." },
+            { q: "Josef Škvorecký byl klasickým autorem:", options: ["Českého exilu.", "Socialistického realismu.", "Předválečného avantgardismu.", "Renesanční prózy."], a: 0, exp: "Škvorecký je legendou českého exilu, založil nakladatelství Sixty-Eight Publishers." },
+            { q: "Pavel Tigrid byl:", options: ["Ministrem vnitra.", "Významným představitelem exilu a autor děl o dějinách.", "Oficiálním spisovatelem režimu.", "Redaktorem Rudého práva."], a: 1, exp: "Pavel Tigrid byl obrovskou autoritou exilu, vydával časopis Svědectví." },
+            { q: "Vladimír Páral je ovlivněn:", options: ["Chemií (studium a prostředí).", "Poezií buřičů.", "Barokní mystikou.", "Husitstvím."], a: 0, exp: "Páral byl chemik, což ovlivnilo jeho tvorbu, např. Soukromou vichřici." },
+            { q: "Jan Trefulka napsal dílo:", options: ["Pršelo jim štěstí.", "Dita Saxová.", "Žert.", "Krysař."], a: 0, exp: "Trefulka je autorem novely Pršelo jim štěstí." },
+            { q: "Co je hlavní tématem románu 'Žert' Milana Kundery?", options: ["Sňatky v lázeňském městě.", "Politická situace, vztahy a dopad jednoho 'žertu' na život člověka.", "Válka v husitských Čechách.", "Život na venkově."], a: 1, exp: "Román Žert zkoumá politické poměry a osobní tragédii vyvolanou nedorozuměním." },
+            { q: "Eva Kantůrková napsala:", options: ["Přítelkyně z domu smutku.", "Slezské písně.", "Příliš hlučnou samotu.", "Král Lávra."], a: 0, exp: "Kantůrková je autorkou Přítelkyň z domu smutku." },
+            { q: "Ludvík Vaculík byl autorem manifestu:", options: ["Dva tisíce slov.", "Charta 77.", "Prohlášení spisovatelů.", "Manifestu moderny."], a: 0, exp: "Vaculík napsal manifest 2000 slov." },
+            { q: "Pavel Kohout byl po roce 1968:", options: ["Zákazán publikovat.", "Prezidentem republiky.", "Oficiálním dramatikem režimu.", "Redaktorem Rudého práva."], a: 0, exp: "Kohout dostal po roce 1968 zákaz publikace." },
+            { q: "Vladimír Körner se ve svých dílech zaměřoval na:", options: ["Současnou sci-fi.", "Historické baladické příběhy o člověku drceném dějinami.", "Humorné fejetony.", "Vědeckou fantastiku."], a: 1, exp: "Körner (Zánik samoty Berhof, Údolí včel) psal historické, baladické příběhy o tragických osudech lidí v dějinách." }
+        ];
+
+        let score = 0;
+        let answeredQuestions = 0;
+        const container = document.getElementById('quiz-container');
+
+        otazky.forEach((otazka, index) => {
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.id = `q-card-${index}`;
+            const title = document.createElement('div');
+            title.className = 'question-title';
+            title.textContent = `${index + 1}. ${otazka.q}`;
+            card.appendChild(title);
+            const optionsDiv = document.createElement('div');
+            optionsDiv.className = 'options';
+            otazka.options.forEach((opt, optIndex) => {
+                const label = document.createElement('label');
+                const radio = document.createElement('input');
+                radio.type = 'radio'; radio.name = `q${index}`; radio.value = optIndex;
+                radio.addEventListener('change', function() {
+                    const currentCard = document.getElementById(`q-card-${index}`);
+                    const allRadios = currentCard.querySelectorAll('input[type="radio"]');
+                    const labels = currentCard.querySelectorAll('label');
+                    const expDiv = document.getElementById(`exp${index}`);
+                    allRadios.forEach(r => r.disabled = true);
+                    currentCard.classList.add('locked');
+                    const selectedVal = parseInt(this.value); const correctVal = otazky[index].a;
+                    labels[correctVal].classList.add('correct');
+                    if (selectedVal === correctVal) {
+                        score++; expDiv.className = 'explanation success';
+                        expDiv.innerHTML = `<strong>Správně!</strong><br><strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
+                    } else {
+                        labels[selectedVal].classList.add('incorrect'); expDiv.className = 'explanation error';
+                        expDiv.innerHTML = `<strong>Špatně.</strong><br><strong>Správná odpověď:</strong> <em>${otazky[index].options[correctVal]}</em><br><strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
+                    }
+                    expDiv.style.display = 'block'; answeredQuestions++;
+                });
+                label.appendChild(radio); label.appendChild(document.createTextNode(opt)); optionsDiv.appendChild(label);
+            });
+            card.appendChild(optionsDiv);
+            const explanationDiv = document.createElement('div');
+            explanationDiv.className = 'explanation'; explanationDiv.id = `exp${index}`;
+            card.appendChild(explanationDiv); container.appendChild(card);
+        });
+
+        function zobrazitKonecneSkore() {
+            const resultDiv = document.getElementById('result');
+            const percent = Math.round((score / otazky.length) * 100);
+            resultDiv.innerHTML = `Váš konečný výsledek: ${score} z ${otazky.length} bodů (${percent} %).`;
+            if(percent >= 80) resultDiv.style.color = '#27ae60';
+            else if (percent >= 50) resultDiv.style.color = '#f39c12';
+            else resultDiv.style.color = '#c0392b';
+        }
+    </script>
+</body>
+</html>
