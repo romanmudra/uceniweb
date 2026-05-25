@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Státnicový test ČJ - Otázka 14</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f4f7f6; padding: 20px; color: #333; }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { text-align: center; color: #2c3e50; }
+        .question-card { background: #fff; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-left: 5px solid #3498db; }
+        .question-title { font-weight: bold; margin-bottom: 15px; }
+        .options label { display: block; background: #f9f9f9; padding: 12px; margin: 5px 0; cursor: pointer; border: 1px solid #ddd; border-radius: 4px; transition: 0.2s; }
+        .options label:hover { background: #eef2f5; }
+        .correct { background-color: #d4edda !important; border-color: #c3e6cb !important; }
+        .incorrect { background-color: #f8d7da !important; border-color: #f5c6cb !important; }
+        .explanation { display: none; margin-top: 15px; padding: 10px; border-left: 4px solid #3498db; background: #eef; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Státnicový test ČJ (Otázka 14)</h1>
+        <div id="quiz-container"></div>
+        <button onclick="zobrazitKonecneSkore()" style="width:100%; padding:15px; font-size:1.2em; cursor:pointer;">Zobrazit celkové skóre</button>
+        <div id="result" style="text-align:center; font-size:1.5em; margin:20px;"></div>
+    </div>
+
+    <script>
+        const otazky = [
+            // Didaktika (RWCT, E-U-R) -
+            { q: "Co je hlavním cílem vzdělávacího programu RWCT (Reading and Writing for Critical Thinking)?", options: ["Diktovat žákům přesná data a historické události bez možnosti diskuze.", "Rozvíjet samostatné myšlení žáků, tvořivý přístup k situacím a schopnost spolupracovat.", "Mechanicky procvičovat čtenářskou techniku bez ohledu na význam textu.", "Využívat literaturu pouze jako nástroj k nácviku správné gramatiky a pravopisu."], a: 1, exp: "Program RWCT klade důraz na rozvoj samostatného myšlení, tvořivého přístupu a spolupráci mezi žáky." },
+            { q: "Jaký je základní význam fáze 'evokace' v cyklu E-U-R?", options: ["Žák se seznámí s novými poznatky skrze výklad učitele.", "Žák si uvědomuje a vyjadřuje své původní znalosti a představy o tématu.", "Studenti píší závěrečný test prověřující jejich memorování.", "Učitel shrnuje hlavní body hodiny a dává domácí úkol."], a: 1, exp: "Fáze evokace spočívá v tom, že studenti vyjádří, co sami vědí nebo si myslí o předloženém tématu." },
+            { q: "K čemu slouží metoda 'myšlenková mapa'?", options: ["K učení se cizím jazykům pomocí obrázků.", "K přehlednému seskupování informací a hledání souvislostí.", "K nácviku psaní krasopisných písmen.", "K memorování životopisů slavných autorů."], a: 1, exp: "Myšlenková mapa je metoda sloužící k efektivnímu seskupování informací a vizualizaci vztahů mezi nimi." },
+            { q: "V čem spočívá metoda 'podvojný deník'?", options: ["Žák si píše deník, který musí každý den odevzdat učiteli ke kontrole.", "Papír se rozdělí na části; v jedné je citát/obraz z textu, v druhé vlastní úvaha, proč to žáka zaujalo či jak tomu rozumí.", "Žák si vede jeden deník pro školu a druhý pro soukromé poznámky.", "Jedná se o metodu, kdy žák zapisuje poznámky do dvou různých sešitů podle barvy pera."], a: 1, exp: "Podvojný deník rozděluje papír na části: v jedné žák zaznamená metaforu či motiv, ve druhé komentuje, proč ho to provokuje nebo jak tomu rozumí." },
+            { q: "Jaký je hlavní didaktický účel metody 'INSERT'?", options: ["Rychlé vyhledávání informací v encyklopediích.", "Třídění informací v průběhu četby na to, co žák již věděl, co je nové a čemu nerozumí.", "Procvičování čtení cizojazyčných textů.", "Psaní kreativních básní na okraji sešitu."], a: 1, exp: "Metoda INSERT slouží k analýze textu v průběhu četby, kde si žák značí, co věděl, co je nové, co je v rozporu s jeho znalostmi nebo čemu nerozumí." },
+            { q: "Co je hlavním cílem aktivity 'pětilístek'?", options: ["Sepsat co nejdelší životopis autora.", "Soustředěnou formou vyjádřit názory na četbu a shrnout informace.", "Nakreslit ilustraci k literárnímu dílu.", "Naučit se nazpaměť pět básní od jednoho autora."], a: 1, exp: "Pětilístek je pětifázový útvar, v němž žák v souladu s formou vyjadřuje názory na četbu a shrnuje informace z vlastního pohledu." },
+            { q: "Jakou roli hraje v metodě 'literárních kroužků' hledač citátů?", options: ["Vyhledává chyby v pravopisu v celém díle.", "Vybere 1-2 úryvky, které jsou v příběhu důležité, a svůj výběr musí zdůvodnit.", "Má za úkol přečíst celou knihu před ostatními.", "Sleduje, zda ostatní členové skupiny knihu skutečně četli."], a: 1, exp: "Hledač citátů má za úkol vybrat důležité úryvky a objasnit, proč jsou pro něj významné." },
+            { q: "Co dělá 'jazykový odborník' v literárních kroužcích?", options: ["Opravuje stylizaci ostatních spolužáků.", "Vyhledává zajímavá nebo nejasná slova a vysvětluje jejich význam.", "Překládá knihu do cizích jazyků.", "Analyzuje životopis autora."], a: 1, exp: "Jazykový odborník vybírá z textu důležitá, nejasná nebo neobvyklá slova a vysvětluje jejich význam." },
+            { q: "Jaký je účel metody 'vkládání se do role' (např. při interpretaci?", options: ["Předstírání, že žáci jsou profesionální herci.", "Sledování průběhu hodiny z pohledu určité postavy (např. optimista, pragmatik).", "Psaní životopisu autora v první osobě.", "Tvorba přesných historických kostýmů."], a: 1, exp: "Metoda reflexe v roli (optimisté, pragmatici) vede žáky k tomu, aby sledovali průběh hodiny a události z perspektivy zastupované postavy." },
+            { q: "Co je hlavním přínosem metody 'kostka' při interpretaci literárního díla?", options: ["Procvičování geometrie v literatuře.", "Vrhnout na dílo pohled z různých úhlů (např. popiš, srovnej, asociuj, analyzuj).", "Rozhodnout o kvalitě díla na základě hodu kostkou.", "Naučit žáky házet kostkou v divadelních hrách."], a: 1, exp: "Kostka směřuje žáka k přemýšlení o díle z různých úhlů (popis, srovnání, asociace, analýza, aplikace, argumentace)." },
+
+            // Erben - Kytice (10 otázek) -
+            { q: "Který z následujících motivů je stěžejní pro baladu 'Poklad'?", options: ["Trest za neposlušnost matce.", "Vidina bohatství a zrada na vlastním dítěti.", "Válka s cizím vojskem.", "Láska k vrbě."], a: 1, exp: "V Pokladu je matka pohlcena vidinou zlata, nechává dítě osudu, a to je hlavní morální selhání." },
+            { q: "Co symbolizuje 'zlatý kolovrat' v baladě Zlatý kolovrat?", options: ["Nástroj k bohatství.", "Pravdu, která nakonec odhalí zločin.", "Dar od krále.", "Nástroj pro předení vlny."], a: 1, exp: "Zlatý kolovrat je symbolem pravdy, která odhalí vraždu nevlastní dcery." },
+            { q: "V baladě 'Holoubek' se vdova provinila tím, že:", options: ["Zabila svého manžela.", "Ztratila dítě v lese.", "Odmítla se vdát.", "Ukradla zlato."], a: 0, exp: "Vdova v Holoubkovi se provinila tím, že otrávila svého manžela." },
+            { q: "Balada 'Záhořovo lože' končí:", options: ["Smrtí Záhoře.", "Vykoupením Záhoře skrze pokání.", "Bojem s ďáblem.", "Pekelným trestem."], a: 1, exp: "Záhoř se kaje a díky pokání dochází k odpuštění." },
+            { q: "V baladě 'Lilie' matka zabije snachu a dítě tím, že je:", options: ["Nechá na slunci.", "Utopí v jezeře.", "Nechá vyhladovět.", "Svrhne do propasti."], a: 0, exp: "Matka ze žárlivosti nechá snachu a dítě na slunci, což vede k jejich smrti." },
+            { q: "Postava 'Polednice' v baladě představuje:", options: ["Dobrou vílu.", "Trestající sílu za mateřskou zlost.", "Duch mrtvé matky.", "Dívku zklamanou láskou."], a: 1, exp: "Polednice je trestající silou vyvolanou matčiným hněvem." },
+            { q: "Balada 'Svatební košile' pracuje s motivem:", options: ["Mrtvého milence (umrlce).", "Zlatého bohatství.", "Krádeže dříví.", "Nenaplněné lásky."], a: 0, exp: "Svatební košile je balada o dívce, která si přivolá umrlce zpět z ciziny." },
+            { q: "Co je hlavním zdrojem viny v baladě 'Dceřina kletba'?", options: ["Sňatek z donucení.", "Vražda vlastního dítěte.", "Krádež peněz.", "Pýcha dívky."], a: 1, exp: "Dcera zabila své nemanželské dítě a proklíná matku za výchovu." },
+            { q: "Co se stane v baladě 'Vrba'?", options: ["Manžel porazí vrbu a manželka zemře.", "Dcera uteče do kláštera.", "Manželka se promění v labuť.", "Dívka skočí do propasti."], a: 0, exp: "Muž porazí vrbu, ve které přebývá duše jeho ženy, čímž ji usmrtí." },
+            { q: "Jaký je žánr Kytice?", options: ["Román.", "Soubor lyricko-epických balad.", "Historická kronika.", "Sbírka satirických epigramů."], a: 1, exp: "Kytice je soubor třinácti lyricko-epických balad, které využívají motivy lidové slovesnosti." },
+
+            // Národní obrození - 10 otázek -
+            { q: "Kdo vydával 'Krameriovy c.k. vlastenecké noviny'?", options: ["Václav Thám.", "Václav Matěj Kramerius.", "Josef Jungmann.", "Antonín Jaroslav Puchmajer."], a: 1, exp: "Noviny vydával Václav Matěj Kramerius." },
+            { q: "Co je hlavním dílem Josefa Jungmanna?", options: ["Slovník česko-německý.", "Kytice.", "Slávy dcera.", "Máj."], a: 0, exp: "Jungmann vytvořil pětidílný Slovník česko-německý." },
+            { q: "Kdo vydal almanach 'Básně v řeči vázané'?", options: ["Václav Thám.", "Josef Linda.", "Ján Kollár.", "František Ladislav Čelakovský."], a: 0, exp: "Almanach vydal Václav Thám." },
+            { q: "Panslavismus propagoval:", options: ["Ján Kollár.", "Karel Hynek Mácha.", "Karel Havlíček Borovský.", "František Ladislav Čelakovský."], a: 0, exp: "Kollár byl hlavním propagátorem myšlenky slovanské vzájemnosti." },
+            { q: "Slovanské starožitnosti jsou dílem:", options: ["Pavla Josefa Šafaříka.", "Jána Kollára.", "Josefa Jungmanna.", "Václava Hanky."], a: 0, exp: "Šafařík napsal Slovanské starožitnosti." },
+            { q: "Autorem 'Ohlasu písní ruských' je:", options: ["František Ladislav Čelakovský.", "Jaroslav Vrchlický.", "Karel Hynek Mácha.", "Jan Neruda."], a: 0, exp: "Čelakovský napsal Ohlas písní ruských." },
+            { q: "Kdo byl autorem skladby 'Máj'?", options: ["Karel Hynek Mácha.", "František Ladislav Čelakovský.", "Ján Kollár.", "Karel Havlíček Borovský."], a: 0, exp: "Máj je vrcholné dílo K. H. Máchy." },
+            { q: "Kde byl internován Karel Havlíček Borovský?", options: ["V Brixenu.", "V Praze.", "V Moskvě.", "V Londýně."], a: 0, exp: "Havlíček byl internován do Brixenu." },
+            { q: "Satira 'Král Lávra' je dílem:", options: ["Karela Havlíčka Borovského.", "Jana Kollára.", "Františka Ladislava Čelakovského.", "Josefa Jungmanna."], a: 0, exp: "Král Lávra je známá satira K. H. Borovského." },
+            { q: "Co napsal František Vladislav Hek?", options: ["Satirické epigramy.", "Lešetínského kováře.", "Slezské písně.", "Máj."], a: 0, exp: "Hek psal satirické epigramy." },
+
+            // Generace buřičů a Krysař - 10 otázek -
+            { q: "Co charakterizuje generaci buřičů?", options: ["Bohémský život, anarchismus, vitalismus.", "Pravidelný rým, náboženské motivy.", "Striktní odmítání politiky.", "Návrat k barokní literatuře."], a: 0, exp: "Buřiči byli básníci života a vzdoru, ovlivnění anarchismem a vitalismem." },
+            { q: "Petr Bezruč je autorem sbírky:", options: ["Slezské písně.", "Koncert na ostrově.", "Noc s Hamletem.", "Kytice."], a: 0, exp: "Bezruč napsal Slezské písně." },
+            { q: "Kdo napsal 'Maryčku Magdonovou'?", options: ["Petr Bezruč.", "Viktor Dyk.", "Fráňa Šrámek.", "Stanislav Kostka Neumann."], a: 0, exp: "Maryčka Magdonová je nejznámější báseň Petra Bezruče." },
+            { q: "František Gellner psal básně:", options: ["Kritické a písňové.", "Oslavné eposy.", "Dlouhé sonety.", "Historické romány."], a: 0, exp: "Gellner psal krátké, kritické verše, spíše písně než básně." },
+            { q: "Fráňa Šrámek se věnoval:", options: ["Antimilitarismu a milostné lyrice.", "Popisu husitských bitev.", "Historickým traktátům.", "Dětské literatuře."], a: 0, exp: "Šrámek byl antimilitarista, psal milostnou lyriku a hry (Měsíc nad řekou)." },
+            { q: "Karel Toman je známý sbírkou:", options: ["Torzo života.", "Slezské písně.", "Kytice.", "Máj."], a: 0, exp: "Toman napsal např. Torzo života." },
+            { q: "Stanislav Kostka Neumann byl ovlivněn:", options: ["Proletářskou kulturou a anarchismem.", "Katolicismem.", "Barokní poezií.", "Rukopisy."], a: 0, exp: "Neumann byl ovlivněn anarchismem a později proletářskou kulturou." },
+            { q: "Viktor Dyk napsal:", options: ["Krysaře.", "Slezské písně.", "Svlékání hadů.", "Koncert na ostrově."], a: 0, exp: "Viktor Dyk napsal novelu Krysař." },
+            { q: "Co je hlavním motivem Dykova 'Krysaře'?", options: ["Konflikt mezi ideálem a skutečností.", "Oslava husitství.", "Kritika venkova.", "Historie obrození."], a: 0, exp: "Ústředním motivem díla je konflikt mezi ideálem a skutečností." },
+            { q: "Kdo je hlavní postavou Dykova 'Krysaře'?", options: ["Tajemný muž s píšťalou.", "Básník Jan.", "Chudý rybář.", "Mlynář."], a: 0, exp: "Hlavní postavou je tajemný muž s píšťalou (Krysař)." },
+
+            // Zbylých 10 otázek (Směs témat)
+            { q: "Co znamená 'prostonárodní' v titulech děl 19. století?", options: ["Určeno pro vzdělance.", "Čerpající z lidové kultury.", "Psáno latinsky.", "Zaměřeno na šlechtu."], a: 1, exp: "Prostonárodní znamená vycházející z lidové slovesnosti a kultury." },
+            { q: "Co je hlavním symbolem 'Maryčky Magdonové'?", options: ["Naděje na lepší život.", "Ztráta naděje a smrt sirotka.", "Vítězství nad utiskovateli.", "Láska k horám."], a: 1, exp: "Maryčka je symbolem hledání smyslu života, které končí tragickou sebevraždou." },
+            { q: "Kdo je autorem novely 'Krysař'?", options: ["Viktor Dyk.", "Fráňa Šrámek.", "František Gellner.", "Petr Bezruč."], a: 0, exp: "Autorem novely Krysař je Viktor Dyk." },
+            { q: "Jaký je hlavní rys poezie Františka Gellnera?", options: ["Pravidelný verš a kritika.", "Dlouhé metafory.", "Snová imaginace.", "Oslava přírody."], a: 0, exp: "Gellner využíval pravidelný verš, rým a jeho básně byly kritické." },
+            { q: "Jakou atmosféru mají básně Fráni Šrámka ve sbírce 'Splav'?", options: ["Anarchistickou.", "Milostnou a přírodní.", "Děsivou.", "Politickou."], a: 1, exp: "Sbírka Splav je milostná a přírodní lyrika." },
+            { q: "Co vyjadřuje básnická sbírka 'Slezské písně'?", options: ["Těžký život horníků a chudinu.", "Oslavu šlechtických dvorů.", "Venkovskou idylu.", "Cesty do ciziny."], a: 0, exp: "Slezské písně od Petra Bezruče zachycují těžký život horníků a chudiny na Slezsku." },
+            { q: "Jak se nazývá postava, která ve 'Svatební košili' přichází za dívkou?", options: ["Umrlec.", "Voják.", "Král.", "Čaroděj."], a: 0, exp: "Mládenec-umrlec je symbolem přicházející smrti." },
+            { q: "Karel Toman napsal sbírku:", options: ["Sluneční hodiny.", "Slezské písně.", "Kytici.", "Máje."], a: 0, exp: "Toman napsal sbírky jako Torzo života nebo Sluneční hodiny." },
+            { q: "Stanislav Kostka Neumann se ve své tvorbě posunul k:", options: ["Proletářské kultuře.", "Mystice.", "Baroku.", "Romantismu."], a: 0, exp: "Neumann byl ovlivněn anarchismem a později proletářskou kulturou." },
+            { q: "Jak se jmenuje dívka, kterou miluje Krysař?", options: ["Agnes.", "Jarmila.", "Lízinka.", "Matylda."], a: 0, exp: "Hlavní postavou vedle Krysaře je mladá dívka Agnes." }
+        ];
+
+        let score = 0;
+        let answeredQuestions = 0;
+        const container = document.getElementById('quiz-container');
+
+        otazky.forEach((otazka, index) => {
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.id = `q-card-${index}`;
+            const title = document.createElement('div');
+            title.className = 'question-title';
+            title.textContent = `${index + 1}. ${otazka.q}`;
+            card.appendChild(title);
+            const optionsDiv = document.createElement('div');
+            optionsDiv.className = 'options';
+            otazka.options.forEach((opt, optIndex) => {
+                const label = document.createElement('label');
+                const radio = document.createElement('input');
+                radio.type = 'radio'; radio.name = `q${index}`; radio.value = optIndex;
+                radio.addEventListener('change', function() {
+                    const currentCard = document.getElementById(`q-card-${index}`);
+                    const allRadios = currentCard.querySelectorAll('input[type="radio"]');
+                    const labels = currentCard.querySelectorAll('label');
+                    const expDiv = document.getElementById(`exp${index}`);
+                    allRadios.forEach(r => r.disabled = true);
+                    currentCard.classList.add('locked');
+                    const selectedVal = parseInt(this.value); const correctVal = otazky[index].a;
+                    labels[correctVal].classList.add('correct');
+                    if (selectedVal === correctVal) {
+                        score++; expDiv.className = 'explanation success';
+                        expDiv.innerHTML = `<strong>Správně!</strong><br><strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
+                    } else {
+                        labels[selectedVal].classList.add('incorrect'); expDiv.className = 'explanation error';
+                        expDiv.innerHTML = `<strong>Špatně.</strong><br><strong>Správná odpověď:</strong> <em>${otazky[index].options[correctVal]}</em><br><strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
+                    }
+                    expDiv.style.display = 'block'; answeredQuestions++;
+                });
+                label.appendChild(radio); label.appendChild(document.createTextNode(opt)); optionsDiv.appendChild(label);
+            });
+            card.appendChild(optionsDiv);
+            const explanationDiv = document.createElement('div');
+            explanationDiv.className = 'explanation'; explanationDiv.id = `exp${index}`;
+            card.appendChild(explanationDiv); container.appendChild(card);
+        });
+
+        function zobrazitKonecneSkore() {
+            const resultDiv = document.getElementById('result');
+            const percent = Math.round((score / otazky.length) * 100);
+            resultDiv.innerHTML = `Váš konečný výsledek: ${score} z ${otazky.length} bodů (${percent} %).`;
+            if(percent >= 80) resultDiv.style.color = '#27ae60';
+            else if (percent >= 50) resultDiv.style.color = '#f39c12';
+            else resultDiv.style.color = '#c0392b';
+        }
+    </script>
+</body>
+</html>
