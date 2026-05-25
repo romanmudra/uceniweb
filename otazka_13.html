@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Státnicový test ČJ - Otázka 13 (Vysoká obtížnost)</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 0.9em;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+        .question-card {
+            background: #fff;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            border-left: 5px solid #3498db;
+        }
+        .question-title {
+            font-weight: bold;
+            font-size: 1.15em;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        .options label {
+            display: block;
+            background: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid #e0e0e0;
+            line-height: 1.5;
+        }
+        .options label:hover {
+            background: #eef2f5;
+        }
+        .locked label {
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        input[type="radio"] {
+            margin-right: 15px;
+            margin-top: 4px;
+            float: left;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            font-size: 1.2em;
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 40px;
+            margin-bottom: 50px;
+        }
+        button:hover {
+            background-color: #1a252f;
+        }
+        .correct {
+            background-color: #d4edda !important;
+            border-color: #c3e6cb !important;
+            color: #155724;
+            font-weight: bold;
+        }
+        .incorrect {
+            background-color: #f8d7da !important;
+            border-color: #f5c6cb !important;
+            color: #721c24;
+        }
+        .explanation {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            font-size: 0.95em;
+            display: none;
+            line-height: 1.6;
+        }
+        .explanation.success {
+            background-color: #d4edda;
+            border-left: 5px solid #28a745;
+            color: #155724;
+        }
+        .explanation.error {
+            background-color: #fff3cd;
+            border-left: 5px solid #dc3545;
+            color: #856404;
+        }
+        #result {
+            font-size: 1.6em;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Státnicový test z ČJ (Otázka 13)</h1>
+    <div class="subtitle">Didaktika recepce, K. J. Erben (Kytice), Národní obrození, Májovci, Ruchovci a Lumírovci, Realismus<br><strong>Vyberte odpověď – výsledek a zdůvodnění se zobrazí okamžitě.</strong></div>
+    
+    <div id="quiz-container"></div>
+    
+    <button onclick="zobrazitKonecneSkore()">Zobrazit celkové skóre</button>
+    <div id="result"></div>
+
+    <script>
+        const otazky = [
+            // Didaktika
+            { q: "Jaký je hlavní rozdíl mezi fází percepce a fází apercepce při žákově recepci uměleckého textu?", options: [
+                "Percepce se omezuje výhradně na tiché čtení textu a analýzu jeho gramatických struktur, zatímco apercepce se soustředí na hlasitý přednes a nácvik správné intonace před třídou.", 
+                "Fáze percepce je vázána na přímé smyslové (např. auditivní) vnímání textu, kdežto v apercepční fázi se rozvíjí čtenářská představivost a žák si modeluje obraz reálií díky denotační složce slov a vlastní čtenářské zkušenosti.", 
+                "V percepční fázi žáci primárně zkoumají historický kontext a životopis autora, zatímco v apercepční fázi se věnují vyhledávání stylistických figur, jako jsou metafory a aliterace, uvnitř literárního díla.", 
+                "Percepce probíhá vždy až po přečtení celého díla a slouží ke shrnutí děje, kdežto apercepce probíhá před samotnou četbou a slouží k vysvětlení neznámých pojmů a historického pozadí."
+            ], a: 1, exp: "Fáze percepce je zaměřena na přímé smyslové (např. auditivní) vnímání textu. Fáze apercepce těsně navazuje a spočívá v rozvoji čtenářské představivosti a fantazie, kdy si čtenář modeluje obraz reálií na základě významu slov a svých životních zkušeností." },
+            { q: "Proč se při interpretaci zvukového komplexu básně v percepční fázi nedoporučuje, aby aktivity typu 'výběr barvy' nebo 'doporučení hudebního doprovodu' trvaly příliš dlouho?", options: [
+                "Příliš dlouhé setrvání u těchto aktivit by mohlo vyvolat nežádoucí psychologické reakce u citlivějších žáků a narušit tak klidný a soustředěný průběh vyučovací hodiny.", 
+                "Tyto metody jsou podle moderních didaktických norem považovány za zastaralé a neefektivní; slouží pouze k dočasnému zabavení žáků a nemají žádný skutečný přínos pro porozumění textu.", 
+                "Úkoly tohoto typu nesmějí být zdlouhavé, aby žák neztratil primární kontakt se samotným textem a aby se z interpretační aktivity nestala pouhá samoúčelná hra; vždy musí následovat zdůvodnění volby opřené o text.", 
+                "Pokud by žáci těmto úkolům věnovali více času, hrozilo by, že zpochybní autorův původní umělecký záměr a začnou prosazovat vlastní, často historicky nepřesné a subjektivní výklady díla."
+            ], a: 2, exp: "Metodika práce se zvukovým či vizuálním komplexem básně má sloužit k uchopení nálady textu. Úkoly však nesmějí být zdlouhavé, aby z nich nestala samoúčelná hra a aby žák neztratil kontakt se slovem. Klíčovým prvkem je vždy následné logické zdůvodnění žákovy volby." },
+            { q: "Při didaktické komunikaci se syžetovým (epickým) textem hraje klíčovou roli pochopení vztahu mezi syžetem a fabulí. Jak tyto dva pojmy definujeme?", options: [
+                "Fabule je abstraktní dějová linka uspořádaná v přirozené, chronologické a logické časové posloupnosti. Syžet představuje konkrétní způsob, jakým autor tyto tematické složky do díla kompozičně poskládal a ztvárnil.", 
+                "Syžet představuje přísně chronologický a historicky přesný sled událostí, zatímco fabule se skládá výhradně z dialogů a přímé řeči postav bez jakýchkoliv popisných pasáží vypravěče.", 
+                "Oba termíny v podstatě splývají a používají se pouze k odlišení formy; syžet označuje texty psané ve verších, zatímco fabule se používá výhradně pro klasická prozaická díla s rozsáhlými popisy.", 
+                "Fabule představuje hlavní morální ponaučení nebo skrytou filozofickou myšlenku celého díla, kdežto syžet určuje pouze geografické prostředí a přesnou historickou dobu, do které je děj zasazen."
+            ], a: 0, exp: "V literární teorii i didaktice je fabule děj v jeho přirozené logické a časové následnosti. Syžet je kompoziční ztvárnění – způsob, jakým autor s informacemi z fabule naloží, jak je uspořádá v textu (např. pomocí časových inverzí nebo retrospektivy)." },
+
+            // Erben - Kytice
+            { q: "Jaký je hlavní rozdíl v pojetí viny a trestu mezi Máchou a Erbenem, jak se to odráží například v Erbenově baladě 'Záhořovo lože'?", options: [
+                "Zatímco Mácha věří v absolutní a neodvratný trest za každý hřích, Erben tvrdí, že trest postihuje pouze ty, kteří se vzepřou přírodním zákonům, zatímco hříchy proti Bohu mohou zůstat nepotrestány.", 
+                "Mácha pojímá vinu jako dědičnou zátěž, kterou nelze odčinit. Erben se naopak domnívá (na rozdíl od Máchy), že odpor jedince vůči vyšší moci lze přemoci pokáním a že existuje reálná cesta ke spáse a odpuštění.", 
+                "Erben je přesvědčen, že vina je vždy produktem špatných sociálních poměrů a chudoby. Mácha oproti tomu vidí vinu jako projev temných nadpřirozených sil, které hrdinu ovládnou proti jeho vůli.", 
+                "Oba autoři chápou vinu stejně, avšak liší se v pojetí trestu; u Máchy je trest vykonán vždy světskou spravedlností, zatímco u Erbena přichází trest výhradně ze záhrobí od oživlých umrlců nebo nadpřirozených bytostí."
+            ], a: 1, exp: "V baladě Záhořovo lože Erben vyjadřuje myšlenku, že na rozdíl od K. H. Máchy se domnívá, že odpor jedince vůči vyšší moci lze přemoci upřímným pokáním a že i pro velkého hříšníka existuje cesta ke spáse a odpuštění." },
+            { q: "V Erbenově baladě 'Poklad' dochází k porušení křesťanských tradic. V čem spočívá hlavní vina mladé ženy a jaké je její prvotní ospravedlnění?", options: [
+                "Žena se dopouští rouhání tím, že odmítá jít v neděli na mši a raději tráví čas se svým nemanželským dítětem; svůj čin omlouvá tím, že péče o rodinu je přednější než církevní rituály.", 
+                "Na Velký pátek si žena z lakoty půjčuje peníze od lichváře, čímž poruší starou pověru. Sama sebe utěšuje tím, že Bůh odpouští těm, kteří jsou v nouzi, a že peníze brzy poctivě vrátí.", 
+                "Žena poruší řád a tradici (že se na Velký pátek nemá s ničím hýbat ani nic půjčovat) a je pohlcena vidinou bohatství ve skále. Své jednání si zprvu chlácholí myšlenkou, že jí to Bůh sám nachystal, aby nežila v chudobě.", 
+                "Vdova ukradne zlatý kalich z místního kostela během vánoční půlnoční mše. Svůj čin si ospravedlňuje tím, že peníze z jeho prodeje věnuje na stavbu nového sirotčince, čímž si zajistí spásu."
+            ], a: 2, exp: "V baladě Poklad mladá a chudá žena poruší tradici Velkého pátku. Je zlákána otevřenou skálou plnou zlata. Své ziskuchtivé jednání se snaží ospravedlnit (chlácholit se) tím, že 'bůh tomu chtěl, aby poklad našla a nežila v chudobě'. Omámená bohatstvím pak ve skále zapomene své dítě." },
+            { q: "Co je hlavním motivem balady 'Svatební košile' a jakým způsobem dívka zhřeší proti tehdejším morálním zásadám?", options: [
+                "Dívka z pýchy odmítá všechny nápadníky a čeká na prince. Je potrestána tím, že se nakonec provdá za krutého tyrana, který ji donutí dnem i nocí tkát svatební košile pro jeho vojsko.", 
+                "Osiřelá a smutná dívka čeká na milého, který se nevrací z ciziny. Její proviněním (rouháním) je, že ve své prosbě k Panně Marii žádá buď o jeho návrat, nebo o to, aby jí byl 'život zkrácen', čímž se protiví boží vůli.", 
+                "Hlavním motivem je chamtivost. Dívka slíbí svou ruku tomu, kdo jí ušije nejkrásnější svatební košili ze zlatých nití. Tímto marnivým požadavkem urazí Pannu Marii a je odsouzena žít v chudobě.", 
+                "Dívka zradí svou rodnou vlast a uteče s cizím rytířem. Trestem za toto odnárodnění je, že s ním musí bloudit pustými lesy a nikdy nesmí obléknout bílou svatební košili."
+            ], a: 1, exp: "V baladě Svatební košile se osiřelá dívka modlí za návrat svého milého z ciziny. Její vinnou (rouháním) je to, že Panně Marii vyhrožuje, že pokud jí milého nevrátí, ať jí raději 'zkrátí život'. Tím si přivolá umrlce." },
+            { q: "V baladě 'Vrba' z Erbenovy sbírky Kytice se objevuje motiv propojení lidského života s přírodou. Jaký je hlavní děj a zápletka této balady?", options: [
+                "Mladá žena je prokleta zlou macechou a proměněna ve vrbu. Její manžel musí vrbu každou noc zalévat svými slzami, aby ji zachránil. Nakonec zjistí, že kletbu může zlomit pouze tím, že z vrby vyřeže svatební lože.", 
+                "Žena je přes den zdravá, ale v noci bývá mrtvá (její duše přebývá ve vrbě). Její starostlivý a rázný muž zjistí pravdu a ve snaze ji vyléčit vrbu u potoka porazí, čímž však svou ženu nechtěně zabije.", 
+                "Starý rybář se zamiluje do vodní víly, která se skrývá ve vrbě. Aby s ní mohl být, pokusí se vrbu vykopat a přesadit na svou zahradu. Víla ho však za tuto troufalost potrestá a utopí ho v jezeře.", 
+                "Muž nevědomky pokácí posvátnou vrbu, ve které sídlí duch lesa. Za trest je jeho žena proměněna v němou labuť a on musí z vrbového dřeva vyrobit magickou píšťalu, aby s ní mohl komunikovat."
+            ], a: 1, exp: "V baladě Vrba je žena přes den normální, ale v noci její duše přechází do vrby u potoka a její tělo leží jako mrtvé. Manžel (rázný a starostlivý) zjistí pravdu od sudičky a ve snaze ženu 'vyléčit' vrbu podetne, čímž ji ale nevědomky usmrtí. Z vrby pak pro dítě udělá kolébku a píšťalku." },
+            { q: "Balada 'Dceřina kletba' se vyznačuje rychlým spádem a formou dialogu. Za jaký čin dcera proklíná svou matku?", options: [
+                "Dcera proklíná matku za to, že ji v dětství prodala do služby bohatému sedlákovi. Kvůli těžké práci dcera přišla o zdraví a nyní, když se vrátila domů, nenachází u matky žádné pochopení ani útěchu.", 
+                "Matka přinutila dceru vdát se za bohatého, ale starého mlynáře. Dcera z nešťastné lásky k jinému muži spáchá sebevraždu skokem do jezera a z posledních sil svou matku prokleje za zničený život.", 
+                "Dcera zabila své nemanželské dítě ('holoubátko'). Své východisko vidí v oprátce, ale předtím prokleje svou starostlivou matku za to, že jí v mládí nechala přílišnou volnost a prostor, což vedlo k jejímu hříchu.", 
+                "Dívka proklíná matku za to, že tajně zničila její svatební šaty, aby zabránila jejímu sňatku s chudým krejčím. V zoufalství dcera odchází z domova a přísahá matce doživotní nenávist a odloučení."
+            ], a: 2, exp: "V baladě Dceřina kletba dcera zabila své nemanželské dítě ('holoubátko') a chystá se oběsit. Ve svém zoufalství neviní jen svůdce, ale proklíná i svou matku za to, že jí v mládí poskytla příliš mnoho volnosti a nepřísně ji vychovala, což podle ní vedlo k jejímu pádu." },
+
+            // Národní obrození - Fáze a Autoři
+            { q: "Národní obrození v českých zemích probíhalo v několika vlnách. Jaké je správné časové a obsahové rozdělení těchto fází?", options: [
+                "První fáze (1771-1805) byla ofenzivní a zaměřila se na politické osamostatnění. Druhá (1805-1830) byla revoluční a vedla k ozbrojeným střetům. Třetí (1830-1848) byla obranná a zaměřila se na záchranu jazyka.", 
+                "První fáze (obranná, 1771-1805) čelila germanizaci a snažila se zachránit český jazyk. Druhá (útočná, 1805-1830) rozvíjela básnický i odborný jazyk a vlastenectví. Třetí (1830-1848) byla spjata s romantismem a čtvrtá (50. léta) završila obrození v politice a kultuře.", 
+                "První fáze byla zaměřena výhradně na překládání německých děl. Druhá fáze byla dobou temna a přísné cenzury. Třetí fáze (po roce 1848) se vyznačovala vznikem Májovců a čtvrtá znamenala návrat k latinské liturgii.", 
+                "Obrození mělo pouze dvě fáze: obrannou do roku 1848, kdy se jazyk pouze chránil, a útočnou po roce 1848, kdy se čeština stala jediným úředním jazykem v celé Habsburské monarchii díky snahám Josefa Dobrovského."
+            ], a: 1, exp: "Fáze NO se dělí na: 1. obrannou (1771-1805) - snaha zachránit jazyk a čelit germanizaci. 2. útočnou (1805-1830) - rozvíjení básnického a odborného jazyka, vlastenectví. 3. revoluční/romantickou (1830-1848). 4. dovršení procesu obrození (50. léta)." },
+            { q: "Který z následujících autorů byl zakladatelem vydavatelství a knihkupectví 'Česká expedice' a vydával 'Pražské poštovské noviny' (později Krameriovy c.k. vlastenecké noviny)?", options: [
+                "Josef Jungmann", 
+                "Václav Thám", 
+                "Václav Matěj Kramerius", 
+                "Antonín Jaroslav Puchmajer"
+            ], a: 2, exp: "Václav Matěj Kramerius byl spisovatel, novinář a učitel češtiny. Založil nakladatelství Česká expedice a vydával Pražské poštovské noviny (později přejmenované na Krameriovy c.k. vlastenecké noviny), čímž významně přispěl k šíření českého slova." },
+            { q: "Václav Thám byl významnou postavou počátků národního obrození. Kromě toho, že byl dramatikem (např. Břetislav a Jitka, Vlasta a Šárka), stál za vydáním jakého klíčového literárního díla?", options: [
+                "Vydal rozsáhlý Česko-německý slovník, který položil základy moderního odborného názvosloví a zavedl do češtiny mnoho nových slov.", 
+                "Sestavil a vydal almanach 'Básně v řeči vázané', který obsahoval překlady německých veršů, ukázky starších autorů a tvorbu současných autorů. V předmluvě vyjádřil vlastenectví a odpor proti předsudkům.", 
+                "Napsal vědecké pojednání 'Historie literatury české', ve kterém jako první chronologicky rozdělil české literární dějiny od dob nejstarších až po současnost.", 
+                "Byl hlavním autorem a iniciátorem padělání Rukopisu královedvorského a zelenohorského, kterými se snažil dokázat starobylost a vysokou úroveň rané české literatury."
+            ], a: 1, exp: "Václav Thám (působící i u policie a v divadle Bouda) vydal významný almanach 'Básně v řeči vázané'. Ten obsahoval ukázky starších autorů, překlady a soudobou tvorbu, a jeho předmluva měla silně vlastenecký charakter brojící proti předsudkům vůči češtině." },
+            { q: "Josef Jungmann patří k nejvýznamnějším postavám druhé fáze národního obrození. Co patřilo k jeho nejvýznamnějším činům a dílům?", options: [
+                "Soustředil se výhradně na sběr lidových písní a říkadel, odmítal tvořit umělá nová slova a byl přesvědčeným zastáncem časoměrného verše po vzoru antické poezie.", 
+                "Působil jako katolický kněz a propagátor panslavismu, napsal rozsáhlou sbírku 'Slávy dcera' a založil první novočeskou básnickou školu ve Spáleném Poříčí.", 
+                "Založil vědecký časopis Krok, přeložil Miltonův Ztracený ráj a vytvořil pětidílný 'Slovník česko-německý', ve kterém využil literární památky, řeč lidu, slovanské jazyky i vlastní novotvary, čímž položil základy odbornému názvosloví.", 
+                "Jeho hlavním dílem byla 'Historie literatury české', kde rozdělil české dějiny do několika epoch, a jako první se pokusil zpochybnit pravost Rukopisu královedvorského, čímž vyvolal vlnu nevole."
+            ], a: 2, exp: "Josef Jungmann byl klíčovou postavou obrození. Založil časopis Krok, byl vynikajícím překladatelem (Milton, Chateaubriand) a jeho celoživotním monumentálním dílem je pětidílný Slovník česko-německý, který výrazně obohatil českou slovní zásobu a vytvořil základy odborného názvosloví." },
+            { q: "Spisovatel, novinář a falzifikátor Josef Linda je společně s Václavem Hankou považován za tvůrce (či objevitele) slavných Rukopisů. Jaká byla údajná historie nálezu 'Rukopisu královedvorského' (1816)?", options: [
+                "Byl objeven zazděný v tajné komoře hradu Karlštejn při jeho rekonstrukci a obsahoval především milostné básně věnované českým královnám.", 
+                "Nalezl ho údajně Václav Hanka ve věži kostela sv. Jana Křtitele ve Dvoře Králové nad Labem. Jednalo se o 12 pergamenových listů obsahujících epické, lyricko-epické a lyrické básně.", 
+                "Při archeologických vykopávkách na pražském Vyšehradě byla nalezena kamenná schránka s pergameny, které líčily hrdinské činy slovanských kmenů bojujících proti Tatarům.", 
+                "Rukopis byl nalezen na půdě staré fary v Litomyšli. Obsahoval zlomky staročeského sněmu a legendu o Libušině soudu, a byl původně považován za dílo Kosmase."
+            ], a: 1, exp: "Rukopis královedvorský (RK) byl údajně nalezen Václavem Hankou v roce 1817 (v poznámkách je uvedeno 1816 u Lindy) ve věži kostela sv. Jana Křtitele ve Dvoře Králové. Tvořilo ho 12 pergamenových listů obsahujících epické, lyricko-epické a lyrické básně (např. O velikém pobití, Jelen, Kytice). Pravost Rukopisů byla později vyvrácena (Masaryk, Gebauer, Goll)." },
+
+            // Ján Kollár a Karel Hynek Mácha
+            { q: "Ján Kollár, propagátor myšlenky panslavismu, vyjádřil své myšlenky a city v monumentálním díle 'Slávy dcera'. Čím je toto dílo charakteristické po formální a obsahové stránce?", options: [
+                "Je napsáno výhradně formou krátkých epigramů v lidovém jazyce. Kritizuje v nich římskokatolickou církev a oslavuje čistě českou národní historii bez vazby na ostatní slovanské národy.", 
+                "Skládá se z Předzpěvu psaného v časomíře a pěti zpěvů pojmenovaných po řekách (Sála, Labe, Dunaj, Léthe, Acheron). Tématem je záhuba Polabských Slovanů, odsouzení germanizace, slovanská vzájemnost a Mína, jež představuje dceru bohyně Slávy. Formou je elegické distichon.", 
+                "Jedná se o prozaický historický román zasazený do období stěhování národů. Hlavní hrdinka Mína v něm putuje přes celou Evropu, aby sjednotila roztroušené slovanské kmeny do jedné obrovské, nezávislé říše.", 
+                "Skladba je tvořena nepravidelnými verši a baladami. Kollár v ní reflektuje své dětství na Slovensku a tvrdě kritizuje snahy o osamostatnění slovenštiny (zejména spory s Ľudovítem Štúrem), přičemž používá silný romantický patos."
+            ], a: 1, exp: "Kollárova 'Slávy dcera' je stěžejní dílo panslavismu. Obsahuje Předzpěv (psaný časoměrným elegickým distichem) a 5 zpěvů nazvaných podle řek (Sála, Labe, Dunaj, Léthe, Acheron). Prolíná se v něm láska k Míně (dceři bohyně Slávy) s myšlenkami slovanské vzájemnosti, odsouzením germanizace (záhuba Polabských Slovanů) a vírou v budoucnost Slovanů." },
+            { q: "Karel Hynek Mácha je považován za jediného představitele českého romantismu. Jeho vrcholné dílo, lyrickoepická skladba 'Máj' (vydána 1836), se vyznačuje složitou strukturou a inovativním jazykem. Které z následujících tvrzení o 'Máji' je správné?", options: [
+                "Skladba byla dobovou kritikou přijata s obrovským nadšením (chválili ji např. J. K. Tyl a P. J. Šafařík) jako vzor vlastenecké poezie. Mácha v ní ztotožňuje hrdinu s celým českým národem a vyzývá k boji proti Habsburkům.", 
+                "Dílo je složeno z 6 zpěvů a 3 intermezz. Hlavním tématem je radostná oslava jarní přírody a idylická láska Jarmily a Viléma, která končí šťastným svatebním obřadem pod rozkvetlou třešní na břehu jezera.", 
+                "Skladba je složena ze 4 zpěvů a 2 intermezz. Je věnována pražskému pekařskému mistru (Hindlovi). Typické je využití metafor ('bledá tvář lůny'), oxymóronů ('zbortěné harfy tón'), apostrof, kontrastů (život x smrt) a zvukomalby. Dobovou kritikou (Tyl, Šafařík) bylo dílo odsouzeno.", 
+                "Jedná se o striktně epickou báseň bez lyrických odboček. Mácha v ní popisuje reálnou historickou událost – soudní proces a popravu skutečného loupežníka. Jazyk je velmi prostý a záměrně se vyhýbá jakýmkoli metaforám či básnickým ozdobám."
+            ], a: 2, exp: "Máchův Máj je lyrickoepická skladba složená ze 4 zpěvů a 2 intermezz. Je známá svým bohatým, inovativním jazykem (metafory, oxymóra, zvukomalba, kontrasty život/smrt). Mácha se v ní básníkově ztotožňuje s hrdinou (Vilémem). Dobovou obrozeneckou kritikou (např. J. K. Tylem, P. J. Šafaříkem) bylo však dílo tvrdě odsouzeno pro nedostatek národního uvědomění a přílišný pesimismus." },
+            
+            // Karel Havlíček Borovský
+            { q: "Karel Havlíček Borovský byl významný novinář, politik a zakladatel české žurnalistiky. Za svou činnost byl v roce 1851 internován do Brixenu. Které z jeho satirických děl vzniklo jako reakce na tuto internaci a kritizuje policejní aparát?", options: [
+                "Křest svatého Vladimíra", 
+                "Král Lávra", 
+                "Epigramy", 
+                "Tyrolské elegie"
+            ], a: 3, exp: "Tyrolské elegie jsou Havlíčkovou satirickou skladbou, ve které formou pravidelných rýmovaných čtyřverší popisuje své zatčení a nucený odjezd (internaci) do tyrolského Brixenu. Využívá komiky a výsměchu k ostré kritice tehdejšího státního policejního systému a bachovského absolutismu." },
+            { q: "Havlíčkova satirická skladba 'Král Lávra' používá formu alegorie. Na co konkrétně tato báseň naráží a co je jejím hlavním terčem?", options: [
+                "Je to alegorický příběh o králi s oslíma ušima. Slouží jako ostrá narážka na omezenost, tupost panovníka a kritika slepé poslušnosti dvora.", 
+                "Jedná se o příběh o krutém ruském carovi Vladimírovi a slovanském bohu Perunovi, čímž autor ironizuje státní zřízení a mocenskou zvůli.", 
+                "Příběh vypráví o putování českého rolníka Lávry do Ruska, kde autor kritizuje obrovský rozsah alkoholismu a zaostalost ruského venkova.", 
+                "Skladba je souborem krátkých, útočných básní s pointou, ve kterých se Lávra vysmívá přetvářce a chamtivosti představitelů katolické církve."
+            ], a: 0, exp: "Král Lávra je alegorická skladba zpracovávající irskou pověst o králi s oslíma ušima (Králi Midasovi). Havlíček tuto formu využil k zesměšnění a kritice tuposti, omezenosti a hlouposti panovníka (absolutistické moci)." }
+        ];
+
+        let score = 0;
+        let answeredQuestions = 0;
+
+        const container = document.getElementById('quiz-container');
+
+        // Generování HTML a okamžité vyhodnocení
+        otazky.forEach((otazka, index) => {
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.id = `q-card-${index}`;
+            
+            const title = document.createElement('div');
+            title.className = 'question-title';
+            title.textContent = `${index + 1}. ${otazka.q}`;
+            card.appendChild(title);
+
+            const optionsDiv = document.createElement('div');
+            optionsDiv.className = 'options';
+
+            otazka.options.forEach((opt, optIndex) => {
+                const label = document.createElement('label');
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = `q${index}`;
+                radio.value = optIndex;
+                
+                radio.addEventListener('change', function() {
+                    const currentCard = document.getElementById(`q-card-${index}`);
+                    const allRadios = currentCard.querySelectorAll('input[type="radio"]');
+                    const labels = currentCard.querySelectorAll('label');
+                    const expDiv = document.getElementById(`exp${index}`);
+                    
+                    // Uzamknutí otázky
+                    allRadios.forEach(r => r.disabled = true);
+                    currentCard.classList.add('locked');
+
+                    const selectedVal = parseInt(this.value);
+                    const correctVal = otazky[index].a;
+
+                    labels[correctVal].classList.add('correct');
+
+                    if (selectedVal === correctVal) {
+                        score++;
+                        expDiv.className = 'explanation success';
+                        expDiv.innerHTML = `<strong>Správně!</strong><br><strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
+                    } else {
+                        labels[selectedVal].classList.add('incorrect');
+                        expDiv.className = 'explanation error';
+                        expDiv.innerHTML = `<strong>Špatně.</strong><br>
+                                            <strong>Správná odpověď:</strong> <em>${otazky[index].options[correctVal]}</em><br>
+                                            <strong>Zdůvodnění:</strong> ${otazky[index].exp}`;
+                    }
+                    expDiv.style.display = 'block';
+                    answeredQuestions++;
+                });
+
+                label.appendChild(radio);
+                label.appendChild(document.createTextNode(opt));
+                optionsDiv.appendChild(label);
+            });
+
+            card.appendChild(optionsDiv);
+
+            const explanationDiv = document.createElement('div');
+            explanationDiv.className = 'explanation';
+            explanationDiv.id = `exp${index}`;
+            card.appendChild(explanationDiv);
+
+            container.appendChild(card);
+        });
+
+        // Finální shrnutí na konci
+        function zobrazitKonecneSkore() {
+            const resultDiv = document.getElementById('result');
+            
+            if (answeredQuestions < otazky.length) {
+                resultDiv.style.color = '#e67e22';
+                resultDiv.innerHTML = `Zatím jste odpověděl/a na ${answeredQuestions} z ${otazky.length} otázek. <br> Průběžné skóre: ${score} správně.`;
+                return;
+            }
+
+            const percent = Math.round((score / otazky.length) * 100);
+            resultDiv.innerHTML = `Váš konečný výsledek: ${score} z ${otazky.length} bodů (${percent} %).`;
+            
+            if(percent >= 80) {
+                resultDiv.style.color = '#27ae60';
+                resultDiv.innerHTML += "<br>Vynikající výkon! Literaturu 19. století a didaktiku máte v malíčku.";
+            } else if (percent >= 50) {
+                resultDiv.style.color = '#f39c12';
+                resultDiv.innerHTML += "<br>Slušný výsledek. Otázky byly komplexní, doporučuji pročíst zdůvodnění u chyb.";
+            } else {
+                resultDiv.style.color = '#c0392b';
+                resultDiv.innerHTML += "<br>Tohle bylo hodně náročné. Pečlivé přečtení zdůvodnění vám pomůže si detaily lépe zapamatovat.";
+            }
+        }
+    </script>
+</body>
+</html>
